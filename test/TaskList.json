@@ -1,0 +1,159 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Task List",
+  "description": "Schema with complex array validations and tuple syntax",
+  "type": "object",
+  "definitions": {
+    "taskStatus": {
+      "type": "string",
+      "enum": ["todo", "in_progress", "review", "done", "cancelled"],
+      "default": "todo"
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["low", "medium", "high", "critical"],
+      "default": "medium"
+    },
+    "tag": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20
+        },
+        "color": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$"
+        }
+      },
+      "required": ["name"]
+    },
+    "timeRange": {
+      "type": "array",
+      "items": [
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "Start time"
+        },
+        {
+          "type": "string",
+          "format": "date-time",
+          "description": "End time"
+        }
+      ],
+      "additionalItems": false,
+      "minItems": 2,
+      "maxItems": 2
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "description": {
+      "type": "string"
+    },
+    "status": {
+      "$ref": "#/definitions/taskStatus"
+    },
+    "priority": {
+      "$ref": "#/definitions/priority"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/tag"
+      },
+      "uniqueItems": true
+    },
+    "subtasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "$ref": "#/definitions/taskStatus"
+          },
+          "isBlocking": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": ["id", "title", "status"]
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "size": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        },
+        "required": ["name", "url"]
+      }
+    },
+    "timeEstimate": {
+      "type": "object",
+      "properties": {
+        "unit": {
+          "type": "string",
+          "enum": ["minutes", "hours", "days"]
+        },
+        "value": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": ["unit", "value"]
+    },
+    "scheduledTime": {
+      "$ref": "#/definitions/timeRange"
+    },
+    "dependsOn": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "uniqueItems": true
+    }
+  },
+  "required": ["id", "title", "status"],
+  "if": {
+    "properties": {
+      "status": { "enum": ["in_progress", "review", "done"] }
+    },
+    "required": ["status"]
+  },
+  "then": {
+    "required": ["scheduledTime"]
+  }
+}

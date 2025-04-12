@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Configuration Settings",
+  "description": "Schema with pattern properties and dynamic keys",
+  "type": "object",
+  "definitions": {
+    "settingValue": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "number" },
+        { "type": "boolean" },
+        {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "type": "string" },
+              { "type": "number" },
+              { "type": "boolean" }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "properties": {
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "global": {
+      "type": "object",
+      "patternProperties": {
+        "^[a-zA-Z][a-zA-Z0-9_]*$": {
+          "$ref": "#/definitions/settingValue"
+        }
+      },
+      "additionalProperties": false
+    },
+    "environments": {
+      "type": "object",
+      "patternProperties": {
+        "^(dev|staging|production)$": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": true
+            },
+            "settings": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-zA-Z][a-zA-Z0-9_]*$": {
+                  "$ref": "#/definitions/settingValue"
+                }
+              }
+            }
+          },
+          "required": ["enabled", "settings"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "features": {
+      "type": "object",
+      "patternProperties": {
+        "^feature\\.[a-zA-Z][a-zA-Z0-9_]*$": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": {
+              "type": "string"
+            },
+            "settings": {
+              "type": "object",
+              "patternProperties": {
+                "^[a-zA-Z][a-zA-Z0-9_]*$": {
+                  "$ref": "#/definitions/settingValue"
+                }
+              }
+            }
+          },
+          "required": ["enabled"]
+        }
+      }
+    }
+  },
+  "required": ["version", "name", "global"]
+}

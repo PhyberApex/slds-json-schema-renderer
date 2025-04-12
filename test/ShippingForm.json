@@ -1,0 +1,126 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Shipping Form",
+  "description": "Schema with conditional fields and dependencies",
+  "type": "object",
+  "properties": {
+    "shipmentType": {
+      "type": "string",
+      "enum": ["standard", "express", "international"],
+      "description": "Type of shipment"
+    },
+    "recipientName": {
+      "type": "string",
+      "minLength": 2
+    },
+    "deliveryAddress": {
+      "type": "object",
+      "properties": {
+        "street": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string",
+          "default": "USA"
+        }
+      },
+      "required": ["street", "city", "postalCode"]
+    },
+    "weight": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "dimensions": {
+      "type": "object",
+      "properties": {
+        "length": {
+          "type": "number",
+          "minimum": 0
+        },
+        "width": {
+          "type": "number",
+          "minimum": 0
+        },
+        "height": {
+          "type": "number",
+          "minimum": 0
+        },
+        "unit": {
+          "type": "string",
+          "enum": ["cm", "in"]
+        }
+      },
+      "required": ["length", "width", "height", "unit"]
+    },
+    "customsDeclaration": {
+      "type": "object",
+      "properties": {
+        "contents": {
+          "type": "string",
+          "enum": ["merchandise", "documents", "gift", "sample", "other"]
+        },
+        "value": {
+          "type": "number",
+          "minimum": 0
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": ["contents", "value"]
+    },
+    "specialInstructions": {
+      "type": "string"
+    },
+    "insuranceRequired": {
+      "type": "boolean",
+      "default": false
+    },
+    "insuranceValue": {
+      "type": "number",
+      "minimum": 0
+    }
+  },
+  "required": ["shipmentType", "recipientName", "deliveryAddress", "weight"],
+  "dependencies": {
+    "shipmentType": {
+      "oneOf": [
+        {
+          "properties": {
+            "shipmentType": {
+              "enum": ["standard", "express"]
+            }
+          }
+        },
+        {
+          "properties": {
+            "shipmentType": {
+              "enum": ["international"]
+            },
+            "customsDeclaration": {
+              "type": "object"
+            }
+          },
+          "required": ["customsDeclaration"]
+        }
+      ]
+    },
+    "insuranceRequired": {
+      "if": {
+        "properties": { "insuranceRequired": { "const": true } }
+      },
+      "then": {
+        "required": ["insuranceValue"]
+      }
+    }
+  }
+}

@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // This configuration works for both development and production
-export default defineConfig(({ command, mode }) => {
+export default defineConfig(({ command }) => {
     const config = {
         plugins: [vue()],
 

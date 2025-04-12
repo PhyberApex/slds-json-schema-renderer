@@ -1,6 +1,6 @@
 # SLDS JSON Schema Renderer
 
-A CLI tool that generates beautiful, interactive documentation from JSON schema files. The tool parses your JSON schemas and creates a static HTML site powered by Vue.js and the Salesforce Lightning Design System (SLDS).
+A CLI tool that generates beautiful, interactive documentation from JSON schema files. The tool parses your JSON schemas and creates a static HTML site powered by Vue.js and the Salesforce Lightning Design System (SLDS). [Demo](https://phyberapex.github.io/slds-json-schema-renderer/)
 
 ## Features
 

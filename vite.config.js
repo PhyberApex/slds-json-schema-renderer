@@ -38,6 +38,16 @@ export default defineConfig(({ command }) => {
                 fileName: 'bundle',
                 formats: ['es', 'umd']
             },
+            rollupOptions: {
+                // This ensures we don't bundle Vue into our output file
+                external: ['vue'],
+                output: {
+                    // Global variables to use in UMD build for externalized deps
+                    globals: {
+                        vue: 'Vue'
+                    }
+                }
+            }
         };
     } else {
         // Development server settings

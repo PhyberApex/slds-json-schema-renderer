@@ -103,8 +103,7 @@ slds-json-schema-renderer/
 │   │   ├── assets/          # Static assets
 │   │   └── index.js         # Frontend entry point
 │   └── templates/           # HTML templates
-├── lib/                      # Compiled code (generated)
-└── docs/                     # Generated documentation (example)
+└── lib/                      # Compiled code (generated)
 ```
 
 ## License

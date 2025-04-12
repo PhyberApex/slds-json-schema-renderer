@@ -1,6 +1,6 @@
 {
   "name": "slds-json-schema-renderer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CLI tool to generate documentation from JSON schema files",
   "main": "lib/index.js",
   "bin": {

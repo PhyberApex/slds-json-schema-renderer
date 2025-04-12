@@ -1,6 +1,6 @@
 {
   "name": "slds-json-schema-renderer",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A CLI tool to generate documentation from JSON schema files",
   "main": "lib/index.js",
   "bin": {
@@ -65,7 +65,9 @@
     "node": ">=22"
   },
   "release": {
-    "branches": ["main"],
+    "branches": [
+      "main"
+    ],
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
@@ -75,7 +77,11 @@
       [
         "@semantic-release/git",
         {
-          "assets": ["package.json", "package-lock.json", "CHANGELOG.md"],
+          "assets": [
+            "package.json",
+            "package-lock.json",
+            "CHANGELOG.md"
+          ],
           "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
         }
       ]

@@ -13,6 +13,7 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    environment: Publish
     steps:
       - name: Checkout
         uses: actions/checkout@v4

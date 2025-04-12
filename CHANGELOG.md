@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.0.1...v1.0.2) (2025-04-12)
+
+
+### Bug Fixes
+
+* Exlude vue again and fix cdn link ([b4964e9](https://github.com/PhyberApex/slds-json-schema-renderer/commit/b4964e92b046179ef9cd60718b7b0e5584a0023e))
+
 ## [1.0.1](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.0.0...v1.0.1) (2025-04-12)
 
 

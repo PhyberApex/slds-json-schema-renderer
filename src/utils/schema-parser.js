@@ -52,9 +52,7 @@ async function parse(filePath) {
         }
 
         // Process the schema to normalize and add metadata
-        const processedSchema = await processSchema(rawSchema, filePath);
-
-        return processedSchema;
+        return await processSchema(rawSchema, filePath);
     } catch (err) {
         throw new Error(`Failed to parse schema: ${err.message}`);
     }

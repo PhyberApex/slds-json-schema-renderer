@@ -20,7 +20,6 @@
 
 <script setup>
 import { computed } from 'vue';
-import SchemaConstraints from "@/components/schema/SchemaConstraints.vue";
 
 const props = defineProps({
   schema: {

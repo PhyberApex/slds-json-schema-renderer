@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Basic User Profile",
+  "description": "A simple schema with basic types and validation",
+  "type": "object",
+  "required": ["id", "name", "email", "age"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for the user"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 50,
+      "description": "User's full name"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "User's email address"
+    },
+    "age": {
+      "type": "integer",
+      "minimum": 18,
+      "maximum": 120,
+      "description": "User's age in years"
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the user account is active"
+    },
+    "registrationDate": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When the user registered"
+    }
+  },
+  "additionalProperties": false
+}

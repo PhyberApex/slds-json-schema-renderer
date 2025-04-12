@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Product Catalog",
+  "description": "Schema with internal references and nested structures",
+  "type": "object",
+  "definitions": {
+    "price": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "currency": {
+          "type": "string",
+          "enum": ["USD", "EUR", "GBP", "JPY"]
+        }
+      },
+      "required": ["amount", "currency"]
+    },
+    "category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "name"]
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^PRD-[0-9]{6}$",
+      "description": "Product identifier in format PRD-XXXXXX"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 100
+    },
+    "description": {
+      "type": "string"
+    },
+    "regularPrice": {
+      "$ref": "#/definitions/price"
+    },
+    "salePrice": {
+      "$ref": "#/definitions/price"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/category"
+      },
+      "minItems": 1
+    },
+    "inStock": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": ["id", "name", "regularPrice", "categories"]
+}

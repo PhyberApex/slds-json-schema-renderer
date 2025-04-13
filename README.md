@@ -1,5 +1,4 @@
 [![Deploy to GitHub Pages](https://github.com/PhyberApex/slds-json-schema-renderer/actions/workflows/deploy.yml/badge.svg)](https://github.com/PhyberApex/slds-json-schema-renderer/actions/workflows/deploy.yml)
-[![Release](https://github.com/PhyberApex/slds-json-schema-renderer/actions/workflows/release.yml/badge.svg)](https://github.com/PhyberApex/slds-json-schema-renderer/actions/workflows/release.yml)
 
 # SLDS JSON Schema Renderer
 

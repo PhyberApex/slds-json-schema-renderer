@@ -2,11 +2,11 @@
  * Main entry point for the JSON Schema Documentation Generator
  */
 
-const schemaParser = require('./utils/schema-parser');
-const htmlGenerator = require('./utils/html-generator');
-const cli = require('./cli');
+import * as schemaParser from './utils/schema-parser.js';
+import * as htmlGenerator from './utils/html-generator.js';
+import * as cli from './cli/index.js';
 
-module.exports = {
+export {
   schemaParser,
   htmlGenerator,
   cli,

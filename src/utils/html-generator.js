@@ -1,5 +1,9 @@
-const fs = require('fs-extra');
-const path = require('path');
+import fs from 'fs-extra';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Generate HTML documentation from parsed JSON schemas
@@ -83,6 +87,8 @@ async function copyAssets(outputDir) {
         if (await fs.pathExists(vuePath)) {
           await fs.copy(vuePath, vueTarget);
           console.log('Vue bundle copied successfully');
+        } else {
+          console.warn('Warning: Vue not found at', vuePath);
         }
       } else {
         console.warn('Warning: Frontend bundle not found at', bundlePath);
@@ -98,6 +104,7 @@ async function copyAssets(outputDir) {
   }
 }
 
-module.exports = {
+export {
   generate,
+  copyAssets,
 };

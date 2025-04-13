@@ -1,8 +1,12 @@
-const fs = require('fs-extra');
-const path = require('path');
-const $RefParser = require('json-schema-ref-parser');
-const Ajv = require('ajv');
-const glob = require('glob');
+import fs from 'fs-extra';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import $RefParser from 'json-schema-ref-parser';
+import Ajv from 'ajv';
+import { glob } from 'glob';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Initialize AJV with options
 const ajv = new Ajv({
@@ -125,40 +129,36 @@ async function processSchema(schema, filePath) {
 }
 
 /**
- * Parse multiple schema files from a directory
+ * Parse all JSON schema files in a directory
  * @param {string} directoryPath - Path to the directory containing JSON schema files
- * @param {Object} options - Parsing options
+ * @param {Object} options - Options for parsing
  * @returns {Array} Array of parsed schemas
  */
 async function parseDirectory(directoryPath, options = {}) {
-  const { pattern = '**/*.json', verbose = false } = options;
+  const { verbose = false } = options;
+  const schemas = [];
 
   try {
     // Find all JSON files in the directory
-    const schemaFiles = glob.sync(path.join(directoryPath, pattern));
+    const files = await glob('**/*.json', {
+      cwd: directoryPath,
+      absolute: true,
+    });
 
-    if (schemaFiles.length === 0) {
-      throw new Error(`No JSON schema files found in ${directoryPath}`);
+    if (verbose) {
+      console.log(`Found ${files.length} JSON files in ${directoryPath}`);
     }
 
-    // Parse each schema file
-    const schemas = [];
-    for (const file of schemaFiles) {
-      if (verbose) {
-        console.log(`Parsing schema: ${file}`);
-      }
-
+    // Parse each file
+    for (const file of files) {
       try {
         const schema = await parse(file);
         schemas.push({
-          fileName: path.basename(file),
-          filePath: file,
           schema,
+          file,
         });
       } catch (err) {
-        if (verbose) {
-          console.error(`Error parsing schema ${file}: ${err.message}`);
-        }
+        console.error(`Error parsing ${file}: ${err.message}`);
       }
     }
 
@@ -168,7 +168,8 @@ async function parseDirectory(directoryPath, options = {}) {
   }
 }
 
-module.exports = {
+export {
   parse,
   parseDirectory,
+  processSchema,
 };

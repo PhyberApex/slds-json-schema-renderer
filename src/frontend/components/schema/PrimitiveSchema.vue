@@ -19,45 +19,12 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
-
-const props = defineProps({
+defineProps({
   schema: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 });
-
-// Check if schema has constraints
-const hasConstraints = computed(() => {
-  const constraintProps = {
-    string: ['minLength', 'maxLength', 'pattern'],
-    number: ['minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum', 'multipleOf'],
-    integer: ['minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum', 'multipleOf']
-  };
-
-  const typeConstraints = constraintProps[props.schema.type] || [];
-  return typeConstraints.some(prop => prop in props.schema);
-});
-
-// Get CSS class for type badge
-const typeClass = computed(() => {
-  const typeClasses = {
-    string: 'type-string',
-    number: 'type-number',
-    integer: 'type-integer',
-    boolean: 'type-boolean',
-    null: 'type-null'
-  };
-  return typeClasses[props.schema.type] || '';
-});
-
-// Format value for display
-const formatValue = (value) => {
-  if (value === null) return 'null';
-  if (typeof value === 'string') return `"${value}"`;
-  return value.toString();
-};
 </script>
 
 <style>

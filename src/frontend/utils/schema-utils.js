@@ -10,23 +10,23 @@
  * @returns {Object} The resolved schema object
  */
 export function resolveRef(schema, ref) {
-    if (!ref.startsWith('#/')) {
-        console.warn('External references not supported:', ref);
-        return { type: 'object', description: `External reference: ${ref}` };
-    }
+  if (!ref.startsWith('#/')) {
+    console.warn('External references not supported:', ref);
+    return { type: 'object', description: `External reference: ${ref}` };
+  }
 
-    const path = ref.substring(2).split('/');
-    let result = schema;
+  const path = ref.substring(2).split('/');
+  let result = schema;
 
-    try {
-        for (const segment of path) {
-            result = result[segment];
-        }
-        return result || {};
-    } catch (e) {
-        console.error('Failed to resolve reference:', ref, e);
-        return {};
+  try {
+    for (const segment of path) {
+      result = result[segment];
     }
+    return result || {};
+  } catch (e) {
+    console.error('Failed to resolve reference:', ref, e);
+    return {};
+  }
 }
 
 /**
@@ -35,12 +35,12 @@ export function resolveRef(schema, ref) {
  * @returns {String} A normalized type string
  */
 export function normalizeType(type) {
-    if (Array.isArray(type)) {
-        // Filter out null and join with pipe
-        const types = type.filter(t => t !== 'null');
-        return types.length ? types.join(' | ') : 'any';
-    }
-    return type || 'any';
+  if (Array.isArray(type)) {
+    // Filter out null and join with pipe
+    const types = type.filter(t => t !== 'null');
+    return types.length ? types.join(' | ') : 'any';
+  }
+  return type || 'any';
 }
 
 /**
@@ -49,24 +49,24 @@ export function normalizeType(type) {
  * @returns {Object} The extracted properties
  */
 export function extractProperties(schema) {
-    if (schema.properties) {
-        return schema.properties;
-    }
+  if (schema.properties) {
+    return schema.properties;
+  }
 
-    // Handle oneOf/anyOf/allOf
-    const combiners = ['oneOf', 'anyOf', 'allOf'];
-    for (const combiner of combiners) {
-        if (schema[combiner] && Array.isArray(schema[combiner])) {
-            // For demo purposes, just use the first option's properties
-            // A more complete solution would merge properties from all options
-            const firstOption = schema[combiner][0];
-            if (firstOption.properties) {
-                return firstOption.properties;
-            }
-        }
+  // Handle oneOf/anyOf/allOf
+  const combiners = ['oneOf', 'anyOf', 'allOf'];
+  for (const combiner of combiners) {
+    if (schema[combiner] && Array.isArray(schema[combiner])) {
+      // For demo purposes, just use the first option's properties
+      // A more complete solution would merge properties from all options
+      const firstOption = schema[combiner][0];
+      if (firstOption.properties) {
+        return firstOption.properties;
+      }
     }
+  }
 
-    return {};
+  return {};
 }
 
 /**
@@ -75,31 +75,31 @@ export function extractProperties(schema) {
  * @returns {Object} A flattened schema suitable for display
  */
 export function flattenSchema(schema) {
-    const result = { ...schema };
+  const result = { ...schema };
 
-    if (!result.properties) {
-        result.properties = {};
-    }
+  if (!result.properties) {
+    result.properties = {};
+  }
 
-    // Convert oneOf/anyOf variants to properties for display
-    const combiners = ['oneOf', 'anyOf'];
-    for (const combiner of combiners) {
-        if (schema[combiner] && Array.isArray(schema[combiner])) {
-            schema[combiner].forEach((variant, index) => {
-                if (variant.title) {
-                    // Create a virtual property for this variant
-                    result.properties[variant.title] = {
-                        type: 'object',
-                        description: `${variant.title} variant ${variant.description || ''}`.trim(),
-                        isVariant: true,
-                        variantSchema: variant
-                    };
-                }
-            });
+  // Convert oneOf/anyOf variants to properties for display
+  const combiners = ['oneOf', 'anyOf'];
+  for (const combiner of combiners) {
+    if (schema[combiner] && Array.isArray(schema[combiner])) {
+      schema[combiner].forEach(variant => {
+        if (variant.title) {
+          // Create a virtual property for this variant
+          result.properties[variant.title] = {
+            type: 'object',
+            description: `${variant.title} variant ${variant.description || ''}`.trim(),
+            isVariant: true,
+            variantSchema: variant,
+          };
         }
+      });
     }
+  }
 
-    return result;
+  return result;
 }
 
 /**
@@ -108,7 +108,7 @@ export function flattenSchema(schema) {
  * @returns {Object} The definitions object
  */
 export function getDefinitions(schema) {
-    return schema.definitions || {};
+  return schema.definitions || {};
 }
 
 /**
@@ -124,13 +124,13 @@ export function resolveReferences(schema, rootSchema) {
   if (schema.$ref) {
     const parts = schema.$ref.split('/');
     let resolved = rootSchema;
-    
+
     // Skip the first empty part and '#'
     for (let i = 1; i < parts.length; i++) {
       if (!resolved) return schema;
       resolved = resolved[parts[i]];
     }
-    
+
     // Recursively resolve any references in the resolved schema
     return resolveReferences(resolved, rootSchema);
   }

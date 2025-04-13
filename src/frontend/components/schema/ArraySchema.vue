@@ -12,41 +12,27 @@
         <!-- Handle tuple validation (items is an array) -->
         <template v-if="Array.isArray(schema.items)">
           <div v-for="(itemSchema, index) in schema.items" :key="index">
-            <div>
-              Index {{ index }}:
-            </div>
-            <SchemaViewer
-                :schema="itemSchema"
-                :rootSchema="rootSchema"
-                :isRoot="false"
-            />
+            <div>Index {{ index }}:</div>
+            <SchemaViewer :schema="itemSchema" :root-schema="rootSchema" :is-root="false" />
           </div>
         </template>
 
         <!-- Handle single schema for all items -->
         <template v-else>
-          <SchemaViewer
-              :schema="schema.items"
-              :rootSchema="rootSchema"
-              :isRoot="false"
-          />
+          <SchemaViewer :schema="schema.items" :root-schema="rootSchema" :is-root="false" />
         </template>
       </NestedSchemaContainer>
     </div>
-    <NoPropertiesMessage 
-      v-else 
-      title="No Items Defined" 
+    <NoPropertiesMessage
+      v-else
+      title="No Items Defined"
       message="This array doesn't have any items defined in the schema."
     />
 
     <div v-if="schema.contains">
       <div>Contains:</div>
       <NestedSchemaContainer>
-        <SchemaViewer
-            :schema="schema.contains"
-            :rootSchema="rootSchema"
-            :isRoot="false"
-        />
+        <SchemaViewer :schema="schema.contains" :root-schema="rootSchema" :is-root="false" />
       </NestedSchemaContainer>
     </div>
 
@@ -58,11 +44,7 @@
         </span>
       </div>
       <NestedSchemaContainer v-else>
-        <SchemaViewer
-            :schema="schema.additionalItems"
-            :rootSchema="rootSchema"
-            :isRoot="false"
-        />
+        <SchemaViewer :schema="schema.additionalItems" :root-schema="rootSchema" :is-root="false" />
       </NestedSchemaContainer>
     </div>
 
@@ -88,20 +70,20 @@
 
 <script setup>
 import { computed } from 'vue';
-import SchemaViewer from "@/components/schema/SchemaViewer.vue";
-import NestedSchemaContainer from "@/components/schema/NestedSchemaContainer.vue";
-import SchemaConstraints from "@/components/schema/SchemaConstraints.vue";
-import NoPropertiesMessage from "@/components/schema/NoPropertiesMessage.vue";
+import SchemaViewer from '@/components/schema/SchemaViewer.vue';
+import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue';
+import SchemaConstraints from '@/components/schema/SchemaConstraints.vue';
+import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue';
 
 const props = defineProps({
   schema: {
     type: Object,
-    required: true
+    required: true,
   },
   rootSchema: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 });
 
 // Check if schema has constraints

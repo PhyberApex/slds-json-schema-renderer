@@ -5,7 +5,11 @@
         <div class="slds-media">
           <div class="slds-media__figure">
             <span class="slds-icon_container slds-icon-standard-account">
-              <img src="@slds/icons/standard/code_playground.svg" class="slds-icon slds-icon_small" alt="" />
+              <img
+                src="@slds/icons/standard/code_playground.svg"
+                class="slds-icon slds-icon_small"
+                alt=""
+              />
             </span>
           </div>
           <div class="slds-media__body">
@@ -27,8 +31,8 @@
 defineProps({
   title: {
     type: String,
-    default: 'JSON Schema Documentation'
-  }
+    default: 'JSON Schema Documentation',
+  },
 });
 </script>
 

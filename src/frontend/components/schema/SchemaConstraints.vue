@@ -22,16 +22,25 @@ import { computed } from 'vue';
 const props = defineProps({
   schema: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const constraints = computed(() => {
   const result = {};
   const constraintKeys = [
-    'minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum',
-    'minLength', 'maxLength', 'pattern', 'minItems', 'maxItems',
-    'uniqueItems', 'minProperties', 'maxProperties'
+    'minimum',
+    'maximum',
+    'exclusiveMinimum',
+    'exclusiveMaximum',
+    'minLength',
+    'maxLength',
+    'pattern',
+    'minItems',
+    'maxItems',
+    'uniqueItems',
+    'minProperties',
+    'maxProperties',
   ];
 
   constraintKeys.forEach(key => {
@@ -43,11 +52,11 @@ const constraints = computed(() => {
   return result;
 });
 
-const formatKey = (key) => {
+const formatKey = key => {
   return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
 };
 
-const formatValue = (value) => {
+const formatValue = value => {
   if (typeof value === 'boolean') {
     return value ? 'Yes' : 'No';
   }

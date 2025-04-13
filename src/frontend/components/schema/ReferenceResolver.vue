@@ -2,18 +2,14 @@
   <div>
     <div>
       <span>Reference</span>
-      <button @click="handleNavigate" :title="schema.$ref">
+      <button :title="schema.$ref" @click="handleNavigate">
         {{ getRefName(schema.$ref) }}
       </button>
     </div>
 
     <div v-if="resolvedSchema">
       <NestedSchemaContainer>
-        <SchemaViewer
-            :schema="resolvedSchema"
-            :rootSchema="rootSchema"
-            :isRoot="false"
-        />
+        <SchemaViewer :schema="resolvedSchema" :root-schema="rootSchema" :is-root="false" />
       </NestedSchemaContainer>
     </div>
 
@@ -35,24 +31,24 @@
 
 <script setup>
 import { computed } from 'vue';
-import SchemaViewer from "@/components/schema/SchemaViewer.vue";
-import NestedSchemaContainer from "@/components/schema/NestedSchemaContainer.vue";
+import SchemaViewer from '@/components/schema/SchemaViewer.vue';
+import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue';
 
 const props = defineProps({
   schema: {
     type: Object,
-    required: true
+    required: true,
   },
   rootSchema: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const emit = defineEmits(['navigate-to-definition']);
 
 // Extract the name from the reference
-const getRefName = (ref) => {
+const getRefName = ref => {
   const parts = ref.split('/');
   return parts[parts.length - 1];
 };
@@ -75,7 +71,7 @@ const resolvedSchema = computed(() => {
 
 const handleNavigate = () => {
   emit('navigate-to-definition', {
-    definitionName: getRefName(props.schema.$ref)
+    definitionName: getRefName(props.schema.$ref),
   });
 };
 </script>

@@ -1,5 +1,3 @@
-const generate = require('./generate');
+import { generate } from './generate.js';
 
-module.exports = {
-    generate
-};
+export { generate };

@@ -6,42 +6,40 @@
 
     <div class="slds-tabs_default">
       <ul class="slds-tabs_default__nav" role="tablist">
-        <li 
-          v-for="(subSchema, index) in schemas" 
-          :key="index" 
-          class="slds-tabs_default__item" 
-          :class="{ 'slds-is-active': activeTab === index }" 
+        <li
+          v-for="(subSchema, index) in schemas"
+          :key="index"
+          class="slds-tabs_default__item"
+          :class="{ 'slds-is-active': activeTab === index }"
           role="presentation"
         >
-          <a 
-            class="slds-tabs_default__link" 
-            role="tab" 
-            tabindex="0" 
-            :aria-selected="activeTab === index" 
-            :aria-controls="`tab-${index}`" 
+          <a
+            class="slds-tabs_default__link"
+            role="tab"
+            tabindex="0"
+            :aria-selected="activeTab === index"
+            :aria-controls="`tab-${index}`"
             @click="activeTab = index"
           >
             <span class="slds-tabs_default__title">{{ getTabTitle(subSchema, index) }}</span>
           </a>
         </li>
       </ul>
-      
-      <div 
-        v-for="(subSchema, index) in schemas" 
-        :key="index" 
-        :id="`tab-${index}`" 
-        class="slds-tabs_default__content" 
-        :class="{ 'slds-show': activeTab === index, 'slds-hide': activeTab !== index }" 
+
+      <div
+        v-for="(subSchema, index) in schemas"
+        :id="`tab-${index}`"
+        :key="index"
+        class="slds-tabs_default__content"
+        :class="{ 'slds-show': activeTab === index, 'slds-hide': activeTab !== index }"
         role="tabpanel"
       >
         <div class="slds-p-around_medium">
-          <div class="slds-text-title_caps slds-m-bottom_small">Schema Type: {{ getSchemaType(subSchema) }}</div>
+          <div class="slds-text-title_caps slds-m-bottom_small">
+            Schema Type: {{ getSchemaType(subSchema) }}
+          </div>
           <NestedSchemaContainer>
-            <SchemaViewer
-              :schema="subSchema"
-              :rootSchema="rootSchema"
-              :isRoot="false"
-            />
+            <SchemaViewer :schema="subSchema" :root-schema="rootSchema" :is-root="false" />
           </NestedSchemaContainer>
         </div>
       </div>
@@ -51,23 +49,23 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import SchemaViewer from "@/components/schema/SchemaViewer.vue";
-import NestedSchemaContainer from "@/components/schema/NestedSchemaContainer.vue";
+import SchemaViewer from '@/components/schema/SchemaViewer.vue';
+import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue';
 
 const props = defineProps({
   schema: {
     type: Object,
-    required: true
+    required: true,
   },
   compositionType: {
     type: String,
     required: true,
-    validator: value => ['anyOf', 'oneOf', 'allOf'].includes(value)
+    validator: value => ['anyOf', 'oneOf', 'allOf'].includes(value),
   },
   rootSchema: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 });
 
 // Track active tab
@@ -107,7 +105,7 @@ const compositionTypeClass = computed(() => {
 });
 
 // Get the schema type for display
-const getSchemaType = (schema) => {
+const getSchemaType = schema => {
   if (Array.isArray(schema.type)) {
     return schema.type.join(' | ');
   }

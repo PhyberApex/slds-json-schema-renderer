@@ -12,8 +12,8 @@
               :is="schemaComponent"
               v-if="schemaComponent"
               :schema="resolvedSchema"
-              :rootSchema="rootSchema"
-              :compositionType="compositionType"
+              :root-schema="rootSchema"
+              :composition-type="compositionType"
               @navigate-to-definition="handleNavigateToDefinition"
             />
             <NoPropertiesMessage v-else />
@@ -49,23 +49,23 @@ import NoPropertiesMessage from './NoPropertiesMessage.vue';
 const props = defineProps({
   schema: {
     type: Object,
-    required: true
+    required: true,
   },
   rootSchema: {
     type: Object,
-    default: null
+    default: null,
   },
   isRoot: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 });
 
 // State for active tab
 const activeTab = ref('visual');
 
 // If this is the root component, use the schema as the rootSchema
-const rootSchema = computed(() => props.isRoot ? props.schema : props.rootSchema);
+const rootSchema = computed(() => (props.isRoot ? props.schema : props.rootSchema));
 
 // Resolve all references in the schema
 const resolvedSchema = computed(() => {
@@ -82,7 +82,7 @@ const schemaComponent = computed(() => schemaUtils.getComponentForSchema(resolve
 const compositionType = computed(() => schemaUtils.getCompositionType(resolvedSchema.value));
 
 // Function to handle navigation to definition
-const handleNavigateToDefinition = (data) => {
+const handleNavigateToDefinition = data => {
   const definitionElement = document.getElementById(`definition-${data.definitionName}`);
 
   if (definitionElement) {

@@ -81,25 +81,6 @@
       </div>
     </div>
 
-    <!-- No properties message -->
-    <NoPropertiesMessage v-else />
-
-    <div v-if="schema.additionalProperties !== undefined">
-      <div>Additional Properties</div>
-      <div v-if="typeof schema.additionalProperties === 'boolean'">
-        <span :class="schema.additionalProperties ? 'status-allowed' : 'status-denied'">
-          {{ schema.additionalProperties ? 'Allowed' : 'Not allowed' }}
-        </span>
-      </div>
-      <NestedSchemaContainer v-else>
-        <SchemaViewer
-            :schema="schema.additionalProperties"
-            :rootSchema="rootSchema"
-            :isRoot="false"
-        />
-      </NestedSchemaContainer>
-    </div>
-
     <div v-if="schema.patternProperties">
       <div>Pattern Properties</div>
       <div>
@@ -120,6 +101,26 @@
         </div>
       </div>
     </div>
+
+    <div v-if="schema.additionalProperties !== undefined">
+      <div>Additional Properties</div>
+      <div v-if="typeof schema.additionalProperties === 'boolean'">
+        <span :class="schema.additionalProperties ? 'status-allowed' : 'status-denied'">
+          {{ schema.additionalProperties ? 'Allowed' : 'Not allowed' }}
+        </span>
+      </div>
+      <NestedSchemaContainer v-else>
+        <SchemaViewer
+            :schema="schema.additionalProperties"
+            :rootSchema="rootSchema"
+            :isRoot="false"
+        />
+      </NestedSchemaContainer>
+    </div>
+    
+    <!-- No properties message -->
+    <NoPropertiesMessage v-else />
+
   </div>
 </template>
 

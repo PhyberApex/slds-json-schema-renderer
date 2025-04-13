@@ -4,7 +4,6 @@ import { program } from 'commander';
 import { readFileSync } from 'fs';
 import * as cli from '../lib/cli/index.js';
 
-
 // Read package.json
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)));
 

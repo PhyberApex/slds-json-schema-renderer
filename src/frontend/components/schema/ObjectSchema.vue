@@ -152,7 +152,7 @@ const hasConstraints = computed(() => {
 
 // Check if schema has properties
 const hasProperties = computed(() => {
-  return props.schema.properties && Object.keys(props.schema.properties).length > 0;
+  return (props.schema.properties && Object.keys(props.schema.properties).length > 0) || (props.schema.patternProperties && Object.keys(props.schema.patternProperties).length > 0);
 });
 
 // Check if a property is required

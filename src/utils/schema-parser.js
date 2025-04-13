@@ -168,8 +168,4 @@ async function parseDirectory(directoryPath, options = {}) {
   }
 }
 
-export {
-  parse,
-  parseDirectory,
-  processSchema,
-};
+export { parse, parseDirectory, processSchema };

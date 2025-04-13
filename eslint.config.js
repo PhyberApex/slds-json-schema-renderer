@@ -1,28 +1,10 @@
 import js from '@eslint/js';
 import vue from 'eslint-plugin-vue';
 import prettier from 'eslint-plugin-prettier';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = resolve(__filename, '..');
-
-// Read .gitignore patterns
-const gitignorePath = resolve(__dirname, '.gitignore');
-const gitignorePatterns = readFileSync(gitignorePath, 'utf8')
-  .split('\n')
-  .filter(line => line && !line.startsWith('#'))
-  .map(pattern => pattern.trim());
 
 export default [
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'lib/**',
-      ...gitignorePatterns,
-    ],
+    ignores: ['node_modules/**', 'dist/**', 'lib/**, docs/**'],
   },
   js.configs.recommended,
   // Vue configuration
@@ -69,4 +51,4 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-]; 
+];

@@ -104,7 +104,4 @@ async function copyAssets(outputDir) {
   }
 }
 
-export {
-  generate,
-  copyAssets,
-};
+export { generate, copyAssets };

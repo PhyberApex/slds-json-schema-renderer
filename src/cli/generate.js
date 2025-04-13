@@ -4,7 +4,6 @@ import chalk from 'chalk';
 import * as schemaParser from '../utils/schema-parser.js';
 import * as htmlGenerator from '../utils/html-generator.js';
 
-
 /**
  * Generate documentation from JSON schema files
  * @param {Object} options - Command options

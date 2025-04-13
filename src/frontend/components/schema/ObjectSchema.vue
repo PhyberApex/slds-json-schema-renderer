@@ -117,7 +117,7 @@
     </div>
     
     <!-- No properties message -->
-    <NoPropertiesMessage v-else />
+    <NoPropertiesMessage v-if="!hasProperties" />
 
   </div>
 </template>

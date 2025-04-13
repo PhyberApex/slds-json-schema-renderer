@@ -45,6 +45,31 @@ jobs:
         # Only run this step on main branch
         if: github.ref == 'refs/heads/main'
 
+  release:
+     name: Release
+     runs-on: ubuntu-latest
+     environment: Publish
+     steps:
+       - name: Checkout
+         uses: actions/checkout@v4
+         with:
+           fetch-depth: 0
+       
+       - name: Setup Node.js
+         uses: actions/setup-node@v4
+         with:
+           node-version: "22"
+           cache: 'npm'
+       
+       - name: Install dependencies
+         run: npm ci
+       
+       - name: Release
+         env:
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+         run: npm run semantic-release 
+
   deploy:
     environment:
       name: github-pages
@@ -57,8 +82,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm run semantic-release 

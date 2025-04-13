@@ -1,3 +1,13 @@
+## [1.0.3](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.0.2...v1.0.3) (2025-04-13)
+
+
+### Bug Fixes
+
+* Fix no properties message ([2889ba8](https://github.com/PhyberApex/slds-json-schema-renderer/commit/2889ba83c16ed5b2cbda86690f3dfd057d4bfcab))
+* Move to @apidevtools/json-schema-ref-parser ([d41c709](https://github.com/PhyberApex/slds-json-schema-renderer/commit/d41c7096a4383577215ddbbb487631771a91108e))
+* Remove no properties message if only pattern properties are available ([0212430](https://github.com/PhyberApex/slds-json-schema-renderer/commit/021243055f7cf7d0a11097aa3cc17ff0e4bd5060))
+* Reorder properties in ObjectSchmea.vue ([9c2e7c3](https://github.com/PhyberApex/slds-json-schema-renderer/commit/9c2e7c3a0b922443771cc3e2b4fb4cfcb478f203))
+
 ## [1.0.2](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.0.1...v1.0.2) (2025-04-12)
 
 

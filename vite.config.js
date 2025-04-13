@@ -37,7 +37,7 @@ export default defineConfig(({ command }) => {
         entry: path.resolve(__dirname, 'src/frontend/index.js'),
         name: 'JsonSchemaDocs',
         fileName: 'bundle',
-        formats: ['es', 'umd'],
+        formats: ['umd'],
       },
       rollupOptions: {
         // This ensures we don't bundle Vue into our output file

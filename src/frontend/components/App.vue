@@ -1,10 +1,10 @@
 <template>
   <div class="slds-grid slds-grid_vertical">
-    <Header :title="title" />
+    <HeaderLayout :title="title" />
 
     <div class="slds-grid slds-gutters slds-grid_vertical-fill">
       <div class="slds-col slds-size_2-of-12">
-        <Sidebar
+        <SidebarLayout
           :schemas="schemas"
           :selected-schema="selectedSchema"
           @select-schema="handleSelectSchema"
@@ -52,15 +52,15 @@
       </div>
     </div>
 
-    <Footer :description="description" :generated-at="generatedAt" :schema-count="schemas.length" />
+    <FooterLayout :description="description" :generated-at="generatedAt" :schema-count="schemas.length" />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import Header from './layout/Header.vue';
-import Sidebar from './layout/Sidebar.vue';
-import Footer from './layout/Footer.vue';
+import HeaderLayout from './layout/HeaderLayout.vue';
+import SidebarLayout from './layout/SidebarLayout.vue';
+import FooterLayout from './layout/FooterLayout.vue';
 import SchemaViewer from './schema/SchemaViewer.vue';
 
 // Props definitions

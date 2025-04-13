@@ -1,13 +1,9 @@
 #!/usr/bin/env node
 
 import { program } from 'commander';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 import { readFileSync } from 'fs';
 import * as cli from '../lib/cli/index.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 // Read package.json
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)));

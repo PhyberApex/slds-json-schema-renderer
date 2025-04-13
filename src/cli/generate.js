@@ -1,12 +1,9 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import chalk from 'chalk';
 import * as schemaParser from '../utils/schema-parser.js';
 import * as htmlGenerator from '../utils/html-generator.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 /**
  * Generate documentation from JSON schema files

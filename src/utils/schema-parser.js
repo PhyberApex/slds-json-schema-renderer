@@ -1,12 +1,8 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import $RefParser from 'json-schema-ref-parser';
 import Ajv from 'ajv';
 import { glob } from 'glob';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 // Initialize AJV with options
 const ajv = new Ajv({

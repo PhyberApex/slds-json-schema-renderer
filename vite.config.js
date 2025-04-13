@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools'
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -9,7 +10,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // This configuration works for both development and production
 export default defineConfig(({ command }) => {
   const config = {
-    plugins: [vue()],
+    plugins: [vue(), command === 'build' ? '' : vueDevTools()],
 
     // The root is src/frontend for development
     root: path.resolve(__dirname, 'src/frontend'),

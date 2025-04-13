@@ -1,6 +1,6 @@
 import fs from 'fs-extra';
 import path from 'path';
-import $RefParser from 'json-schema-ref-parser';
+import $RefParser from '@apidevtools/json-schema-ref-parser';
 import Ajv from 'ajv';
 import { glob } from 'glob';
 

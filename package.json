@@ -39,13 +39,13 @@
   "author": "PhyberApex",
   "license": "MIT",
   "dependencies": {
+    "@apidevtools/json-schema-ref-parser": "12.0.1",
     "@salesforce-ux/design-system": "2.26.2",
     "ajv": "8.17.1",
     "chalk": "5.4.1",
     "commander": "13.1.0",
     "fs-extra": "11.3.0",
     "glob": "11.0.1",
-    "json-schema-ref-parser": "9.0.9",
     "shx": "0.4.0"
   },
   "devDependencies": {
@@ -61,11 +61,10 @@
     "@vue/eslint-config-prettier": "10.2.0",
     "css-loader": "7.1.2",
     "eslint": "9.24.0",
-    "eslint-plugin-n": "^17.17.0",
+    "eslint-plugin-n": "17.17.0",
     "eslint-plugin-vue": "10.0.0",
-    "globals": "^16.0.0",
+    "globals": "16.0.0",
     "husky": "9.1.7",
-    "jest": "^29.0.3",
     "lint-staged": "15.5.1",
     "prettier": "3.5.3",
     "rimraf": "6.0.1",

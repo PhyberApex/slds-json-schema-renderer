@@ -7,7 +7,7 @@ const htmlGenerator = require('./utils/html-generator');
 const cli = require('./cli');
 
 module.exports = {
-    schemaParser,
-    htmlGenerator,
-    cli
+  schemaParser,
+  htmlGenerator,
+  cli,
 };

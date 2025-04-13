@@ -1,6 +1,8 @@
 <template>
   <div class="schema-property slds-box slds-box_small slds-theme_default slds-m-vertical_x-small">
-    <div class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-border_bottom slds-m-bottom_x-small property-header">
+    <div
+      class="slds-grid slds-grid_align-spread slds-p-bottom_x-small slds-border_bottom slds-m-bottom_x-small property-header"
+    >
       <div class="slds-col">
         <span class="slds-text-title_bold slds-text-color_default">{{ name }}</span>
         <span v-if="required" class="slds-text-color_error slds-m-left_xx-small">*</span>
@@ -10,7 +12,10 @@
       </div>
     </div>
 
-    <div v-if="schema.description" class="slds-text-body_small slds-p-bottom_small property-description">
+    <div
+      v-if="schema.description"
+      class="slds-text-body_small slds-p-bottom_small property-description"
+    >
       {{ schema.description }}
     </div>
 
@@ -22,22 +27,22 @@
 
 <script setup>
 import { computed } from 'vue';
-import SchemaConstraints from "@/components/schema/SchemaConstraints.vue";
-import SchemaEnum from "@/components/schema/SchemaEnum.vue";
+import SchemaConstraints from '@/components/schema/SchemaConstraints.vue';
+import SchemaEnum from '@/components/schema/SchemaEnum.vue';
 
 const props = defineProps({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   schema: {
     type: Object,
-    required: true
+    required: true,
   },
   required: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 // Get display type
@@ -51,11 +56,21 @@ const displayType = computed(() => {
 // Check if schema has constraints
 const hasConstraints = computed(() => {
   const constraintProps = [
-    'minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum',
-    'minLength', 'maxLength', 'pattern', 'format',
-    'multipleOf', 'default',
-    'minItems', 'maxItems', 'uniqueItems',
-    'minProperties', 'maxProperties'
+    'minimum',
+    'maximum',
+    'exclusiveMinimum',
+    'exclusiveMaximum',
+    'minLength',
+    'maxLength',
+    'pattern',
+    'format',
+    'multipleOf',
+    'default',
+    'minItems',
+    'maxItems',
+    'uniqueItems',
+    'minProperties',
+    'maxProperties',
   ];
 
   return constraintProps.some(prop => prop in props.schema);

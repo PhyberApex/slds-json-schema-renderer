@@ -11,8 +11,8 @@ import { computed } from 'vue';
 const props = defineProps({
   schema: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const formattedSchema = computed(() => {
@@ -26,4 +26,4 @@ pre {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
-</style> 
+</style>

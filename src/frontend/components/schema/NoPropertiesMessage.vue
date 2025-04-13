@@ -1,8 +1,15 @@
 <template>
-  <div class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning" role="alert">
+  <div
+    class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning"
+    role="alert"
+  >
     <span class="slds-assistive-text">warning</span>
     <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small">
-      <img src="@slds/icons/utility/warning.svg" class="slds-icon slds-icon_x-small warning-icon" alt="" />
+      <img
+        src="@slds/icons/utility/warning.svg"
+        class="slds-icon slds-icon_x-small warning-icon"
+        alt=""
+      />
     </span>
     <h2>{{ title }}</h2>
     <div class="slds-notify__content">
@@ -12,15 +19,15 @@
 </template>
 
 <script setup>
-const props = defineProps({
+defineProps({
   title: {
     type: String,
-    default: 'No Properties Defined'
+    default: 'No Properties Defined',
   },
   message: {
     type: String,
-    default: 'This object doesn\'t have any properties defined in the schema.'
-  }
+    default: "This object doesn't have any properties defined in the schema.",
+  },
 });
 </script>
 
@@ -44,4 +51,4 @@ h2 {
   font-weight: 700;
   margin-right: 0.5rem;
 }
-</style> 
+</style>

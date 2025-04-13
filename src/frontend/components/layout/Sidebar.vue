@@ -7,10 +7,10 @@
         </div>
       </div>
     </div>
-    <div class="slds-navigation-list__item" v-for="schema in schemas" :key="schema.fileName">
+    <div v-for="schema in schemas" :key="schema.fileName" class="slds-navigation-list__item">
       <div class="slds-navigation-list__item-content">
         <div class="slds-navigation-list__item-title">
-          <button 
+          <button
             class="slds-button slds-button_neutral slds-button_stretch"
             :class="{ 'slds-is-active': selectedSchemaId === schema.fileName }"
             @click="selectSchema(schema)"
@@ -29,23 +29,23 @@ import { ref } from 'vue';
 const props = defineProps({
   schemas: {
     type: Array,
-    required: true
+    required: true,
   },
   selectedSchema: {
     type: Object,
-    default: null
-  }
+    default: null,
+  },
 });
 
 const emit = defineEmits(['select-schema']);
 const selectedSchemaId = ref(props.selectedSchema?.fileName || null);
 
-const selectSchema = (schema) => {
+const selectSchema = schema => {
   selectedSchemaId.value = schema.fileName;
   emit('select-schema', schema);
 };
 
-const getSchemaTitle = (schema) => {
+const getSchemaTitle = schema => {
   return schema.schema?.title || schema.fileName || 'Untitled Schema';
 };
 </script>

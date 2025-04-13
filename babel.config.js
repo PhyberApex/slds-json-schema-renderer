@@ -1,10 +1,13 @@
 module.exports = {
-    presets: [
-        ["@babel/preset-env", {
-            targets: {
-                browsers: ["last 2 versions", "not ie <= 11"]
-            }
-        }]
+  presets: [
+    [
+      '@babel/preset-env',
+      {
+        targets: {
+          browsers: ['last 2 versions', 'not ie <= 11'],
+        },
+      },
     ],
-    plugins: []
+  ],
+  plugins: [],
 };

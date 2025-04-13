@@ -41,13 +41,17 @@
                   <td>
                     <div class="slds-truncate">
                       <span class="slds-badge">{{ property.type }}</span>
-                      <button 
+                      <button
                         v-if="isExpandable(property)"
                         class="slds-button slds-button_icon slds-button_icon_small slds-m-left_x-small"
-                        @click="toggleProperty(name)"
                         :title="expandedProperties[name] ? 'Collapse' : 'Expand'"
+                        @click="toggleProperty(name)"
                       >
-                        <img src="@slds/icons/utility/switch.svg" class="slds-button__icon" alt="" />
+                        <img
+                          src="@slds/icons/utility/switch.svg"
+                          class="slds-button__icon"
+                          alt=""
+                        />
                       </button>
                     </div>
                   </td>
@@ -58,7 +62,9 @@
                   </td>
                   <td>
                     <div class="slds-truncate">
-                      <span v-if="isRequired(name)" class="slds-badge slds-badge_success">Required</span>
+                      <span v-if="isRequired(name)" class="slds-badge slds-badge_success"
+                        >Required</span
+                      >
                       <span v-else class="slds-badge slds-badge_inverse">Optional</span>
                     </div>
                   </td>
@@ -66,11 +72,7 @@
                 <tr v-if="isExpandable(property) && expandedProperties[name]">
                   <td colspan="4" class="slds-p-around_medium">
                     <div class="slds-box slds-theme_shade">
-                      <SchemaViewer
-                        :schema="property"
-                        :rootSchema="rootSchema"
-                        :isRoot="false"
-                      />
+                      <SchemaViewer :schema="property" :root-schema="rootSchema" :is-root="false" />
                     </div>
                   </td>
                 </tr>
@@ -92,11 +94,7 @@
                 <code>{{ pattern }}</code>
               </div>
             </div>
-            <SchemaViewer
-                :schema="propSchema"
-                :rootSchema="rootSchema"
-                :isRoot="false"
-            />
+            <SchemaViewer :schema="propSchema" :root-schema="rootSchema" :is-root="false" />
           </NestedSchemaContainer>
         </div>
       </div>
@@ -111,9 +109,9 @@
       </div>
       <NestedSchemaContainer v-else>
         <SchemaViewer
-            :schema="schema.additionalProperties"
-            :rootSchema="rootSchema"
-            :isRoot="false"
+          :schema="schema.additionalProperties"
+          :root-schema="rootSchema"
+          :is-root="false"
         />
       </NestedSchemaContainer>
     </div>
@@ -126,20 +124,20 @@
 
 <script setup>
 import { computed, ref } from 'vue';
-import SchemaConstraints from "@/components/schema/SchemaConstraints.vue";
-import NestedSchemaContainer from "@/components/schema/NestedSchemaContainer.vue";
-import SchemaViewer from "@/components/schema/SchemaViewer.vue";
-import NoPropertiesMessage from "@/components/schema/NoPropertiesMessage.vue";
+import SchemaConstraints from '@/components/schema/SchemaConstraints.vue';
+import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue';
+import SchemaViewer from '@/components/schema/SchemaViewer.vue';
+import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue';
 
 const props = defineProps({
   schema: {
     type: Object,
-    required: true
+    required: true,
   },
   rootSchema: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 });
 
 // Track which properties are expanded
@@ -157,18 +155,22 @@ const hasProperties = computed(() => {
 });
 
 // Check if a property is required
-const isRequired = (propName) => {
+const isRequired = propName => {
   return props.schema.required && props.schema.required.includes(propName);
 };
 
 // Check if a property is expandable (object or array)
-const isExpandable = (property) => {
-  return property.type === 'object' || property.type === 'array' || 
-         (Array.isArray(property.type) && (property.type.includes('object') || property.type.includes('array')));
+const isExpandable = property => {
+  return (
+    property.type === 'object' ||
+    property.type === 'array' ||
+    (Array.isArray(property.type) &&
+      (property.type.includes('object') || property.type.includes('array')))
+  );
 };
 
 // Toggle property expansion
-const toggleProperty = (name) => {
+const toggleProperty = name => {
   expandedProperties.value[name] = !expandedProperties.value[name];
 };
 </script>

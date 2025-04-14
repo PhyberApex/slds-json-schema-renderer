@@ -1,18 +1,27 @@
 <template>
-  <div>
-    <div>
-      <span>Type: array</span>
+  <div class="array-schema">
+    <div class="slds-box slds-theme_shade">
+      <div class="slds-grid slds-gutters">
+        <div class="slds-col">
+          <div class="slds-text-title_caps slds-m-bottom_xx-small">Type</div>
+          <div class="slds-badge">array</div>
+        </div>
+        <div class="slds-col" v-if="schema.items">
+          <div class="slds-text-title_caps slds-m-bottom_xx-small">Items Type</div>
+          <div class="slds-badge">{{ getItemsType }}</div>
+        </div>
+      </div>
     </div>
 
     <SchemaConstraints v-if="hasConstraints" :schema="schema" />
 
-    <div v-if="schema.items">
-      <div>Items:</div>
+    <div v-if="schema.items" class="slds-m-top_medium">
+      <div class="slds-text-heading_small slds-m-bottom_small">Items Schema</div>
       <NestedSchemaContainer>
         <!-- Handle tuple validation (items is an array) -->
         <template v-if="Array.isArray(schema.items)">
-          <div v-for="(itemSchema, index) in schema.items" :key="index">
-            <div>Index {{ index }}:</div>
+          <div v-for="(itemSchema, index) in schema.items" :key="index" class="slds-m-bottom_medium">
+            <div class="slds-text-title_caps slds-m-bottom_xx-small">Index {{ index }}</div>
             <SchemaViewer :schema="itemSchema" :root-schema="rootSchema" :is-root="false" />
           </div>
         </template>
@@ -29,16 +38,16 @@
       message="This array doesn't have any items defined in the schema."
     />
 
-    <div v-if="schema.contains">
-      <div>Contains:</div>
+    <div v-if="schema.contains" class="slds-m-top_medium">
+      <div class="slds-text-heading_small slds-m-bottom_small">Contains</div>
       <NestedSchemaContainer>
         <SchemaViewer :schema="schema.contains" :root-schema="rootSchema" :is-root="false" />
       </NestedSchemaContainer>
     </div>
 
-    <div v-if="schema.additionalItems !== undefined && Array.isArray(schema.items)">
-      <div>Additional Items:</div>
-      <div v-if="typeof schema.additionalItems === 'boolean'">
+    <div v-if="schema.additionalItems !== undefined && Array.isArray(schema.items)" class="slds-m-top_medium">
+      <div class="slds-text-heading_small slds-m-bottom_small">Additional Items</div>
+      <div v-if="typeof schema.additionalItems === 'boolean'" class="slds-m-top_xx-small">
         <span :class="schema.additionalItems ? 'status-allowed' : 'status-denied'">
           {{ schema.additionalItems ? 'Allowed' : 'Not allowed' }}
         </span>
@@ -46,24 +55,6 @@
       <NestedSchemaContainer v-else>
         <SchemaViewer :schema="schema.additionalItems" :root-schema="rootSchema" :is-root="false" />
       </NestedSchemaContainer>
-    </div>
-
-    <div v-if="schema.items" class="slds-box slds-m-top_small">
-      <div class="slds-text-heading_small slds-m-bottom_small">Array Items</div>
-      <div class="slds-box slds-theme_shade">
-        <div class="slds-text-body_regular">
-          <div class="slds-grid slds-gutters">
-            <div class="slds-col">
-              <div class="slds-text-title_caps slds-m-bottom_xx-small">Type</div>
-              <div class="slds-badge">{{ schema.items.type }}</div>
-            </div>
-            <div class="slds-col">
-              <div class="slds-text-title_caps slds-m-bottom_xx-small">Description</div>
-              <div>{{ schema.items.description || 'No description' }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -91,8 +82,27 @@ const hasConstraints = computed(() => {
   const constraintProps = ['minItems', 'maxItems', 'uniqueItems'];
   return constraintProps.some(prop => prop in props.schema);
 });
+
+// Get the type of items in the array
+const getItemsType = computed(() => {
+  if (!props.schema.items) return 'Not defined';
+  if (Array.isArray(props.schema.items)) return 'Tuple';
+  return props.schema.items.type || 'Not specified';
+});
 </script>
 
 <style>
-/* Add any custom styles here if needed */
+.array-schema {
+  padding: 0.5rem;
+}
+
+.status-allowed {
+  color: #1589ee;
+  font-weight: bold;
+}
+
+.status-denied {
+  color: #c23934;
+  font-weight: bold;
+}
 </style>

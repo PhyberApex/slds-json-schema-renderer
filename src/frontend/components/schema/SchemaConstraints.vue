@@ -1,17 +1,19 @@
 <template>
-  <div class="slds-box slds-m-top_small">
+  <div class="slds-m-top_medium">
     <div class="slds-text-heading_small slds-m-bottom_small">Constraints</div>
     <div class="slds-box slds-theme_shade">
-      <dl class="slds-dl_horizontal slds-wrap">
+      <div class="slds-grid slds-wrap slds-gutters">
         <template v-for="(value, key) in constraints" :key="key">
-          <dt class="slds-size_1-of-3 slds-p-around_xx-small">
-            <div class="slds-text-title_caps">{{ formatKey(key) }}</div>
-          </dt>
-          <dd class="slds-size_2-of-3 slds-p-around_xx-small">
-            <div class="slds-text-body_regular">{{ formatValue(value) }}</div>
-          </dd>
+          <div class="slds-col slds-size_1-of-2 slds-p-around_xx-small">
+            <div class="constraint-item">
+              <div class="slds-text-title_caps slds-text-color_default">{{ formatKey(key) }}</div>
+              <div class="slds-text-body_regular slds-m-top_xx-small">
+                <span class="slds-badge" :class="getBadgeClass(value)">{{ formatValue(value) }}</span>
+              </div>
+            </div>
+          </div>
         </template>
-      </dl>
+      </div>
     </div>
   </div>
 </template>
@@ -60,10 +62,34 @@ const formatValue = value => {
   if (typeof value === 'boolean') {
     return value ? 'Yes' : 'No';
   }
+  if (typeof value === 'string' && value.startsWith('^')) {
+    return 'Pattern: ' + value;
+  }
   return value;
+};
+
+const getBadgeClass = value => {
+  if (typeof value === 'boolean') {
+    return value ? 'slds-badge_success' : 'slds-badge_inverse';
+  }
+  if (typeof value === 'number') {
+    return 'slds-badge_warning';
+  }
+  if (typeof value === 'string' && value.startsWith('^')) {
+    return 'slds-badge_info';
+  }
+  return '';
 };
 </script>
 
 <style>
-/* Add any custom styles here if needed */
+.constraint-item {
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  background-color: #f3f2f2;
+}
+
+.constraint-item:hover {
+  background-color: #eef1f6;
+}
 </style>

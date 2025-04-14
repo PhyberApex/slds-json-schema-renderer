@@ -43,7 +43,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
 
       - name: Setup Pages
-        uses: actions/configure-pages@v4
+        uses: actions/configure-pages@v5
         # Only run this step on main branch
         if: github.ref == 'refs/heads/main'
 

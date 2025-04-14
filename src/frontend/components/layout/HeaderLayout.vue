@@ -1,3 +1,12 @@
+<script setup>
+defineProps({
+  title: {
+    type: String,
+    default: 'JSON Schema Documentation',
+  },
+})
+</script>
+
 <template>
   <header class="slds-page-header">
     <div class="slds-page-header__row">
@@ -9,7 +18,7 @@
                 src="@slds/icons/standard/code_playground.svg"
                 class="slds-icon slds-icon_small"
                 alt=""
-              />
+              >
             </span>
           </div>
           <div class="slds-media__body">
@@ -26,15 +35,6 @@
     </div>
   </header>
 </template>
-
-<script setup>
-defineProps({
-  title: {
-    type: String,
-    default: 'JSON Schema Documentation',
-  },
-});
-</script>
 
 <style>
 /* Add any custom styles here if needed */

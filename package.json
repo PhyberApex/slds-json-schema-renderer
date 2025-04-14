@@ -24,9 +24,9 @@
     "prepublishOnly": "npm run build",
     "pages": "npm run build && npm run start -- generate -i ./test/ -o docs",
     "semantic-release": "semantic-release",
-    "lint": "eslint \"src/**/*.{js,vue}\" --fix",
-    "format": "prettier --write .",
-    "prepare": "husky install"
+    "lint": "eslint \"src/**/*.{js,vue}\"",
+    "lint:fix": "eslint \"src/**/*.{js,vue}\" --fix",
+    "prepare": "husky"
   },
   "keywords": [
     "json-schema",
@@ -46,9 +46,11 @@
     "commander": "13.1.0",
     "fs-extra": "11.3.0",
     "glob": "11.0.1",
+    "process": "^0.11.10",
     "shx": "0.4.0"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.12.0",
     "@babel/cli": "7.27.0",
     "@babel/core": "7.26.10",
     "@babel/preset-env": "7.26.9",
@@ -61,12 +63,8 @@
     "@vue/eslint-config-prettier": "10.2.0",
     "css-loader": "7.1.2",
     "eslint": "9.24.0",
-    "eslint-plugin-n": "17.17.0",
-    "eslint-plugin-vue": "10.0.0",
-    "globals": "16.0.0",
     "husky": "9.1.7",
     "lint-staged": "15.5.1",
-    "prettier": "3.5.3",
     "rimraf": "6.0.1",
     "semantic-release": "24.2.3",
     "style-loader": "4.0.0",
@@ -102,8 +100,7 @@
   },
   "lint-staged": {
     "*.{js,vue}": [
-      "eslint --fix",
-      "prettier --write"
+      "eslint --fix"
     ]
   }
 }

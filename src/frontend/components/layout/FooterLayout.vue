@@ -1,3 +1,24 @@
+<script setup>
+defineProps({
+  description: {
+    type: String,
+    default: '',
+  },
+  generatedAt: {
+    type: String,
+    default: () => new Date().toISOString(),
+  },
+  schemaCount: {
+    type: Number,
+    default: 0,
+  },
+})
+
+function formatDate(dateStr) {
+  return new Date(dateStr).toLocaleString()
+}
+</script>
+
 <template>
   <footer
     class="slds-p-around_medium slds-theme_shade slds-text-align_center slds-text-body_small slds-mt-auto"
@@ -19,24 +40,3 @@
     </div>
   </footer>
 </template>
-
-<script setup>
-defineProps({
-  description: {
-    type: String,
-    default: '',
-  },
-  generatedAt: {
-    type: String,
-    default: () => new Date().toISOString(),
-  },
-  schemaCount: {
-    type: Number,
-    default: 0,
-  },
-});
-
-const formatDate = dateStr => {
-  return new Date(dateStr).toLocaleString();
-};
-</script>

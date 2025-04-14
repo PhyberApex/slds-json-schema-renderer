@@ -1,3 +1,30 @@
+<script setup>
+import { ref } from 'vue'
+
+const props = defineProps({
+  schemas: {
+    type: Array,
+    required: true,
+  },
+  selectedSchema: {
+    type: Object,
+    default: null,
+  },
+})
+
+const emit = defineEmits(['selectSchema'])
+const selectedSchemaId = ref(props.selectedSchema?.fileName || null)
+
+function selectSchema(schema) {
+  selectedSchemaId.value = schema.fileName
+  emit('selectSchema', schema)
+}
+
+function getSchemaTitle(schema) {
+  return schema.schema?.title || schema.fileName || 'Untitled Schema'
+}
+</script>
+
 <template>
   <div class="slds-navigation-list--vertical">
     <div class="slds-navigation-list__item">
@@ -22,33 +49,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-
-const props = defineProps({
-  schemas: {
-    type: Array,
-    required: true,
-  },
-  selectedSchema: {
-    type: Object,
-    default: null,
-  },
-});
-
-const emit = defineEmits(['select-schema']);
-const selectedSchemaId = ref(props.selectedSchema?.fileName || null);
-
-const selectSchema = schema => {
-  selectedSchemaId.value = schema.fileName;
-  emit('select-schema', schema);
-};
-
-const getSchemaTitle = schema => {
-  return schema.schema?.title || schema.fileName || 'Untitled Schema';
-};
-</script>
 
 <style>
 .slds-navigation-list--vertical {

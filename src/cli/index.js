@@ -1,3 +1,3 @@
-import { generate } from './generate.js';
+import { generate } from './generate.js'
 
-export { generate };
+export { generate }

@@ -1,3 +1,55 @@
+<script setup>
+import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
+import SchemaEnum from '@/components/schema/SchemaEnum.vue'
+import { computed } from 'vue'
+
+const props = defineProps({
+  name: {
+    type: String,
+    required: true,
+  },
+  schema: {
+    type: Object,
+    required: true,
+  },
+  required: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+// Get display type
+const displayType = computed(() => {
+  if (Array.isArray(props.schema.type)) {
+    return props.schema.type.join(' | ')
+  }
+  return props.schema.type || 'any'
+})
+
+// Check if schema has constraints
+const hasConstraints = computed(() => {
+  const constraintProps = [
+    'minimum',
+    'maximum',
+    'exclusiveMinimum',
+    'exclusiveMaximum',
+    'minLength',
+    'maxLength',
+    'pattern',
+    'format',
+    'multipleOf',
+    'default',
+    'minItems',
+    'maxItems',
+    'uniqueItems',
+    'minProperties',
+    'maxProperties',
+  ]
+
+  return constraintProps.some(prop => prop in props.schema)
+})
+</script>
+
 <template>
   <div class="schema-property slds-box slds-box_small slds-theme_default slds-m-vertical_x-small">
     <div
@@ -24,55 +76,3 @@
     <SchemaEnum v-if="schema.enum" :values="schema.enum" />
   </div>
 </template>
-
-<script setup>
-import { computed } from 'vue';
-import SchemaConstraints from '@/components/schema/SchemaConstraints.vue';
-import SchemaEnum from '@/components/schema/SchemaEnum.vue';
-
-const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  schema: {
-    type: Object,
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-});
-
-// Get display type
-const displayType = computed(() => {
-  if (Array.isArray(props.schema.type)) {
-    return props.schema.type.join(' | ');
-  }
-  return props.schema.type || 'any';
-});
-
-// Check if schema has constraints
-const hasConstraints = computed(() => {
-  const constraintProps = [
-    'minimum',
-    'maximum',
-    'exclusiveMinimum',
-    'exclusiveMaximum',
-    'minLength',
-    'maxLength',
-    'pattern',
-    'format',
-    'multipleOf',
-    'default',
-    'minItems',
-    'maxItems',
-    'uniqueItems',
-    'minProperties',
-    'maxProperties',
-  ];
-
-  return constraintProps.some(prop => prop in props.schema);
-});
-</script>

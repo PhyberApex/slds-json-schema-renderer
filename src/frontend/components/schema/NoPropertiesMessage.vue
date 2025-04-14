@@ -1,3 +1,16 @@
+<script setup>
+defineProps({
+  title: {
+    type: String,
+    default: 'No Properties Defined',
+  },
+  message: {
+    type: String,
+    default: 'This object doesn\'t have any properties defined in the schema.',
+  },
+})
+</script>
+
 <template>
   <div
     class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning"
@@ -9,7 +22,7 @@
         src="@slds/icons/utility/warning.svg"
         class="slds-icon slds-icon_x-small warning-icon"
         alt=""
-      />
+      >
     </span>
     <h2>{{ title }}</h2>
     <div class="slds-notify__content">
@@ -17,19 +30,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-defineProps({
-  title: {
-    type: String,
-    default: 'No Properties Defined',
-  },
-  message: {
-    type: String,
-    default: "This object doesn't have any properties defined in the schema.",
-  },
-});
-</script>
 
 <style scoped>
 .slds-notify_alert {

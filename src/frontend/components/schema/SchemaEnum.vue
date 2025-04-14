@@ -1,6 +1,17 @@
+<script setup>
+defineProps({
+  values: {
+    type: Array,
+    required: true,
+  },
+})
+</script>
+
 <template>
   <div class="slds-box slds-theme_shade">
-    <div class="slds-text-heading_small slds-m-bottom_small">Enum Values</div>
+    <div class="slds-text-heading_small slds-m-bottom_small">
+      Enum Values
+    </div>
     <div class="slds-grid slds-wrap slds-gutters">
       <div
         v-for="(value, index) in values"
@@ -14,12 +25,3 @@
     </div>
   </div>
 </template>
-
-<script setup>
-defineProps({
-  values: {
-    type: Array,
-    required: true,
-  },
-});
-</script>

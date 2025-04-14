@@ -1,3 +1,52 @@
+<script setup>
+import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue'
+import SchemaViewer from '@/components/schema/SchemaViewer.vue'
+import { computed } from 'vue'
+
+const props = defineProps({
+  schema: {
+    type: Object,
+    required: true,
+  },
+  rootSchema: {
+    type: Object,
+    required: true,
+  },
+})
+
+const emit = defineEmits(['navigateToDefinition'])
+
+// Extract the name from the reference
+function getRefName(ref) {
+  const parts = ref.split('/')
+  return parts[parts.length - 1]
+}
+
+// Resolve the reference in the schema
+const resolvedSchema = computed(() => {
+  if (!props.schema.$ref)
+    return null
+
+  const parts = props.schema.$ref.split('/')
+  let current = props.rootSchema
+
+  // Skip the first empty part and '#'
+  for (let i = 1; i < parts.length; i++) {
+    if (!current)
+      return null
+    current = current[parts[i]]
+  }
+
+  return current
+})
+
+function handleNavigate() {
+  emit('navigateToDefinition', {
+    definitionName: getRefName(props.schema.$ref),
+  })
+}
+</script>
+
 <template>
   <div>
     <div>
@@ -17,7 +66,7 @@
       <div>
         <div>
           <span>
-            <img src="@slds/icons/utility/warning.svg" class="warning-icon" alt="" />
+            <img src="@slds/icons/utility/warning.svg" class="warning-icon" alt="">
           </span>
         </div>
         <div>
@@ -28,53 +77,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { computed } from 'vue';
-import SchemaViewer from '@/components/schema/SchemaViewer.vue';
-import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue';
-
-const props = defineProps({
-  schema: {
-    type: Object,
-    required: true,
-  },
-  rootSchema: {
-    type: Object,
-    required: true,
-  },
-});
-
-const emit = defineEmits(['navigate-to-definition']);
-
-// Extract the name from the reference
-const getRefName = ref => {
-  const parts = ref.split('/');
-  return parts[parts.length - 1];
-};
-
-// Resolve the reference in the schema
-const resolvedSchema = computed(() => {
-  if (!props.schema.$ref) return null;
-
-  const parts = props.schema.$ref.split('/');
-  let current = props.rootSchema;
-
-  // Skip the first empty part and '#'
-  for (let i = 1; i < parts.length; i++) {
-    if (!current) return null;
-    current = current[parts[i]];
-  }
-
-  return current;
-});
-
-const handleNavigate = () => {
-  emit('navigate-to-definition', {
-    definitionName: getRefName(props.schema.$ref),
-  });
-};
-</script>
 
 <style scoped>
 .warning-icon {

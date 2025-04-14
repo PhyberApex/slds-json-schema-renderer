@@ -1,3 +1,59 @@
+<script setup>
+import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue'
+import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue'
+import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
+import SchemaViewer from '@/components/schema/SchemaViewer.vue'
+import { computed, ref } from 'vue'
+
+const props = defineProps({
+  schema: {
+    type: Object,
+    required: true,
+  },
+  rootSchema: {
+    type: Object,
+    required: true,
+  },
+})
+
+// Track which properties are expanded
+const expandedProperties = ref({})
+
+// Check if schema has constraints
+const hasConstraints = computed(() => {
+  const constraintProps = ['minProperties', 'maxProperties']
+  return constraintProps.some(prop => prop in props.schema)
+})
+
+// Check if schema has properties
+const hasProperties = computed(() => {
+  return (
+    (props.schema.properties && Object.keys(props.schema.properties).length > 0)
+    || (props.schema.patternProperties && Object.keys(props.schema.patternProperties).length > 0)
+  )
+})
+
+// Check if a property is required
+function isRequired(propName) {
+  return props.schema.required && props.schema.required.includes(propName)
+}
+
+// Check if a property is expandable (object or array)
+function isExpandable(property) {
+  return (
+    property.type === 'object'
+    || property.type === 'array'
+    || (Array.isArray(property.type)
+      && (property.type.includes('object') || property.type.includes('array')))
+  )
+}
+
+// Toggle property expansion
+function toggleProperty(name) {
+  expandedProperties.value[name] = !expandedProperties.value[name]
+}
+</script>
+
 <template>
   <div>
     <div>
@@ -13,22 +69,32 @@
 
     <div v-if="hasProperties">
       <div class="slds-box slds-m-top_small">
-        <div class="slds-text-heading_small slds-m-bottom_small">Properties</div>
+        <div class="slds-text-heading_small slds-m-bottom_small">
+          Properties
+        </div>
         <div class="slds-table_container">
           <table class="slds-table slds-table_cell-buffer slds-table_bordered">
             <thead>
               <tr class="slds-line-height_reset">
                 <th class="slds-text-title_caps" scope="col">
-                  <div class="slds-truncate" title="Property">Property</div>
+                  <div class="slds-truncate" title="Property">
+                    Property
+                  </div>
                 </th>
                 <th class="slds-text-title_caps" scope="col">
-                  <div class="slds-truncate" title="Type">Type</div>
+                  <div class="slds-truncate" title="Type">
+                    Type
+                  </div>
                 </th>
                 <th class="slds-text-title_caps" scope="col">
-                  <div class="slds-truncate" title="Description">Description</div>
+                  <div class="slds-truncate" title="Description">
+                    Description
+                  </div>
                 </th>
                 <th class="slds-text-title_caps" scope="col">
-                  <div class="slds-truncate" title="Required">Required</div>
+                  <div class="slds-truncate" title="Required">
+                    Required
+                  </div>
                 </th>
               </tr>
             </thead>
@@ -36,7 +102,9 @@
               <template v-for="(property, name) in schema.properties" :key="name">
                 <tr class="slds-hint-parent">
                   <td>
-                    <div class="slds-truncate" :title="name">{{ name }}</div>
+                    <div class="slds-truncate" :title="name">
+                      {{ name }}
+                    </div>
                   </td>
                   <td>
                     <div class="slds-truncate">
@@ -51,7 +119,7 @@
                           src="@slds/icons/utility/switch.svg"
                           class="slds-button__icon"
                           alt=""
-                        />
+                        >
                       </button>
                     </div>
                   </td>
@@ -62,9 +130,7 @@
                   </td>
                   <td>
                     <div class="slds-truncate">
-                      <span v-if="isRequired(name)" class="slds-badge slds-badge_success"
-                        >Required</span
-                      >
+                      <span v-if="isRequired(name)" class="slds-badge slds-badge_success">Required</span>
                       <span v-else class="slds-badge slds-badge_inverse">Optional</span>
                     </div>
                   </td>
@@ -120,62 +186,6 @@
     <NoPropertiesMessage v-if="!hasProperties" />
   </div>
 </template>
-
-<script setup>
-import { computed, ref } from 'vue';
-import SchemaConstraints from '@/components/schema/SchemaConstraints.vue';
-import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue';
-import SchemaViewer from '@/components/schema/SchemaViewer.vue';
-import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue';
-
-const props = defineProps({
-  schema: {
-    type: Object,
-    required: true,
-  },
-  rootSchema: {
-    type: Object,
-    required: true,
-  },
-});
-
-// Track which properties are expanded
-const expandedProperties = ref({});
-
-// Check if schema has constraints
-const hasConstraints = computed(() => {
-  const constraintProps = ['minProperties', 'maxProperties'];
-  return constraintProps.some(prop => prop in props.schema);
-});
-
-// Check if schema has properties
-const hasProperties = computed(() => {
-  return (
-    (props.schema.properties && Object.keys(props.schema.properties).length > 0) ||
-    (props.schema.patternProperties && Object.keys(props.schema.patternProperties).length > 0)
-  );
-});
-
-// Check if a property is required
-const isRequired = propName => {
-  return props.schema.required && props.schema.required.includes(propName);
-};
-
-// Check if a property is expandable (object or array)
-const isExpandable = property => {
-  return (
-    property.type === 'object' ||
-    property.type === 'array' ||
-    (Array.isArray(property.type) &&
-      (property.type.includes('object') || property.type.includes('array')))
-  );
-};
-
-// Toggle property expansion
-const toggleProperty = name => {
-  expandedProperties.value[name] = !expandedProperties.value[name];
-};
-</script>
 
 <style>
 .slds-button_icon_small {

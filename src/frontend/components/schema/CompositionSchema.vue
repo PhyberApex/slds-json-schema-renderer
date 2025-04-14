@@ -1,3 +1,77 @@
+<script setup>
+import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue'
+import SchemaViewer from '@/components/schema/SchemaViewer.vue'
+import { computed, ref } from 'vue'
+
+const props = defineProps({
+  schema: {
+    type: Object,
+    required: true,
+  },
+  compositionType: {
+    type: String,
+    required: true,
+    validator: value => ['anyOf', 'oneOf', 'allOf'].includes(value),
+  },
+  rootSchema: {
+    type: Object,
+    required: true,
+  },
+})
+
+// Track active tab
+const activeTab = ref(0)
+
+// Get the array of schemas based on composition type
+const schemas = computed(() => {
+  return props.schema[props.compositionType] || []
+})
+
+// Get the label for the composition type
+const compositionTypeLabel = computed(() => {
+  switch (props.compositionType) {
+    case 'oneOf':
+      return 'One Of (Choose One)'
+    case 'anyOf':
+      return 'Any Of (Choose Any)'
+    case 'allOf':
+      return 'All Of (Must Match All)'
+    default:
+      return props.compositionType
+  }
+})
+
+// Get the CSS class for the composition type badge
+const compositionTypeClass = computed(() => {
+  switch (props.compositionType) {
+    case 'oneOf':
+      return 'slds-badge_success'
+    case 'anyOf':
+      return 'slds-badge_warning'
+    case 'allOf':
+      return 'slds-badge_inverse'
+    default:
+      return ''
+  }
+})
+
+// Get the schema type for display
+function getSchemaType(schema) {
+  if (Array.isArray(schema.type)) {
+    return schema.type.join(' | ')
+  }
+  return schema.type || 'object'
+}
+
+// Get the tab title for a schema
+function getTabTitle(schema, index) {
+  if (schema.title) {
+    return schema.title
+  }
+  return `Option ${index + 1}`
+}
+</script>
+
 <template>
   <div class="slds-box slds-theme_shade">
     <div class="slds-text-heading_small slds-m-bottom_small">
@@ -46,80 +120,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-import { computed, ref } from 'vue';
-import SchemaViewer from '@/components/schema/SchemaViewer.vue';
-import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue';
-
-const props = defineProps({
-  schema: {
-    type: Object,
-    required: true,
-  },
-  compositionType: {
-    type: String,
-    required: true,
-    validator: value => ['anyOf', 'oneOf', 'allOf'].includes(value),
-  },
-  rootSchema: {
-    type: Object,
-    required: true,
-  },
-});
-
-// Track active tab
-const activeTab = ref(0);
-
-// Get the array of schemas based on composition type
-const schemas = computed(() => {
-  return props.schema[props.compositionType] || [];
-});
-
-// Get the label for the composition type
-const compositionTypeLabel = computed(() => {
-  switch (props.compositionType) {
-    case 'oneOf':
-      return 'One Of (Choose One)';
-    case 'anyOf':
-      return 'Any Of (Choose Any)';
-    case 'allOf':
-      return 'All Of (Must Match All)';
-    default:
-      return props.compositionType;
-  }
-});
-
-// Get the CSS class for the composition type badge
-const compositionTypeClass = computed(() => {
-  switch (props.compositionType) {
-    case 'oneOf':
-      return 'slds-badge_success';
-    case 'anyOf':
-      return 'slds-badge_warning';
-    case 'allOf':
-      return 'slds-badge_inverse';
-    default:
-      return '';
-  }
-});
-
-// Get the schema type for display
-const getSchemaType = schema => {
-  if (Array.isArray(schema.type)) {
-    return schema.type.join(' | ');
-  }
-  return schema.type || 'object';
-};
-
-// Get the tab title for a schema
-const getTabTitle = (schema, index) => {
-  if (schema.title) {
-    return schema.title;
-  }
-  return `Option ${index + 1}`;
-};
-</script>
 
 <style>
 .slds-tabs_default__content {

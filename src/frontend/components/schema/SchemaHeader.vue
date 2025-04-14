@@ -1,3 +1,12 @@
+<script setup>
+defineProps({
+  schema: {
+    type: Object,
+    required: true,
+  },
+})
+</script>
+
 <template>
   <div class="slds-page-header">
     <div class="slds-page-header__row">
@@ -9,7 +18,7 @@
                 src="@slds/icons/standard/code_playground.svg"
                 class="slds-icon slds-icon_small"
                 alt=""
-              />
+              >
             </span>
           </div>
           <div class="slds-media__body">
@@ -32,15 +41,6 @@
     </div>
   </div>
 </template>
-
-<script setup>
-defineProps({
-  schema: {
-    type: Object,
-    required: true,
-  },
-});
-</script>
 
 <style>
 /* Add any custom styles here if needed */

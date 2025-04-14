@@ -1,3 +1,14 @@
+<script setup>
+defineProps({
+  modelValue: {
+    type: String,
+    required: true,
+  },
+})
+
+defineEmits(['update:modelValue'])
+</script>
+
 <template>
   <ul class="slds-tabs_default__nav" role="tablist">
     <li
@@ -34,17 +45,6 @@
     </li>
   </ul>
 </template>
-
-<script setup>
-defineProps({
-  modelValue: {
-    type: String,
-    required: true,
-  },
-});
-
-defineEmits(['update:modelValue']);
-</script>
 
 <style>
 /* Add any custom styles here if needed */

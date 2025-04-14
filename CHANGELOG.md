@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.0.3...v1.0.4) (2025-04-14)
+
+
+### Bug Fixes
+
+* Some layout changes. And reduced required node version ([7a0e8c4](https://github.com/PhyberApex/slds-json-schema-renderer/commit/7a0e8c4fad76c086f4d3fa567b0f543ac603854a))
+
 ## [1.0.3](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.0.2...v1.0.3) (2025-04-13)
 
 

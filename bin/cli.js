@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync } from 'node:fs'
-import { process } from 'node:process'
+import process from 'node:process'
 import { program } from 'commander'
 import * as cli from '../lib/cli/index.js'
 

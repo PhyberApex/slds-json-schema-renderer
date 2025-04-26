@@ -1,4 +1,5 @@
 import path from 'node:path'
+import { process } from 'node:process'
 import $RefParser from '@apidevtools/json-schema-ref-parser'
 import Ajv from 'ajv'
 import fs from 'fs-extra'
@@ -18,21 +19,27 @@ const ajv = new Ajv({
  */
 async function parse(filePath) {
   try {
+    // Get absolute path
+    const absoluteFilePath = path.resolve(filePath)
+
+    // Get the directory of the file
+    const fileDir = path.dirname(absoluteFilePath)
+
     // Read the schema file
-    const schemaContent = await fs.readFile(filePath, 'utf8')
+    const schemaContent = await fs.readFile(absoluteFilePath, 'utf8')
     let rawSchema
 
     try {
       rawSchema = JSON.parse(schemaContent)
     }
     catch (error) {
-      throw new Error(`Invalid JSON in file ${filePath}: ${error.message}`)
+      throw new Error(`Invalid JSON in file ${absoluteFilePath}: ${error.message}`)
     }
 
     // Check if it's a valid JSON schema (should have a $schema property or type property)
     if (!rawSchema.$schema && !rawSchema.type) {
       console.warn(
-        `Warning: File ${filePath} may not be a JSON schema (missing $schema or type property)`,
+        `Warning: File ${absoluteFilePath} may not be a JSON schema (missing $schema or type property)`,
       )
     }
 
@@ -45,18 +52,18 @@ async function parse(filePath) {
       validate(rawSchema)
 
       if (validate.errors) {
-        console.warn(`Warning: Schema validation issues in ${filePath}:`)
+        console.warn(`Warning: Schema validation issues in ${absoluteFilePath}:`)
         validate.errors.forEach((err) => {
           console.warn(`  - ${err.instancePath} ${err.message}`)
         })
       }
     }
     catch (err) {
-      console.warn(`Warning: Failed to validate schema ${filePath}: ${err.message}`)
+      console.warn(`Warning: Failed to validate schema ${absoluteFilePath}: ${err.message}`)
     }
 
-    // Process the schema to normalize and add metadata
-    return await processSchema(rawSchema, filePath)
+    // Process the schema to normalize and add metadata - passing the file directory
+    return await processSchema(rawSchema, absoluteFilePath, fileDir)
   }
   catch (err) {
     throw new Error(`Failed to parse schema: ${err.message}`)
@@ -67,62 +74,75 @@ async function parse(filePath) {
  * Process a schema to resolve references and add metadata
  * @param {object} schema - The JSON schema object
  * @param {string} filePath - Path to the JSON schema file
+ * @param {string} fileDir - Directory of the JSON schema file
  * @returns {object} Processed schema
  */
-async function processSchema(schema, filePath) {
+async function processSchema(schema, filePath, fileDir) {
   try {
-    // Dereference any $ref pointers
-    const dereferencedSchema = await $RefParser.dereference(schema, {
-      resolve: {
-        file: true,
-        http: false,
-      },
-    })
+    // Store the current working directory
+    const originalCwd = process.cwd()
 
-    // Get file stats
-    const stats = await fs.stat(filePath)
+    try {
+      // Change working directory to the file's directory
+      process.chdir(fileDir)
 
-    // Add metadata
-    dereferencedSchema._metadata = {
-      fileName: path.basename(filePath),
-      filePath,
-      fileSize: stats.size,
-      lastModified: stats.mtime,
-      processed: new Date().toISOString(),
-    }
+      // Dereference any $ref pointers - now relative to the file's directory
+      const dereferencedSchema = await $RefParser.dereference(schema, {
+        resolve: {
+          http: false,
+        },
+      })
 
-    // Extract additional useful metadata from the schema
-    if (dereferencedSchema.title) {
-      dereferencedSchema._metadata.title = dereferencedSchema.title
-    }
+      // Get file stats
+      const stats = await fs.stat(filePath)
 
-    if (dereferencedSchema.$id) {
-      dereferencedSchema._metadata.id = dereferencedSchema.$id
-    }
-
-    // Extract all schema types (if it's an array of types)
-    if (dereferencedSchema.type) {
-      if (Array.isArray(dereferencedSchema.type)) {
-        dereferencedSchema._metadata.types = dereferencedSchema.type
+      // Add metadata
+      dereferencedSchema._metadata = {
+        fileName: path.basename(filePath),
+        filePath,
+        fileDirectory: fileDir,
+        fileSize: stats.size,
+        lastModified: stats.mtime,
+        processed: new Date().toISOString(),
       }
-      else {
-        dereferencedSchema._metadata.types = [dereferencedSchema.type]
+
+      // Extract additional useful metadata from the schema
+      if (dereferencedSchema.title) {
+        dereferencedSchema._metadata.title = dereferencedSchema.title
       }
-    }
 
-    // Count properties
-    if (dereferencedSchema.properties) {
-      dereferencedSchema._metadata.propertyCount = Object.keys(
-        dereferencedSchema.properties,
-      ).length
-
-      // Count required properties
-      if (Array.isArray(dereferencedSchema.required)) {
-        dereferencedSchema._metadata.requiredPropertyCount = dereferencedSchema.required.length
+      if (dereferencedSchema.$id) {
+        dereferencedSchema._metadata.id = dereferencedSchema.$id
       }
-    }
 
-    return dereferencedSchema
+      // Extract all schema types (if it's an array of types)
+      if (dereferencedSchema.type) {
+        if (Array.isArray(dereferencedSchema.type)) {
+          dereferencedSchema._metadata.types = dereferencedSchema.type
+        }
+        else {
+          dereferencedSchema._metadata.types = [dereferencedSchema.type]
+        }
+      }
+
+      // Count properties
+      if (dereferencedSchema.properties) {
+        dereferencedSchema._metadata.propertyCount = Object.keys(
+          dereferencedSchema.properties,
+        ).length
+
+        // Count required properties
+        if (Array.isArray(dereferencedSchema.required)) {
+          dereferencedSchema._metadata.requiredPropertyCount = dereferencedSchema.required.length
+        }
+      }
+
+      return dereferencedSchema
+    }
+    finally {
+      // Restore the original working directory
+      process.chdir(originalCwd)
+    }
   }
   catch (err) {
     throw new Error(`Failed to process schema: ${err.message}`)

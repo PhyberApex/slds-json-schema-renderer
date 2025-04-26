@@ -53,6 +53,9 @@
       "type": "string",
       "format": "uuid"
     },
+    "user": {
+      "$ref": "schemas/BasicUser.json"
+    },
     "title": {
       "type": "string",
       "minLength": 1,

@@ -1,13 +1,14 @@
 #!/usr/bin/env node
 
-import { program } from 'commander';
-import { readFileSync } from 'fs';
-import * as cli from '../lib/cli/index.js';
+import { readFileSync } from 'node:fs'
+import { process } from 'node:process'
+import { program } from 'commander'
+import * as cli from '../lib/cli/index.js'
 
 // Read package.json
-const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)));
+const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)))
 
-program.version(pkg.version).description('JSON Schema Documentation Generator CLI');
+program.version(pkg.version).description('JSON Schema Documentation Generator CLI')
 
 // Add the generate command
 program
@@ -18,19 +19,19 @@ program
   .option('-t, --title <title>', 'Documentation title', 'JSON Schema Documentation')
   .option('-d, --description <description>', 'Documentation description', '')
   .option('-v, --verbose', 'Enable verbose output', false)
-  .action(cli.generate);
+  .action(cli.generate)
 
 // Add the init command for future implementation
 program
   .command('init')
   .description('Initialize a new documentation project')
   .action(() => {
-    console.log('Initialize command not yet implemented');
-  });
+    console.log('Initialize command not yet implemented')
+  })
 
-program.parse(process.argv);
+program.parse(process.argv)
 
 // If no arguments, display help
 if (!process.argv.slice(2).length) {
-  program.outputHelp();
+  program.outputHelp()
 }

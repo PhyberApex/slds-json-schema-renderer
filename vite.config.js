@@ -1,11 +1,11 @@
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import vueDevTools from 'vite-plugin-vue-devtools';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import vue from '@vitejs/plugin-vue'
+import { defineConfig } from 'vite'
+import vueDevTools from 'vite-plugin-vue-devtools'
 
 // Get directory path in ESM
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // This configuration works for both development and production
 export default defineConfig(({ command }) => {
@@ -21,7 +21,7 @@ export default defineConfig(({ command }) => {
         '@slds': path.resolve(__dirname, 'node_modules/@salesforce-ux/design-system/assets'),
       },
     },
-  };
+  }
 
   if (command === 'build') {
     // Production build settings
@@ -49,16 +49,17 @@ export default defineConfig(({ command }) => {
           },
         },
       },
-    };
-  } else {
+    }
+  }
+  else {
     // Development server settings
     config.server = {
       // Serve node_modules for SLDS resources
       fs: {
         allow: ['..', '../../node_modules'],
       },
-    };
+    }
   }
 
-  return config;
-});
+  return config
+})

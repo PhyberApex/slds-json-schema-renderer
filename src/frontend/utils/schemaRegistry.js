@@ -3,7 +3,6 @@ import CompositionSchema from '@/components/schema/CompositionSchema.vue'
 import ObjectSchema from '@/components/schema/ObjectSchema.vue'
 import PrimitiveSchema from '@/components/schema/PrimitiveSchema.vue'
 import ReferenceResolver from '@/components/schema/ReferenceResolver.vue'
-import { resolveReferences } from './schema-utils'
 
 // Registry of schema type components
 export const schemaTypeComponents = {
@@ -32,11 +31,6 @@ export const schemaUtils = {
     return null
   },
 
-  isPrimitiveType: (schema) => {
-    const primitiveTypes = ['string', 'number', 'integer', 'boolean', 'null']
-    return primitiveTypes.includes(schema.type)
-  },
-
   getComponentForSchema: (schema) => {
     if (schemaUtils.hasReference(schema)) {
       return ReferenceResolver
@@ -48,6 +42,4 @@ export const schemaUtils = {
 
     return schemaTypeComponents[schema.type] || null
   },
-
-  resolveReferences,
 }

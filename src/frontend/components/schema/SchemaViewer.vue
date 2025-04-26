@@ -29,19 +29,14 @@ const activeTab = ref('visual')
 // If this is the root component, use the schema as the rootSchema
 const rootSchema = computed(() => (props.isRoot ? props.schema : props.rootSchema))
 
-// Resolve all references in the schema
-const resolvedSchema = computed(() => {
-  return schemaUtils.resolveReferences(props.schema, rootSchema.value)
-})
-
 // Provide the rootSchema to all child components
 provide('rootSchema', rootSchema)
 
 // Get the appropriate component for the schema type
-const schemaComponent = computed(() => schemaUtils.getComponentForSchema(resolvedSchema.value))
+const schemaComponent = computed(() => schemaUtils.getComponentForSchema(props.schema))
 
 // Get composition type if applicable
-const compositionType = computed(() => schemaUtils.getCompositionType(resolvedSchema.value))
+const compositionType = computed(() => schemaUtils.getCompositionType(props.schema))
 
 // Function to handle navigation to definition
 function handleNavigateToDefinition(data) {
@@ -64,13 +59,13 @@ function handleNavigateToDefinition(data) {
 
       <div :class="{ 'slds-show': activeTab === 'visual', 'slds-hide': activeTab !== 'visual' }">
         <div class="slds-p-around_medium">
-          <SchemaHeader :schema="resolvedSchema" />
+          <SchemaHeader :schema="schema" />
 
           <div class="slds-m-top_medium">
             <component
               :is="schemaComponent"
               v-if="schemaComponent"
-              :schema="resolvedSchema"
+              :schema="schema"
               :root-schema="rootSchema"
               :composition-type="compositionType"
               @navigate-to-definition="handleNavigateToDefinition"
@@ -78,8 +73,8 @@ function handleNavigateToDefinition(data) {
             <NoPropertiesMessage v-else />
 
             <SchemaEnum
-              v-if="resolvedSchema.enum"
-              :values="resolvedSchema.enum"
+              v-if="schema.enum"
+              :values="schema.enum"
               class="slds-m-top_medium"
             />
           </div>
@@ -88,7 +83,7 @@ function handleNavigateToDefinition(data) {
 
       <div :class="{ 'slds-show': activeTab === 'plain', 'slds-hide': activeTab !== 'plain' }">
         <div class="slds-p-around_medium">
-          <PlainSchemaView :schema="resolvedSchema" />
+          <PlainSchemaView :schema="schema" />
         </div>
       </div>
     </div>

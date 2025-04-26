@@ -1,33 +1,10 @@
 {
   "name": "slds-json-schema-renderer",
+  "type": "module",
   "version": "1.0.4",
   "description": "A CLI tool to generate documentation from JSON schema files",
-  "type": "module",
-  "main": "lib/index.js",
-  "bin": {
-    "json-schema-docs": "./bin/cli.js"
-  },
-  "files": [
-    "bin/",
-    "lib/",
-    "src/templates/",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "start": "node ./bin/cli.js",
-    "clean": "rimraf lib",
-    "build:cli": "babel src --out-dir lib --copy-files --ignore 'src/frontend/**' --config-file ./babel.config.json",
-    "dev": "vite",
-    "build:frontend": "vite build",
-    "build": "npm run clean && npm run build:cli && npm run build:frontend",
-    "prepublishOnly": "npm run build",
-    "pages": "npm run build && npm run start -- generate -i ./test/ -o docs",
-    "semantic-release": "semantic-release",
-    "lint": "eslint \"src/**/*.{js,vue}\"",
-    "lint:fix": "eslint \"src/**/*.{js,vue}\" --fix",
-    "prepare": "husky"
-  },
+  "author": "PhyberApex",
+  "license": "MIT",
   "keywords": [
     "json-schema",
     "documentation",
@@ -36,8 +13,35 @@
     "vue",
     "slds"
   ],
-  "author": "PhyberApex",
-  "license": "MIT",
+  "main": "lib/index.js",
+  "bin": {
+    "json-schema-docs": "./bin/cli.js"
+  },
+  "files": [
+    "LICENSE",
+    "README.md",
+    "bin/",
+    "lib/",
+    "src/templates/"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node ./bin/cli.js",
+    "clean": "rimraf lib",
+    "build:cli": "babel src --out-dir lib --copy-files --ignore 'src/frontend/**' --config-file ./babel.config.json",
+    "dev": "npm run mock-data && vite",
+    "mock-data": "node prepareMockData.js",
+    "build:frontend": "vite build",
+    "build": "npm run clean && npm run build:cli && npm run build:frontend",
+    "prepublishOnly": "npm run build",
+    "pages": "npm run build && npm run start -- generate -i ./test/ -o docs",
+    "semantic-release": "semantic-release",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "prepare": "husky"
+  },
   "dependencies": {
     "@apidevtools/json-schema-ref-parser": "12.0.1",
     "@salesforce-ux/design-system": "2.26.2",
@@ -71,9 +75,6 @@
     "vite": "6.3.1",
     "vite-plugin-vue-devtools": "7.7.5",
     "vue": "3.5.13"
-  },
-  "engines": {
-    "node": ">=20"
   },
   "release": {
     "branches": [

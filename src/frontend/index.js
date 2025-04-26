@@ -10,7 +10,7 @@ async function init() {
   // Get the app data from the window object
   const appData
     = import.meta.env.MODE === 'development'
-      ? (await import('./utils/mockData.js')).default
+      ? (await import('../../dist/mockData.js')).default
       : window.__JSON_SCHEMA_DOCS_DATA__ || {
         title: 'JSON Schema Documentation',
         description: '',

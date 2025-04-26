@@ -1,5 +1,5 @@
 import path from 'node:path'
-import { process } from 'node:process'
+import process from 'node:process'
 import $RefParser from '@apidevtools/json-schema-ref-parser'
 import Ajv from 'ajv'
 import fs from 'fs-extra'

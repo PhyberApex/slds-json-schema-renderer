@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.2.0...v1.3.0) (2025-04-27)
+
+
+### Features
+
+* Added enum handling, better animations more support for constraints and removed redundant files ([1d9789f](https://github.com/PhyberApex/slds-json-schema-renderer/commit/1d9789fe116153e8fd805dcb6e3797fb58294fb2))
+
 # [1.2.0](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.1.0...v1.2.0) (2025-04-27)
 
 

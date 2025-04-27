@@ -46,6 +46,89 @@
       "additionalItems": false,
       "minItems": 2,
       "maxItems": 2
+    },
+    "contactInfo": {
+      "type": "object",
+      "oneOf": [
+        {
+          "properties": {
+            "contactType": { "enum": ["email"] },
+            "emailAddress": {
+              "type": "string",
+              "format": "email"
+            }
+          },
+          "required": ["contactType", "emailAddress"]
+        },
+        {
+          "properties": {
+            "contactType": { "enum": ["phone"] },
+            "phoneNumber": {
+              "type": "string",
+              "pattern": "^\\+?[0-9]{10,15}$"
+            }
+          },
+          "required": ["contactType", "phoneNumber"]
+        },
+        {
+          "properties": {
+            "contactType": { "enum": ["slack"] },
+            "slackHandle": {
+              "type": "string",
+              "pattern": "^@[a-zA-Z0-9._-]+$"
+            }
+          },
+          "required": ["contactType", "slackHandle"]
+        }
+      ]
+    },
+    "criticalTask": {
+      "type": "object",
+      "allOf": [
+        {
+          "properties": {
+            "priority": { "enum": ["critical"] },
+            "escalationLevel": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            },
+            "notificationInterval": {
+              "type": "integer",
+              "minimum": 15,
+              "description": "Minutes between notifications"
+            }
+          },
+          "required": ["priority", "escalationLevel", "notificationInterval"]
+        },
+        {
+          "properties": {
+            "assignee": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "name": { "type": "string" },
+                "contactDetails": { "$ref": "#/definitions/contactInfo" }
+              },
+              "required": ["id", "name", "contactDetails"]
+            },
+            "backupAssignees": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "name": { "type": "string" },
+                  "contactDetails": { "$ref": "#/definitions/contactInfo" }
+                },
+                "required": ["id", "name", "contactDetails"]
+              },
+              "minItems": 1
+            }
+          },
+          "required": ["assignee", "backupAssignees"]
+        }
+      ]
     }
   },
   "properties": {
@@ -147,6 +230,46 @@
         "format": "uuid"
       },
       "uniqueItems": true
+    },
+    "assignee": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "type": { "enum": ["user"] },
+            "userId": { "type": "string", "format": "uuid" },
+            "name": { "type": "string" }
+          },
+          "required": ["type", "userId", "name"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "enum": ["team"] },
+            "teamId": { "type": "string", "format": "uuid" },
+            "teamName": { "type": "string" },
+            "representativeId": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Team member who is the primary contact for this task"
+            }
+          },
+          "required": ["type", "teamId", "teamName"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "enum": ["external"] },
+            "vendorId": { "type": "string" },
+            "vendorName": { "type": "string" },
+            "contactInfo": { "$ref": "#/definitions/contactInfo" }
+          },
+          "required": ["type", "vendorId", "vendorName", "contactInfo"]
+        }
+      ]
+    },
+    "criticalTaskDetails": {
+      "$ref": "#/definitions/criticalTask"
     }
   },
   "required": ["id", "title", "status"],

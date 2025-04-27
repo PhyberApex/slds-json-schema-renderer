@@ -1,17 +1,12 @@
 <script setup>
 import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 
 const props = defineProps({
   schema: {
     type: Object,
     required: true,
-  },
-  compositionType: {
-    type: String,
-    required: true,
-    validator: value => ['anyOf', 'oneOf', 'allOf'].includes(value),
   },
   rootSchema: {
     type: Object,
@@ -19,17 +14,34 @@ const props = defineProps({
   },
 })
 
+const compositionType = computed(() => {
+  if (props.schema.anyOf)
+    return 'anyOf'
+  if (props.schema.oneOf)
+    return 'oneOf'
+  if (props.schema.allOf)
+    return 'allOf'
+  return null
+})
+
 // Track active tab
 const activeTab = ref(0)
 
 // Get the array of schemas based on composition type
 const schemas = computed(() => {
-  return props.schema[props.compositionType] || []
+  return props.schema[compositionType.value] || []
+})
+
+watchEffect(() => {
+  schemas.value.forEach((schema) => {
+    if (!schema.type)
+      schema.type = props.schema.type
+  })
 })
 
 // Get the label for the composition type
 const compositionTypeLabel = computed(() => {
-  switch (props.compositionType) {
+  switch (compositionType.value) {
     case 'oneOf':
       return 'One Of (Choose One)'
     case 'anyOf':
@@ -37,7 +49,7 @@ const compositionTypeLabel = computed(() => {
     case 'allOf':
       return 'All Of (Must Match All)'
     default:
-      return props.compositionType
+      return compositionType.value
   }
 })
 

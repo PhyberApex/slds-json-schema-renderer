@@ -38,14 +38,25 @@ function isRequired(propName) {
   return props.schema.required && props.schema.required.includes(propName)
 }
 
-// Check if a property is expandable (object or array)
+// Check if a property is expandable (object, array or composition)
 function isExpandable(property) {
   return (
     property.type === 'object'
     || property.type === 'array'
+    || property.anyOf
+    || property.allOf
+    || property.oneOf
     || (Array.isArray(property.type)
       && (property.type.includes('object') || property.type.includes('array')))
   )
+}
+
+function getTypeLabel(property) {
+  if (property.type)
+    return property.type
+  if (property.oneOf || property.allOf || property.anyOf)
+    return 'Composition'
+  return 'No type found'
 }
 
 // Toggle property expansion
@@ -108,7 +119,7 @@ function toggleProperty(name) {
                   </td>
                   <td>
                     <div class="slds-truncate">
-                      <span class="slds-badge">{{ property.type }}</span>
+                      <span class="slds-badge">{{ getTypeLabel(property) }}</span>
                       <button
                         v-if="isExpandable(property)"
                         class="slds-button slds-button_icon slds-button_icon_small slds-m-left_x-small"

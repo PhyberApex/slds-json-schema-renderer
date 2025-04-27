@@ -34,22 +34,6 @@ provide('rootSchema', rootSchema)
 
 // Get the appropriate component for the schema type
 const schemaComponent = computed(() => schemaUtils.getComponentForSchema(props.schema))
-
-// Get composition type if applicable
-const compositionType = computed(() => schemaUtils.getCompositionType(props.schema))
-
-// Function to handle navigation to definition
-function handleNavigateToDefinition(data) {
-  const definitionElement = document.getElementById(`definition-${data.definitionName}`)
-
-  if (definitionElement) {
-    definitionElement.scrollIntoView({ behavior: 'smooth' })
-    definitionElement.classList.add('highlight')
-    setTimeout(() => {
-      definitionElement.classList.remove('highlight')
-    }, 2000)
-  }
-}
 </script>
 
 <template>
@@ -67,8 +51,6 @@ function handleNavigateToDefinition(data) {
               v-if="schemaComponent"
               :schema="schema"
               :root-schema="rootSchema"
-              :composition-type="compositionType"
-              @navigate-to-definition="handleNavigateToDefinition"
             />
             <NoPropertiesMessage v-else />
 

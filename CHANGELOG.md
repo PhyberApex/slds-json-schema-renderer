@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.1.0...v1.2.0) (2025-04-27)
+
+
+### Features
+
+* Better composition support ([9ebde90](https://github.com/PhyberApex/slds-json-schema-renderer/commit/9ebde90b1acebf5c4100329ef88d064546f5b0b7))
+
 # [1.1.0](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.0.4...v1.1.0) (2025-04-26)
 
 

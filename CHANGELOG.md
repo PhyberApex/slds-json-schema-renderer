@@ -1,3 +1,10 @@
+## [1.3.1](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.3.0...v1.3.1) (2025-04-27)
+
+
+### Bug Fixes
+
+* Fix motion requiring process ([6c263d3](https://github.com/PhyberApex/slds-json-schema-renderer/commit/6c263d36884edbdfbf1d33686727a2b59982450d))
+
 # [1.3.0](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.2.0...v1.3.0) (2025-04-27)
 
 

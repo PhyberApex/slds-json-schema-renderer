@@ -1,4 +1,5 @@
 import path from 'node:path'
+import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
@@ -10,6 +11,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // This configuration works for both development and production
 export default defineConfig(({ command }) => {
   const config = {
+    define: {
+      // This creates a global process.env object with your values
+      'process.env': JSON.stringify({
+        NODE_ENV: process.env.NODE_ENV,
+      }),
+    },
     plugins: [vue(), command === 'build' ? '' : vueDevTools()],
 
     // The root is src/frontend for development

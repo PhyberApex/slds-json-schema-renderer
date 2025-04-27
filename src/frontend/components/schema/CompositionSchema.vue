@@ -1,5 +1,4 @@
 <script setup>
-import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
 import { computed, ref, watchEffect } from 'vue'
 
@@ -124,9 +123,7 @@ function getTabTitle(schema, index) {
           <div class="slds-text-title_caps slds-m-bottom_small">
             Schema Type: {{ getSchemaType(subSchema) }}
           </div>
-          <NestedSchemaContainer>
-            <SchemaViewer :schema="subSchema" :root-schema="rootSchema" :is-root="false" />
-          </NestedSchemaContainer>
+          <SchemaViewer :schema="subSchema" :root-schema="rootSchema" :is-root="false" />
         </div>
       </div>
     </div>

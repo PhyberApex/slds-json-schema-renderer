@@ -1,4 +1,5 @@
 <script setup>
+import { motion } from 'motion-v'
 import { ref } from 'vue'
 
 const props = defineProps({
@@ -37,13 +38,15 @@ function getSchemaTitle(schema) {
     <div v-for="schema in schemas" :key="schema.fileName" class="slds-navigation-list__item">
       <div class="slds-navigation-list__item-content">
         <div class="slds-navigation-list__item-title">
-          <button
+          <motion.button
+            :while-hover="{ scale: 1.05 }"
+            :while-press="{ scale: 0.95 }"
             class="slds-button slds-button_neutral slds-button_stretch"
             :class="{ 'slds-is-active': selectedSchemaId === schema.fileName }"
             @click="selectSchema(schema)"
           >
             {{ getSchemaTitle(schema) }}
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>

@@ -34,6 +34,8 @@ const constraints = computed(() => {
   return result
 })
 
+const hasConstraints = computed(() => Object.entries(constraints.value).length !== 0)
+
 function formatKey(key) {
   return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())
 }
@@ -63,7 +65,7 @@ function getBadgeClass(value) {
 </script>
 
 <template>
-  <div class="slds-m-top_medium">
+  <div v-if="hasConstraints" class="slds-m-top_medium">
     <div class="slds-text-heading_small slds-m-bottom_small">
       Constraints
     </div>

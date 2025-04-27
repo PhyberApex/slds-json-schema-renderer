@@ -2,11 +2,10 @@
 import { schemaUtils } from '@/utils/schemaRegistry'
 import { computed, provide, ref } from 'vue'
 import SchemaLayout from '../layout/SchemaLayout.vue'
-import NoPropertiesMessage from './NoPropertiesMessage.vue'
 import PlainSchemaView from './PlainSchemaView.vue'
-import SchemaEnum from './SchemaEnum.vue'
 import SchemaHeader from './SchemaHeader.vue'
 import SchemaTabs from './SchemaTabs.vue'
+import UnknownSchemaMessage from './UnknownSchemaMessage.vue'
 
 const props = defineProps({
   schema: {
@@ -52,13 +51,7 @@ const schemaComponent = computed(() => schemaUtils.getComponentForSchema(props.s
               :schema="schema"
               :root-schema="rootSchema"
             />
-            <NoPropertiesMessage v-else />
-
-            <SchemaEnum
-              v-if="schema.enum"
-              :values="schema.enum"
-              class="slds-m-top_medium"
-            />
+            <UnknownSchemaMessage v-else />
           </div>
         </div>
       </div>

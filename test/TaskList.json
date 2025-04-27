@@ -87,7 +87,7 @@
       "allOf": [
         {
           "properties": {
-            "priority": { "enum": ["critical"] },
+            "priority": { "enum": ["critical", "urgent"] },
             "escalationLevel": {
               "type": "integer",
               "minimum": 1,

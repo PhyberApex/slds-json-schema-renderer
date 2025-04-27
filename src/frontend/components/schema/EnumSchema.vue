@@ -1,10 +1,18 @@
 <script setup>
-defineProps({
-  values: {
-    type: Array,
+import { computed } from 'vue'
+
+const props = defineProps({
+  schema: {
+    type: Object,
+    required: true,
+  },
+  rootSchema: {
+    type: Object,
     required: true,
   },
 })
+
+const values = computed(() => props.schema.enum)
 </script>
 
 <template>

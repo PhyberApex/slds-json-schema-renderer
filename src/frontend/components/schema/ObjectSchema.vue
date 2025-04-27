@@ -1,5 +1,4 @@
 <script setup>
-import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue'
 import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
@@ -19,12 +18,6 @@ const props = defineProps({
 // Track which properties are expanded
 const expandedProperties = ref({})
 
-// Check if schema has constraints
-const hasConstraints = computed(() => {
-  const constraintProps = ['minProperties', 'maxProperties']
-  return constraintProps.some(prop => prop in props.schema)
-})
-
 // Check if schema has properties
 const hasProperties = computed(() => {
   return (
@@ -38,24 +31,13 @@ function isRequired(propName) {
   return props.schema.required && props.schema.required.includes(propName)
 }
 
-// Check if a property is expandable (object, array or composition)
-function isExpandable(property) {
-  return (
-    property.type === 'object'
-    || property.type === 'array'
-    || property.anyOf
-    || property.allOf
-    || property.oneOf
-    || (Array.isArray(property.type)
-      && (property.type.includes('object') || property.type.includes('array')))
-  )
-}
-
 function getTypeLabel(property) {
   if (property.type)
     return property.type
   if (property.oneOf || property.allOf || property.anyOf)
-    return 'Composition'
+    return 'composition'
+  if (property.enum)
+    return 'enum'
   return 'No type found'
 }
 
@@ -71,7 +53,7 @@ function toggleProperty(name) {
       <div>Type: object</div>
     </div>
 
-    <SchemaConstraints v-if="hasConstraints" :schema="schema" />
+    <SchemaConstraints :schema="schema" />
 
     <div v-if="schema.required && schema.required.length > 0">
       <span>Required properties:</span>
@@ -111,27 +93,23 @@ function toggleProperty(name) {
             </thead>
             <tbody>
               <template v-for="(property, name) in schema.properties" :key="name">
-                <tr class="slds-hint-parent">
+                <tr class="slds-hint-parent is-interactive" @click="toggleProperty(name)">
                   <td>
                     <div class="slds-truncate" :title="name">
+                      <img
+                        src="@slds/icons/utility/switch.svg"
+                        class="slds-button__icon"
+                        :class="{
+                          expanded: expandedProperties[name],
+                        }"
+                        alt=""
+                      >
                       {{ name }}
                     </div>
                   </td>
                   <td>
                     <div class="slds-truncate">
                       <span class="slds-badge">{{ getTypeLabel(property) }}</span>
-                      <button
-                        v-if="isExpandable(property)"
-                        class="slds-button slds-button_icon slds-button_icon_small slds-m-left_x-small"
-                        :title="expandedProperties[name] ? 'Collapse' : 'Expand'"
-                        @click="toggleProperty(name)"
-                      >
-                        <img
-                          src="@slds/icons/utility/switch.svg"
-                          class="slds-button__icon"
-                          alt=""
-                        >
-                      </button>
                     </div>
                   </td>
                   <td>
@@ -146,13 +124,15 @@ function toggleProperty(name) {
                     </div>
                   </td>
                 </tr>
-                <tr v-if="isExpandable(property) && expandedProperties[name]">
-                  <td colspan="4" class="slds-p-around_medium">
-                    <div class="slds-box slds-theme_shade">
-                      <SchemaViewer :schema="property" :root-schema="rootSchema" :is-root="false" />
-                    </div>
-                  </td>
-                </tr>
+                <Transition>
+                  <tr v-if="expandedProperties[name]">
+                    <td colspan="4" class="slds-p-around_medium">
+                      <div class="slds-box slds-theme_shade">
+                        <SchemaViewer :schema="property" :root-schema="rootSchema" :is-root="false" />
+                      </div>
+                    </td>
+                  </tr>
+                </Transition>
               </template>
             </tbody>
           </table>
@@ -164,15 +144,13 @@ function toggleProperty(name) {
       <div>Pattern Properties</div>
       <div>
         <div v-for="(propSchema, pattern) in schema.patternProperties" :key="pattern">
-          <NestedSchemaContainer>
+          <div>
             <div>
-              <div>
-                <span>Pattern:</span>
-                <code>{{ pattern }}</code>
-              </div>
+              <span>Pattern:</span>
+              <code>{{ pattern }}</code>
             </div>
-            <SchemaViewer :schema="propSchema" :root-schema="rootSchema" :is-root="false" />
-          </NestedSchemaContainer>
+          </div>
+          <SchemaViewer :schema="propSchema" :root-schema="rootSchema" :is-root="false" />
         </div>
       </div>
     </div>
@@ -184,13 +162,13 @@ function toggleProperty(name) {
           {{ schema.additionalProperties ? 'Allowed' : 'Not allowed' }}
         </span>
       </div>
-      <NestedSchemaContainer v-else>
-        <SchemaViewer
-          :schema="schema.additionalProperties"
-          :root-schema="rootSchema"
-          :is-root="false"
-        />
-      </NestedSchemaContainer>
+
+      <SchemaViewer
+        v-else
+        :schema="schema.additionalProperties"
+        :root-schema="rootSchema"
+        :is-root="false"
+      />
     </div>
 
     <!-- No properties message -->
@@ -199,15 +177,50 @@ function toggleProperty(name) {
 </template>
 
 <style>
-.slds-button_icon_small {
-  width: 1.25rem;
-  height: 1.25rem;
-  line-height: 1.25rem;
-}
-
-.slds-button_icon_small .slds-button__icon {
+/* Icon rotation animation */
+.slds-button__icon {
   width: 0.75rem;
   height: 0.75rem;
   filter: brightness(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+.slds-button__icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* Interactive cursor */
+.is-interactive {
+  cursor: pointer;
+}
+
+/* Transition for the expanding/collapsing row */
+.v-enter-active {
+  transition: all 0.3s ease-out;
+  max-height: 500px; /* Set a reasonable max height */
+  overflow: hidden;
+}
+
+.v-leave-active {
+  transition: all 0.2s ease-in;
+  max-height: 500px;
+  overflow: hidden;
+}
+
+.v-enter-from,
+.v-leave-to {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Optional: Add hover effect for better UX */
+.slds-hint-parent.is-interactive:hover {
+  background-color: #f3f3f3;
+}
+
+/* Optional: Add subtle shadow to expanded content */
+.slds-box.slds-theme_shade {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12);
 }
 </style>

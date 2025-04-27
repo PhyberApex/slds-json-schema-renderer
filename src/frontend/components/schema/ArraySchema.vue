@@ -1,5 +1,4 @@
 <script setup>
-import NestedSchemaContainer from '@/components/schema/NestedSchemaContainer.vue'
 import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
@@ -61,22 +60,20 @@ const getItemsType = computed(() => {
       <div class="slds-text-heading_small slds-m-bottom_small">
         Items Schema
       </div>
-      <NestedSchemaContainer>
-        <!-- Handle tuple validation (items is an array) -->
-        <template v-if="Array.isArray(schema.items)">
-          <div v-for="(itemSchema, index) in schema.items" :key="index" class="slds-m-bottom_medium">
-            <div class="slds-text-title_caps slds-m-bottom_xx-small">
-              Index {{ index }}
-            </div>
-            <SchemaViewer :schema="itemSchema" :root-schema="rootSchema" :is-root="false" />
+      <!-- Handle tuple validation (items is an array) -->
+      <template v-if="Array.isArray(schema.items)">
+        <div v-for="(itemSchema, index) in schema.items" :key="index" class="slds-m-bottom_medium">
+          <div class="slds-text-title_caps slds-m-bottom_xx-small">
+            Index {{ index }}
           </div>
-        </template>
+          <SchemaViewer :schema="itemSchema" :root-schema="rootSchema" :is-root="false" />
+        </div>
+      </template>
 
-        <!-- Handle single schema for all items -->
-        <template v-else>
-          <SchemaViewer :schema="schema.items" :root-schema="rootSchema" :is-root="false" />
-        </template>
-      </NestedSchemaContainer>
+      <!-- Handle single schema for all items -->
+      <template v-else>
+        <SchemaViewer :schema="schema.items" :root-schema="rootSchema" :is-root="false" />
+      </template>
     </div>
     <NoPropertiesMessage
       v-else
@@ -88,9 +85,7 @@ const getItemsType = computed(() => {
       <div class="slds-text-heading_small slds-m-bottom_small">
         Contains
       </div>
-      <NestedSchemaContainer>
-        <SchemaViewer :schema="schema.contains" :root-schema="rootSchema" :is-root="false" />
-      </NestedSchemaContainer>
+      <SchemaViewer :schema="schema.contains" :root-schema="rootSchema" :is-root="false" />
     </div>
 
     <div v-if="schema.additionalItems !== undefined && Array.isArray(schema.items)" class="slds-m-top_medium">
@@ -102,9 +97,7 @@ const getItemsType = computed(() => {
           {{ schema.additionalItems ? 'Allowed' : 'Not allowed' }}
         </span>
       </div>
-      <NestedSchemaContainer v-else>
-        <SchemaViewer :schema="schema.additionalItems" :root-schema="rootSchema" :is-root="false" />
-      </NestedSchemaContainer>
+      <SchemaViewer v-else :schema="schema.additionalItems" :root-schema="rootSchema" :is-root="false" />
     </div>
   </div>
 </template>

@@ -1,4 +1,6 @@
 <script setup>
+import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
+
 defineProps({
   schema: {
     type: Object,
@@ -32,9 +34,7 @@ defineProps({
         </div>
       </div>
     </div>
+
+    <SchemaConstraints :schema="schema" />
   </div>
 </template>
-
-<style>
-/* Add any custom styles here if needed */
-</style>

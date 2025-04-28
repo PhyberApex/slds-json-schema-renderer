@@ -1,3 +1,10 @@
+## [1.3.2](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.3.1...v1.3.2) (2025-04-28)
+
+
+### Bug Fixes
+
+* Naming of the bin ([76b7af8](https://github.com/PhyberApex/slds-json-schema-renderer/commit/76b7af8a201dc67598b87b1e6f8d531880793dca))
+
 ## [1.3.1](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.3.0...v1.3.1) (2025-04-27)
 
 

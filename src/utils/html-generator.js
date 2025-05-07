@@ -81,17 +81,6 @@ async function copyAssets(outputDir) {
       if (await fs.pathExists(bundlePath)) {
         await fs.copy(bundlePath, bundleTarget)
         console.log('Frontend bundle copied successfully')
-
-        // Copy Vue as well since we're externalizing it
-        const vuePath = path.resolve(__dirname, '../../node_modules/vue/dist/vue.global.prod.js')
-        const vueTarget = path.join(assetsDir, 'vue.js')
-        if (await fs.pathExists(vuePath)) {
-          await fs.copy(vuePath, vueTarget)
-          console.log('Vue bundle copied successfully')
-        }
-        else {
-          console.warn('Warning: Vue not found at', vuePath)
-        }
       }
       else {
         console.warn('Warning: Frontend bundle not found at', bundlePath)

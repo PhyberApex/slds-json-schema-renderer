@@ -2,6 +2,7 @@
 import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
+import { schemaUtils } from '@/utils/schemaRegistry.js'
 import { computed, ref } from 'vue'
 
 const props = defineProps({
@@ -34,10 +35,12 @@ function isRequired(propName) {
 function getTypeLabel(property) {
   if (property.type)
     return property.type
-  if (property.oneOf || property.allOf || property.anyOf)
+  if (schemaUtils.hasComposition(property))
     return 'composition'
-  if (property.enum)
+  if (schemaUtils.isEnum(property))
     return 'enum'
+  if (schemaUtils.isConst(property))
+    return 'const'
   return 'No type found'
 }
 

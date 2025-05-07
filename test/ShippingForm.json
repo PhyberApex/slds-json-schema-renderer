@@ -4,6 +4,19 @@
   "description": "Schema with conditional fields and dependencies",
   "type": "object",
   "properties": {
+    "shipmentAction": {
+      "type": "string",
+      "const": "PHASE"
+    },
+    "shipmentOrder": {
+      "const": "DESC"
+    },
+    "shipmentNumber": {
+      "const": {
+        "prefix": "shpmnt",
+        "number": 23
+      }
+    },
     "shipmentType": {
       "type": "string",
       "enum": ["standard", "express", "international"],

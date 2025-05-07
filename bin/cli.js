@@ -21,14 +21,6 @@ program
   .option('-v, --verbose', 'Enable verbose output', false)
   .action(cli.generate)
 
-// Add the init command for future implementation
-program
-  .command('init')
-  .description('Initialize a new documentation project')
-  .action(() => {
-    console.log('Initialize command not yet implemented')
-  })
-
 program.parse(process.argv)
 
 // If no arguments, display help

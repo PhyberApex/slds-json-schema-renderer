@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.3.4...v1.4.0) (2025-05-07)
+
+
+### Bug Fixes
+
+* Removed init command ([1b38633](https://github.com/PhyberApex/slds-json-schema-renderer/commit/1b38633ad890a6d40873a0a6a3724a0887565034))
+
+
+### Features
+
+* Add support for const keyword and remove _metadata from raw json view ([0e7be78](https://github.com/PhyberApex/slds-json-schema-renderer/commit/0e7be7894bbcbc6ba75b94a1d2496471f8645bdd))
+
 ## [1.3.4](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.3.3...v1.3.4) (2025-05-07)
 
 

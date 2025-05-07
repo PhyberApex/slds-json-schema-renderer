@@ -1,3 +1,10 @@
+## [1.3.4](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.3.3...v1.3.4) (2025-05-07)
+
+
+### Bug Fixes
+
+* remove asset of vue ([25b0609](https://github.com/PhyberApex/slds-json-schema-renderer/commit/25b060943befe8e766795efa20d5657fe16057b0))
+
 ## [1.3.3](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.3.2...v1.3.3) (2025-05-07)
 
 

@@ -1,3 +1,10 @@
+## [1.3.3](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.3.2...v1.3.3) (2025-05-07)
+
+
+### Bug Fixes
+
+* remove peer dependency on vue ([b64e580](https://github.com/PhyberApex/slds-json-schema-renderer/commit/b64e580d7f4422df4b81fc7439d5e7c1a07d8269))
+
 ## [1.3.2](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.3.1...v1.3.2) (2025-04-28)
 
 

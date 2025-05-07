@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.4.1...v1.5.0) (2025-05-07)
+
+
+### Features
+
+* Include const as type and add some examples for const ([add7fe9](https://github.com/PhyberApex/slds-json-schema-renderer/commit/add7fe92505e0b0d602a509f45d95870181d4c50))
+
 ## [1.4.1](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.4.0...v1.4.1) (2025-05-07)
 
 

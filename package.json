@@ -62,7 +62,7 @@
     "@semantic-release/git": "10.0.1",
     "@semantic-release/github": "11.0.2",
     "@semantic-release/npm": "12.0.1",
-    "@vitejs/plugin-vue": "5.2.3",
+    "@vitejs/plugin-vue": "5.2.4",
     "@vue/eslint-config-prettier": "10.2.0",
     "css-loader": "7.1.2",
     "eslint": "9.26.0",

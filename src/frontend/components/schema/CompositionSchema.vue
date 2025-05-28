@@ -1,6 +1,6 @@
 <script setup>
-import SchemaViewer from '@/components/schema/SchemaViewer.vue'
 import { computed, ref, watchEffect } from 'vue'
+import SchemaViewer from '@/components/schema/SchemaViewer.vue'
 
 const props = defineProps({
   schema: {

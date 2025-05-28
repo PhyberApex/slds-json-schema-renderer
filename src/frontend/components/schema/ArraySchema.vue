@@ -1,8 +1,8 @@
 <script setup>
+import { computed } from 'vue'
 import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
-import { computed } from 'vue'
 
 const props = defineProps({
   schema: {

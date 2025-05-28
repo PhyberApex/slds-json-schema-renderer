@@ -1,6 +1,6 @@
 <script setup>
-import { schemaUtils } from '@/utils/schemaRegistry'
 import { computed, provide, ref } from 'vue'
+import { schemaUtils } from '@/utils/schemaRegistry'
 import SchemaLayout from '../layout/SchemaLayout.vue'
 import PlainSchemaView from './PlainSchemaView.vue'
 import SchemaHeader from './SchemaHeader.vue'

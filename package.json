@@ -100,7 +100,7 @@
     ]
   },
   "lint-staged": {
-    "*.{js,vue}": [
+    "*.{js,vue,yml}": [
       "eslint --fix"
     ]
   }

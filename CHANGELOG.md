@@ -1,3 +1,11 @@
+## [1.5.8](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.7...v1.5.8) (2025-06-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @apidevtools/json-schema-ref-parser to v14.0.2 ([#62](https://github.com/PhyberApex/slds-json-schema-renderer/issues/62)) ([4f70811](https://github.com/PhyberApex/slds-json-schema-renderer/commit/4f70811d387cd358d1b2fb7fba228b952b2805d2))
+* **deps:** update dependency motion-v to v1.3.0 ([#61](https://github.com/PhyberApex/slds-json-schema-renderer/issues/61)) ([94aa8b8](https://github.com/PhyberApex/slds-json-schema-renderer/commit/94aa8b8dc78883b6373d111ed3d9b897e004d877))
+
 ## [1.5.7](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.6...v1.5.7) (2025-06-18)
 
 

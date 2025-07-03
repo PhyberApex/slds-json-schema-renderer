@@ -43,7 +43,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@apidevtools/json-schema-ref-parser": "14.0.2",
+    "@apidevtools/json-schema-ref-parser": "14.0.3",
     "@salesforce-ux/design-system": "2.27.1",
     "ajv": "8.17.1",
     "chalk": "5.4.1",

@@ -5,6 +5,9 @@
   "description": "A CLI tool to generate documentation from JSON schema files",
   "author": "PhyberApex",
   "license": "MIT",
+    "repository": {
+    "url": "https://github.com/PhyberApex/slds-json-schema-renderer"
+  },
   "keywords": [
     "json-schema",
     "documentation",
@@ -26,9 +29,6 @@
   ],
   "engines": {
     "node": ">=20"
-  },
-  "repository": {
-    "url": "https://github.com/PhyberApex/slds-json-schema-renderer"
   },
   "scripts": {
     "start": "node ./bin/cli.js",

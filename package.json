@@ -27,6 +27,9 @@
   "engines": {
     "node": ">=20"
   },
+  "repository": {
+    "url": "https://github.com/PhyberApex/slds-json-schema-renderer"
+  },
   "scripts": {
     "start": "node ./bin/cli.js",
     "clean": "rimraf lib",

@@ -1,3 +1,10 @@
+## [1.5.36](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.35...v1.5.36) (2026-03-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency fs-extra to v11.3.4 ([#197](https://github.com/PhyberApex/slds-json-schema-renderer/issues/197)) ([ed2c5ee](https://github.com/PhyberApex/slds-json-schema-renderer/commit/ed2c5eea890595d20280fc789b4460623b555350))
+
 ## [1.5.35](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.34...v1.5.35) (2026-03-01)
 
 

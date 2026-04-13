@@ -50,7 +50,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
 
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./docs
         # Only run this step on main branch

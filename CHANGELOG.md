@@ -1,3 +1,10 @@
+## [1.5.44](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.43...v1.5.44) (2026-04-24)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @salesforce-ux/design-system to v2.29.2 ([#228](https://github.com/PhyberApex/slds-json-schema-renderer/issues/228)) ([5714c31](https://github.com/PhyberApex/slds-json-schema-renderer/commit/5714c3136105a217c4c510f73a19ec9d18a05e8c))
+
 ## [1.5.43](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.42...v1.5.43) (2026-04-14)
 
 

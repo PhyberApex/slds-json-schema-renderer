@@ -1,3 +1,10 @@
+## [1.5.45](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.44...v1.5.45) (2026-04-25)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ajv to v8.20.0 ([#229](https://github.com/PhyberApex/slds-json-schema-renderer/issues/229)) ([4d1c195](https://github.com/PhyberApex/slds-json-schema-renderer/commit/4d1c195d5ce945467a363e5252b38c36f6c25f45))
+
 ## [1.5.44](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.43...v1.5.44) (2026-04-24)
 
 

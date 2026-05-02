@@ -68,7 +68,7 @@
     "@vitejs/plugin-vue": "6.0.6",
     "@vue/eslint-config-prettier": "10.2.0",
     "css-loader": "7.1.4",
-    "eslint": "10.2.1",
+    "eslint": "10.3.0",
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
     "rimraf": "6.1.3",

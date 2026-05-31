@@ -1,3 +1,10 @@
+## [1.5.48](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.47...v1.5.48) (2026-05-31)
+
+
+### Bug Fixes
+
+* **deps:** update dependency commander to v15 ([#250](https://github.com/PhyberApex/slds-json-schema-renderer/issues/250)) ([fc3ffb6](https://github.com/PhyberApex/slds-json-schema-renderer/commit/fc3ffb6f75f7b62c3132b946f1860c3bd55ecd71))
+
 ## [1.5.47](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.46...v1.5.47) (2026-05-28)
 
 

@@ -57,7 +57,7 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "9.1.0",
-    "@babel/cli": "8.0.1",
+    "@babel/cli": "8.0.4",
     "@babel/core": "8.0.1",
     "@babel/preset-env": "8.0.2",
     "@eslint/js": "10.0.1",

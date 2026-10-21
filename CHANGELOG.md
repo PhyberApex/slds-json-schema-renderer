@@ -5,6 +5,13 @@
 
 * **deps:** update dependency motion-v to v2.8.0 ([#339](https://github.com/PhyberApex/slds-json-schema-renderer/issues/339)) ([b4810ed](https://github.com/PhyberApex/slds-json-schema-renderer/commit/b4810edc09830005fae0e658d9feebdd8b7cfc64))
 
+## [1.5.74](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.73...v1.5.74) (2026-10-21)
+
+
+### Bug Fixes
+
+* **generator:** escape embedded schema data so a &lt;/script&gt; in a schema cannot break the page ([#345](https://github.com/PhyberApex/slds-json-schema-renderer/issues/345)) ([4d4a0df](https://github.com/PhyberApex/slds-json-schema-renderer/commit/4d4a0dfd72888e2caed0931091f0f23cb10fd5f4))
+
 ## [1.5.72](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.71...v1.5.72) (2026-10-16)
 
 

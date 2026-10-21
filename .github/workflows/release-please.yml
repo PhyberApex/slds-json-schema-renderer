@@ -1,0 +1,64 @@
+name: Release Please
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - name: Release Please
+        id: release
+        uses: googleapis/release-please-action@v5
+        with:
+          token: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
+
+  checks:
+    if: needs.release-please.outputs.release_created == 'true'
+    needs: release-please
+    uses: ./.github/workflows/checks.yml
+
+  publish:
+    if: needs.release-please.outputs.release_created == 'true'
+    needs: [release-please, checks]
+    runs-on: ubuntu-latest
+    environment: Publish
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: '24'
+          cache: npm
+          registry-url: https://registry.npmjs.org
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Publish to npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --provenance --access public
+
+  pages:
+    if: needs.release-please.outputs.release_created == 'true'
+    needs: [release-please, checks]
+    uses: ./.github/workflows/pages.yml

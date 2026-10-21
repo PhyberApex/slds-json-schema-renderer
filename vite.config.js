@@ -37,6 +37,8 @@ export default defineConfig(({ command }) => {
       outDir: path.resolve(__dirname, 'lib/frontend'),
       emptyOutDir: true,
       assetsInlineLimit: 0,
+      // lightningcss (Vite 8 default) rejects the `:nth-child(1 of .sel)` syntax used by SLDS
+      cssMinify: 'esbuild',
 
       // Generate a library build
       lib: {

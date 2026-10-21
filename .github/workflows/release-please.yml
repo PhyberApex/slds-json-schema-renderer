@@ -69,6 +69,8 @@ jobs:
         run: npm ci
 
       - name: Publish to npm via trusted publishing
+        env:
+          NPM_CONFIG_LOGLEVEL: ${{ runner.debug == '1' && 'verbose' || 'notice' }}
         run: npm publish --provenance --access public
 
   pages:

@@ -5,6 +5,31 @@
 
 * **deps:** update dependency motion-v to v2.8.0 ([#339](https://github.com/PhyberApex/slds-json-schema-renderer/issues/339)) ([b4810ed](https://github.com/PhyberApex/slds-json-schema-renderer/commit/b4810edc09830005fae0e658d9feebdd8b7cfc64))
 
+## [1.5.56](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.55...v1.5.56) (2026-10-21)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @apidevtools/json-schema-ref-parser to v15.5.1 ([#295](https://github.com/PhyberApex/slds-json-schema-renderer/issues/295)) ([f18f953](https://github.com/PhyberApex/slds-json-schema-renderer/commit/f18f9531cbef3584c598be02d8791414b7133c35))
+* **deps:** update dependency @apidevtools/json-schema-ref-parser to v15.5.2 ([#301](https://github.com/PhyberApex/slds-json-schema-renderer/issues/301)) ([1140a3e](https://github.com/PhyberApex/slds-json-schema-renderer/commit/1140a3edc5035e91e27291fc779dbb44ea15cbb1))
+* **deps:** update dependency @apidevtools/json-schema-ref-parser to v16 ([#302](https://github.com/PhyberApex/slds-json-schema-renderer/issues/302)) ([64c520c](https://github.com/PhyberApex/slds-json-schema-renderer/commit/64c520c9b3ab896b16a245eee0029b1fb0f2bd93))
+* **deps:** update dependency @apidevtools/json-schema-ref-parser to v16.0.1 ([#306](https://github.com/PhyberApex/slds-json-schema-renderer/issues/306)) ([b85f7d5](https://github.com/PhyberApex/slds-json-schema-renderer/commit/b85f7d56cac2fb3ff29ea6f0859c6b572daffd54))
+* **deps:** update dependency @apidevtools/json-schema-ref-parser to v16.0.2 ([#316](https://github.com/PhyberApex/slds-json-schema-renderer/issues/316)) ([8b8a8b1](https://github.com/PhyberApex/slds-json-schema-renderer/commit/8b8a8b1c9bb419b3968bb4129bbdd9446430046f))
+* **deps:** update dependency @apidevtools/json-schema-ref-parser to v16.0.3 ([#324](https://github.com/PhyberApex/slds-json-schema-renderer/issues/324)) ([22617db](https://github.com/PhyberApex/slds-json-schema-renderer/commit/22617dbdbed6f6e9a29fac4967b5942ce6a32a5c))
+* **deps:** update dependency @apidevtools/json-schema-ref-parser to v16.0.5 ([#336](https://github.com/PhyberApex/slds-json-schema-renderer/issues/336)) ([6408f4e](https://github.com/PhyberApex/slds-json-schema-renderer/commit/6408f4ee15875051630114f59cd7c38df67866bc))
+* **deps:** update dependency @salesforce-ux/design-system to v2.264.1 ([#311](https://github.com/PhyberApex/slds-json-schema-renderer/issues/311)) ([43e8285](https://github.com/PhyberApex/slds-json-schema-renderer/commit/43e82855af7b6330c6dfeccddcc11f8c448eff13))
+* **deps:** update dependency chalk to v6.0.1 ([#328](https://github.com/PhyberApex/slds-json-schema-renderer/issues/328)) ([c035956](https://github.com/PhyberApex/slds-json-schema-renderer/commit/c0359564b0fb71b60f9e052d73baf60d37a92541))
+* **deps:** update dependency fs-extra to v11.4.1 ([#326](https://github.com/PhyberApex/slds-json-schema-renderer/issues/326)) ([3f90ab5](https://github.com/PhyberApex/slds-json-schema-renderer/commit/3f90ab5b98921278c3f0bf49d700d0b00d94b967))
+* **deps:** update dependency motion-v to v2.4.0 ([#303](https://github.com/PhyberApex/slds-json-schema-renderer/issues/303)) ([35d93b1](https://github.com/PhyberApex/slds-json-schema-renderer/commit/35d93b1f05c06b0b2858e062edcc3f3d93944d79))
+* **deps:** update dependency motion-v to v2.4.1 ([#312](https://github.com/PhyberApex/slds-json-schema-renderer/issues/312)) ([203b6ca](https://github.com/PhyberApex/slds-json-schema-renderer/commit/203b6ca3270df3813fbc8b3cd35be8a3998df5b3))
+* **deps:** update dependency motion-v to v2.4.2 ([#315](https://github.com/PhyberApex/slds-json-schema-renderer/issues/315)) ([3fbbde1](https://github.com/PhyberApex/slds-json-schema-renderer/commit/3fbbde12a5ddd196096b281fe4480dda1689c369))
+* **deps:** update dependency motion-v to v2.4.4 ([#320](https://github.com/PhyberApex/slds-json-schema-renderer/issues/320)) ([67ca325](https://github.com/PhyberApex/slds-json-schema-renderer/commit/67ca32576a274bcbfa72a1d4627fc000c1515cca))
+* **deps:** update dependency motion-v to v2.5.1 ([#329](https://github.com/PhyberApex/slds-json-schema-renderer/issues/329)) ([55a98f9](https://github.com/PhyberApex/slds-json-schema-renderer/commit/55a98f992323f4877a34dbba51cac71f9b5acfc5))
+* **deps:** update dependency motion-v to v2.5.2 ([#330](https://github.com/PhyberApex/slds-json-schema-renderer/issues/330)) ([00c3360](https://github.com/PhyberApex/slds-json-schema-renderer/commit/00c3360cc1aee7fb064b00fe41ab6bc390fbb2d2))
+* **deps:** update dependency motion-v to v2.6.0 ([#332](https://github.com/PhyberApex/slds-json-schema-renderer/issues/332)) ([a0bfcc1](https://github.com/PhyberApex/slds-json-schema-renderer/commit/a0bfcc1a183c9bc086b18854db289a44d6968d53))
+* **deps:** update dependency motion-v to v2.7.0 ([#337](https://github.com/PhyberApex/slds-json-schema-renderer/issues/337)) ([590dd8f](https://github.com/PhyberApex/slds-json-schema-renderer/commit/590dd8fb1964e23da0e2a218365a4603a3383f82))
+* **deps:** update dependency motion-v to v2.8.0 ([#339](https://github.com/PhyberApex/slds-json-schema-renderer/issues/339)) ([b4810ed](https://github.com/PhyberApex/slds-json-schema-renderer/commit/b4810edc09830005fae0e658d9feebdd8b7cfc64))
+
 ## [1.5.72](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.71...v1.5.72) (2026-10-16)
 
 

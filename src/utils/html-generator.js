@@ -6,6 +6,23 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 /**
+ * Serialize data as JSON that is safe to embed inside an inline <script> tag.
+ * Angle brackets and ampersands are escaped so a `</script>` inside a schema
+ * cannot terminate the tag, and the line separators U+2028/U+2029 are escaped
+ * because they are valid in JSON but not in JavaScript string literals.
+ * @param {object} data - Data to serialize
+ * @returns {string} Escaped JSON string
+ */
+function serializeForInlineScript(data) {
+  return JSON.stringify(data)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029')
+}
+
+/**
  * Generate HTML documentation from parsed JSON schemas
  * @param {object} options - Generation options
  * @param {Array} options.schemas - Array of parsed schemas
@@ -37,7 +54,7 @@ async function generate(options) {
 
     // Add the data to the window object so it can be used by Vue
     const scriptTag = `<script>
-      window.__JSON_SCHEMA_DOCS_DATA__ = ${JSON.stringify(appData)};
+      window.__JSON_SCHEMA_DOCS_DATA__ = ${serializeForInlineScript(appData)};
     </script>`
 
     // Insert the script tag before the closing body tag

@@ -12,10 +12,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export default defineConfig(({ command }) => {
   const config = {
     define: {
-      // This creates a global process.env object with your values
-      'process.env': JSON.stringify({
-        NODE_ENV: process.env.NODE_ENV,
-      }),
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     },
     plugins: [vue(), command === 'build' ? '' : vueDevTools()],
 

@@ -5,6 +5,13 @@
 
 * **deps:** update dependency motion-v to v2.8.0 ([#339](https://github.com/PhyberApex/slds-json-schema-renderer/issues/339)) ([b4810ed](https://github.com/PhyberApex/slds-json-schema-renderer/commit/b4810edc09830005fae0e658d9feebdd8b7cfc64))
 
+## [1.5.75](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.74...v1.5.75) (2026-10-21)
+
+
+### Bug Fixes
+
+* **build:** define process.env.NODE_ENV so the Vite 8 bundle does not reference process at runtime ([#376](https://github.com/PhyberApex/slds-json-schema-renderer/issues/376)) ([d2cec37](https://github.com/PhyberApex/slds-json-schema-renderer/commit/d2cec37f10b7425f4b7e6cf62fb34930d801a2ae)), closes [#349](https://github.com/PhyberApex/slds-json-schema-renderer/issues/349)
+
 ## [1.5.74](https://github.com/PhyberApex/slds-json-schema-renderer/compare/v1.5.73...v1.5.74) (2026-10-21)
 
 

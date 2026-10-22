@@ -22,9 +22,11 @@ const hasConstraints = computed(() => {
 })
 
 // Get the type of items in the array
+const hasItems = computed(() => props.schema.items !== undefined)
+
 const getItemsType = computed(() => {
-  if (!props.schema.items)
-    return 'Not defined'
+  if (typeof props.schema.items === 'boolean')
+    return props.schema.items ? 'any' : 'none'
   if (Array.isArray(props.schema.items))
     return 'Tuple'
   return props.schema.items.type || 'Not specified'
@@ -43,7 +45,7 @@ const getItemsType = computed(() => {
             array
           </div>
         </div>
-        <div v-if="schema.items" class="slds-col">
+        <div v-if="hasItems" class="slds-col">
           <div class="slds-text-title_caps slds-m-bottom_xx-small">
             Items Type
           </div>
@@ -56,7 +58,7 @@ const getItemsType = computed(() => {
 
     <SchemaConstraints v-if="hasConstraints" :schema="schema" />
 
-    <div v-if="schema.items" class="slds-m-top_medium">
+    <div v-if="hasItems" class="slds-m-top_medium">
       <div class="slds-text-heading_small slds-m-bottom_small">
         Items Schema
       </div>
@@ -81,7 +83,7 @@ const getItemsType = computed(() => {
       message="This array doesn't have any items defined in the schema."
     />
 
-    <div v-if="schema.contains" class="slds-m-top_medium">
+    <div v-if="schema.contains !== undefined" class="slds-m-top_medium">
       <div class="slds-text-heading_small slds-m-bottom_small">
         Contains
       </div>

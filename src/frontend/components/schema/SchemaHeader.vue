@@ -1,7 +1,7 @@
 <script setup>
 defineProps({
   schema: {
-    type: Object,
+    type: [Object, Boolean],
     required: true,
   },
 })

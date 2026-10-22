@@ -23,13 +23,14 @@ const nullable = computed(() => isNullable(props.schema))
     <div class="slds-box slds-theme_shade">
       <div class="slds-text-body_regular">
         <div class="slds-grid slds-gutters">
-          <div class="slds-col">
+          <div class="slds-col type-badges">
             <div class="slds-text-title_caps slds-m-bottom_xx-small">
               Type
             </div>
             <span v-for="type in concreteTypes" :key="type" class="slds-badge slds-m-right_xx-small">
               {{ type }}
             </span>
+            <span v-if="schema.format" class="slds-badge slds-badge_lightest slds-m-right_xx-small">{{ schema.format }}</span>
             <span v-if="nullable" class="slds-badge slds-badge_lightest">nullable</span>
             <span v-if="inferred" class="slds-badge slds-badge_lightest">inferred</span>
           </div>

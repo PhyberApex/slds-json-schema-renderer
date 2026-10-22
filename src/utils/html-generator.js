@@ -115,4 +115,4 @@ async function copyAssets(outputDir) {
   }
 }
 
-export { copyAssets, generate }
+export { copyAssets, generate, serializeForInlineScript }

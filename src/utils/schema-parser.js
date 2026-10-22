@@ -109,6 +109,42 @@ async function parse(filePath, options = {}) {
   return processSchema(rawSchema, absoluteFilePath)
 }
 
+function escapePointerSegment(segment) {
+  return String(segment).replace(/~/g, '~0').replace(/\//g, '~1')
+}
+
+/**
+ * Copy a dereferenced schema graph, replacing every edge that points back to
+ * an ancestor with a `{ $ref, _circular: true }` marker so the result is a
+ * tree that `JSON.stringify` can serialize. Shared references that do not form
+ * a cycle are copied in full.
+ * @param {unknown} node - Current value
+ * @param {Map<object, string>} ancestors - Objects on the current path, mapped to their JSON pointer
+ * @param {string} pointer - JSON pointer of the current value
+ * @returns {unknown} Acyclic copy
+ */
+function breakCycles(node, ancestors = new Map(), pointer = '#') {
+  if (node === null || typeof node !== 'object') {
+    return node
+  }
+  if (ancestors.has(node)) {
+    return { $ref: ancestors.get(node), _circular: true }
+  }
+
+  ancestors.set(node, pointer)
+  const copy = Array.isArray(node)
+    ? node.map((item, index) => breakCycles(item, ancestors, `${pointer}/${index}`))
+    : Object.fromEntries(
+        Object.entries(node).map(([key, value]) => [
+          key,
+          breakCycles(value, ancestors, `${pointer}/${escapePointerSegment(key)}`),
+        ]),
+      )
+  ancestors.delete(node)
+
+  return copy
+}
+
 /**
  * Process a schema to resolve references and add metadata
  * @param {object} schema - The JSON schema object
@@ -121,11 +157,12 @@ async function processSchema(schema, filePath) {
 
   let dereferencedSchema
   try {
-    dereferencedSchema = await $RefParser.dereference(absoluteFilePath, schema, {
+    const graph = await $RefParser.dereference(absoluteFilePath, schema, {
       resolve: {
         http: false,
       },
     })
+    dereferencedSchema = breakCycles(graph)
   }
   catch (err) {
     throw new Error(`Failed to resolve $ref in ${absoluteFilePath}: ${err.message}`)

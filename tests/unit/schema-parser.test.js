@@ -75,6 +75,55 @@ describe('parse', () => {
   })
 })
 
+describe('parse circular references', () => {
+  it('replaces back-edges with a circular $ref marker so the result is serializable', async () => {
+    const file = await writeJson('tree.json', {
+      $schema: 'http://json-schema.org/draft-07/schema#',
+      title: 'Tree',
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+        children: { type: 'array', items: { $ref: '#' } },
+      },
+    })
+
+    const schema = await parse(file)
+
+    expect(() => JSON.stringify(schema)).not.toThrow()
+    expect(schema.properties.children.items).toEqual({ $ref: '#', _circular: true })
+    expect(schema.properties.name).toEqual({ type: 'string' })
+  })
+
+  it('expands a reference to a cyclic definition once before marking the cycle', async () => {
+    const file = await writeJson('linked.json', {
+      type: 'object',
+      definitions: {
+        node: { type: 'object', properties: { next: { $ref: '#/definitions/node' } } },
+      },
+      properties: { head: { $ref: '#/definitions/node' } },
+    })
+
+    const schema = await parse(file)
+
+    expect(schema.properties.head.type).toBe('object')
+    expect(schema.properties.head.properties.next).toEqual({ $ref: '#/properties/head', _circular: true })
+    expect(() => JSON.stringify(schema)).not.toThrow()
+  })
+
+  it('keeps shared non-cyclic references fully expanded', async () => {
+    const file = await writeJson('shared.json', {
+      type: 'object',
+      definitions: { id: { type: 'string', minLength: 1 } },
+      properties: { a: { $ref: '#/definitions/id' }, b: { $ref: '#/definitions/id' } },
+    })
+
+    const schema = await parse(file)
+
+    expect(schema.properties.a).toEqual({ type: 'string', minLength: 1 })
+    expect(schema.properties.b).toEqual({ type: 'string', minLength: 1 })
+  })
+})
+
 describe('parse non-object documents', () => {
   it.each([
     ['null', null],

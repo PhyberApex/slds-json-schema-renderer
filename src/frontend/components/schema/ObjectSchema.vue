@@ -33,6 +33,8 @@ function isRequired(propName) {
 }
 
 function getTypeLabel(property) {
+  if (schemaUtils.isRef(property))
+    return property._circular ? 'recursive reference' : 'reference'
   if (property.type)
     return property.type
   if (schemaUtils.hasComposition(property))

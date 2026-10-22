@@ -53,7 +53,7 @@ const schemaKeywords = computed(() => (isSchemaObject(props.schema) ? Object.key
             <CompositionSchema :schema="schema" :keyword="keyword" />
           </div>
 
-          <ApplicatorsSection v-if="hasApplicators" :schema="schema" />
+          <ApplicatorsSection v-if="hasApplicators" :schema="schema" :expanded="isRoot" />
         </div>
 
         <div v-else class="slds-p-around_medium">

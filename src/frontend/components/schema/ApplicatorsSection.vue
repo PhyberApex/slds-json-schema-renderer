@@ -1,11 +1,16 @@
 <script setup>
 import { computed } from 'vue'
+import CollapsibleSection from '@/components/schema/CollapsibleSection.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
 
 const props = defineProps({
   schema: {
     type: Object,
     required: true,
+  },
+  expanded: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -55,18 +60,14 @@ function capitalize(word) {
       </p>
     </div>
 
-    <div v-if="'not' in schema" class="slds-m-top_medium">
-      <div class="slds-text-heading_small slds-m-bottom_small">
-        Not
+    <CollapsibleSection v-if="'not' in schema" title="Not" :initially-expanded="expanded" class="slds-m-top_medium">
+      <template #badge>
         <span class="slds-badge slds-badge_error slds-m-left_x-small">must not match</span>
-      </div>
+      </template>
       <SchemaViewer :schema="schema.not" :is-root="false" />
-    </div>
+    </CollapsibleSection>
 
-    <div v-if="conditional.length > 0" class="slds-m-top_medium">
-      <div class="slds-text-heading_small slds-m-bottom_small">
-        Conditional
-      </div>
+    <CollapsibleSection v-if="conditional.length > 0" title="Conditional" :initially-expanded="expanded" class="slds-m-top_medium">
       <div class="slds-grid slds-gutters slds-wrap">
         <div v-for="keyword in conditional" :key="keyword" class="slds-col slds-size_1-of-1 slds-large-size_1-of-3">
           <div class="slds-text-title_caps slds-m-bottom_x-small">
@@ -75,12 +76,9 @@ function capitalize(word) {
           <SchemaViewer :schema="schema[keyword]" :is-root="false" />
         </div>
       </div>
-    </div>
+    </CollapsibleSection>
 
-    <div v-if="dependencyEntries.length > 0" class="dependencies slds-m-top_medium">
-      <div class="slds-text-heading_small slds-m-bottom_small">
-        Dependencies
-      </div>
+    <CollapsibleSection v-if="dependencyEntries.length > 0" title="Dependencies" :initially-expanded="expanded" class="dependencies slds-m-top_medium">
       <table class="slds-table slds-table_cell-buffer slds-table_bordered">
         <thead>
           <tr class="slds-line-height_reset">
@@ -104,13 +102,10 @@ function capitalize(word) {
           </tr>
         </tbody>
       </table>
-    </div>
+    </CollapsibleSection>
 
-    <div v-if="'propertyNames' in schema" class="slds-m-top_medium">
-      <div class="slds-text-heading_small slds-m-bottom_small">
-        Property Names
-      </div>
+    <CollapsibleSection v-if="'propertyNames' in schema" title="Property Names" :initially-expanded="expanded" class="slds-m-top_medium">
       <SchemaViewer :schema="schema.propertyNames" :is-root="false" />
-    </div>
+    </CollapsibleSection>
   </div>
 </template>

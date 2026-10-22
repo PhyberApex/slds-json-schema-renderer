@@ -24,6 +24,30 @@ function serializeForInlineScript(data) {
 }
 
 /**
+ * Escape a value for use as HTML text or inside a double-quoted attribute
+ * @param {string} value - Raw text
+ * @returns {string} Escaped text
+ */
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+/**
+ * Replace a `{{placeholder}}` in the template with a verbatim value
+ * @param {string} html - Template HTML
+ * @param {string} name - Placeholder name without braces
+ * @param {string} value - Replacement text
+ * @returns {string} HTML with the placeholder replaced
+ */
+function fillPlaceholder(html, name, value) {
+  return html.replace(`{{${name}}}`, () => value)
+}
+
+/**
  * Generate HTML documentation from parsed JSON schemas
  * @param {object} options - Generation options
  * @param {Array} options.schemas - Array of parsed schemas
@@ -33,7 +57,13 @@ function serializeForInlineScript(data) {
  * @param {string} [options.bundleDir] - Directory containing the built frontend bundle
  */
 async function generate(options) {
-  const { schemas, outputDir, title, description, bundleDir = DEFAULT_BUNDLE_DIR } = options
+  const {
+    schemas,
+    outputDir,
+    title = 'JSON Schema Documentation',
+    description = '',
+    bundleDir = DEFAULT_BUNDLE_DIR,
+  } = options
 
   try {
     console.log('Preparing output directory...')
@@ -53,6 +83,13 @@ async function generate(options) {
     }
 
     console.log('Creating HTML output...')
+
+    html = fillPlaceholder(html, 'title', escapeHtml(title))
+    html = fillPlaceholder(
+      html,
+      'metaDescription',
+      description ? `<meta name="description" content="${escapeHtml(description)}" />` : '',
+    )
 
     // Add the data to the window object so it can be used by Vue
     const scriptTag = `<script>

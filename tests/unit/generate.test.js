@@ -71,4 +71,27 @@ describe('generate', () => {
       .rejects
       .toThrow(/bundle\.css/)
   })
+
+  it('writes the configured title and description into the document head, HTML-escaped', async () => {
+    const outputDir = path.join(tmpDir, 'out')
+    await generate({
+      schemas: [],
+      outputDir,
+      bundleDir,
+      title: 'Tom & Jerry <Docs>',
+      description: 'Quotes "here" & there',
+    })
+
+    const html = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
+    expect(html).toContain('<title>Tom &amp; Jerry &lt;Docs&gt;</title>')
+    expect(html).toContain('<meta name="description" content="Quotes &quot;here&quot; &amp; there" />')
+  })
+
+  it('omits the meta description when none is configured', async () => {
+    const outputDir = path.join(tmpDir, 'out')
+    await generate({ schemas: [], outputDir, bundleDir, title: 'Docs', description: '' })
+
+    const html = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
+    expect(html).not.toContain('name="description"')
+  })
 })

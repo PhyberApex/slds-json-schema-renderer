@@ -8,21 +8,19 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  keyword: {
+    type: String,
+    required: true,
+    validator: value => ['allOf', 'anyOf', 'oneOf'].includes(value),
+  },
   rootSchema: {
     type: Object,
-    required: true,
+    default: null,
   },
 })
 
-const compositionType = computed(() => {
-  if (props.schema.anyOf)
-    return 'anyOf'
-  if (props.schema.oneOf)
-    return 'oneOf'
-  if (props.schema.allOf)
-    return 'allOf'
-  return null
-})
+const compositionType = computed(() => props.keyword)
+const stacked = computed(() => props.keyword === 'allOf')
 
 // Track active tab
 const activeTab = ref(0)
@@ -67,10 +65,10 @@ function getSchemaType(schema) {
 
 // Get the tab title for a schema
 function getTabTitle(schema, index) {
-  if (schema.title) {
+  if (schema?.title) {
     return schema.title
   }
-  return `Option ${index + 1}`
+  return `${stacked.value ? 'Part' : 'Option'} ${index + 1}`
 }
 </script>
 
@@ -80,7 +78,16 @@ function getTabTitle(schema, index) {
       <span class="slds-badge" :class="compositionTypeClass">{{ compositionTypeLabel }}</span>
     </div>
 
-    <div class="slds-tabs_default">
+    <div v-if="stacked">
+      <div v-for="(subSchema, index) in schemas" :key="index" class="slds-m-bottom_medium">
+        <div class="slds-text-title_caps slds-m-bottom_x-small">
+          {{ getTabTitle(subSchema, index) }} · {{ getSchemaType(subSchema) }}
+        </div>
+        <SchemaViewer :schema="subSchema" :root-schema="rootSchema" :is-root="false" />
+      </div>
+    </div>
+
+    <div v-else class="slds-tabs_default composition-tabs">
       <ul class="slds-tabs_default__nav" role="tablist">
         <li
           v-for="(subSchema, index) in schemas"

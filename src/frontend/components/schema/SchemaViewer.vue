@@ -1,7 +1,8 @@
 <script setup>
 import { computed, provide, ref } from 'vue'
-import { schemaUtils } from '@/utils/schemaRegistry'
+import { compositionKeywords, schemaUtils } from '@/utils/schemaRegistry'
 import SchemaLayout from '../layout/SchemaLayout.vue'
+import CompositionSchema from './CompositionSchema.vue'
 import PlainSchemaView from './PlainSchemaView.vue'
 import SchemaHeader from './SchemaHeader.vue'
 import SchemaTabs from './SchemaTabs.vue'
@@ -33,6 +34,7 @@ provide('rootSchema', rootSchema)
 
 // Get the appropriate component for the schema type
 const schemaComponent = computed(() => schemaUtils.getComponentForSchema(props.schema))
+const compositions = computed(() => compositionKeywords(props.schema))
 </script>
 
 <template>
@@ -51,7 +53,11 @@ const schemaComponent = computed(() => schemaUtils.getComponentForSchema(props.s
               :schema="schema"
               :root-schema="rootSchema"
             />
-            <UnknownSchemaMessage v-else />
+            <UnknownSchemaMessage v-else-if="compositions.length === 0" />
+          </div>
+
+          <div v-for="keyword in compositions" :key="keyword" class="slds-m-top_medium">
+            <CompositionSchema :schema="schema" :keyword="keyword" :root-schema="rootSchema" />
           </div>
         </div>
       </div>

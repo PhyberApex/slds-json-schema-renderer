@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 const props = defineProps({
   schema: {
-    type: Object,
+    type: [Object, Boolean],
     required: true,
   },
 })

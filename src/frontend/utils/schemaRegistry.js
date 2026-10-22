@@ -1,4 +1,5 @@
 import ArraySchema from '@/components/schema/ArraySchema.vue'
+import BooleanSchema from '@/components/schema/BooleanSchema.vue'
 import CompositionSchema from '@/components/schema/CompositionSchema.vue'
 import ConstSchema from '@/components/schema/ConstSchema.vue'
 import EnumSchema from '@/components/schema/EnumSchema.vue'
@@ -22,13 +23,27 @@ function schemaTypeComponents() {
 }
 
 // Schema type checking utilities
+export function isSchemaObject(schema) {
+  return schema !== null && typeof schema === 'object' && !Array.isArray(schema)
+}
+
 export const schemaUtils = {
-  hasComposition: schema => !!(schema.anyOf || schema.oneOf || schema.allOf),
-  isEnum: schema => 'enum' in schema && Array.isArray(schema.enum),
-  isConst: schema => 'const' in schema,
-  isRef: schema => typeof schema.$ref === 'string',
+  isSchemaObject,
+  isBooleanSchema: schema => typeof schema === 'boolean',
+  hasComposition: schema => isSchemaObject(schema) && !!(schema.anyOf || schema.oneOf || schema.allOf),
+  isEnum: schema => isSchemaObject(schema) && Array.isArray(schema.enum),
+  isConst: schema => isSchemaObject(schema) && 'const' in schema,
+  isRef: schema => isSchemaObject(schema) && typeof schema.$ref === 'string',
 
   getComponentForSchema: (schema) => {
+    if (schemaUtils.isBooleanSchema(schema)) {
+      return BooleanSchema
+    }
+
+    if (!isSchemaObject(schema)) {
+      return null
+    }
+
     if (schemaUtils.isRef(schema)) {
       return RefSchema
     }

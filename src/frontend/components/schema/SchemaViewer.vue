@@ -9,7 +9,7 @@ import UnknownSchemaMessage from './UnknownSchemaMessage.vue'
 
 const props = defineProps({
   schema: {
-    type: Object,
+    type: [Object, Boolean],
     required: true,
   },
   rootSchema: {

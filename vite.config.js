@@ -37,13 +37,16 @@ export default defineConfig(({ command }) => {
       // lightningcss (Vite 8 default) rejects the `:nth-child(1 of .sel)` syntax used by SLDS
       cssMinify: 'esbuild',
 
-      // Generate a library build
+      // The bundle is only ever loaded through a <script> tag, so a single
+      // IIFE with a plain .js extension keeps every static host serving it
+      // as JavaScript (a .cjs file is served as application/node and is
+      // refused under X-Content-Type-Options: nosniff).
       lib: {
-        // Entry point is in src/frontend
         entry: path.resolve(__dirname, 'src/frontend/index.js'),
         name: 'JsonSchemaDocs',
-        fileName: 'bundle',
-        formats: ['umd'],
+        fileName: () => 'bundle.js',
+        cssFileName: 'bundle',
+        formats: ['iife'],
       },
     }
   }

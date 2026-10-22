@@ -118,7 +118,7 @@ async function generate(options) {
   }
 }
 
-const BUNDLE_FILES = ['bundle.css', 'bundle.umd.cjs']
+const BUNDLE_FILES = ['bundle.css', 'bundle.js']
 
 /**
  * Copy the built frontend bundle into the output directory

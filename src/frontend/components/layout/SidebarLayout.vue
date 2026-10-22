@@ -32,7 +32,7 @@ function getSchemaTitle(entry) {
 </script>
 
 <template>
-  <div class="slds-navigation-list--vertical">
+  <nav class="slds-navigation-list--vertical" aria-label="Schemas">
     <div class="slds-navigation-list__item">
       <div class="slds-navigation-list__item-content">
         <div class="slds-navigation-list__item-title">
@@ -55,7 +55,7 @@ function getSchemaTitle(entry) {
         </div>
       </div>
     </div>
-  </div>
+  </nav>
 </template>
 
 <style>

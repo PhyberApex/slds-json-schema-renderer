@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref } from 'vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
+import Tabs from '@/components/schema/Tabs.vue'
 import { formatTypeLabel } from '@/utils/schemaRegistry.js'
 
 const props = defineProps({
@@ -22,13 +23,16 @@ const props = defineProps({
 const compositionType = computed(() => props.keyword)
 const stacked = computed(() => props.keyword === 'allOf')
 
-// Track active tab
 const activeTab = ref(0)
 
 // Get the array of schemas based on composition type
 const schemas = computed(() => {
   return props.schema[compositionType.value] || []
 })
+
+const tabs = computed(() =>
+  schemas.value.map((subSchema, index) => ({ id: index, label: getTabTitle(subSchema, index), schema: subSchema })),
+)
 
 // Get the label for the composition type
 const compositionTypeLabel = computed(() => {
@@ -87,44 +91,16 @@ function getTabTitle(schema, index) {
       </div>
     </div>
 
-    <div v-else class="slds-tabs_default composition-tabs">
-      <ul class="slds-tabs_default__nav" role="tablist">
-        <li
-          v-for="(subSchema, index) in schemas"
-          :key="index"
-          class="slds-tabs_default__item"
-          :class="{ 'slds-is-active': activeTab === index }"
-          role="presentation"
-        >
-          <a
-            class="slds-tabs_default__link"
-            role="tab"
-            tabindex="0"
-            :aria-selected="activeTab === index"
-            :aria-controls="`tab-${index}`"
-            @click="activeTab = index"
-          >
-            <span class="slds-tabs_default__title">{{ getTabTitle(subSchema, index) }}</span>
-          </a>
-        </li>
-      </ul>
-
-      <div
-        v-for="(subSchema, index) in schemas"
-        :id="`tab-${index}`"
-        :key="index"
-        class="slds-tabs_default__content"
-        :class="{ 'slds-show': activeTab === index, 'slds-hide': activeTab !== index }"
-        role="tabpanel"
-      >
+    <Tabs v-else v-model="activeTab" :tabs="tabs" class="composition-tabs">
+      <template #panel="{ tab }">
         <div class="slds-p-around_medium">
           <div class="slds-text-title_caps slds-m-bottom_small">
-            Schema Type: {{ getSchemaType(subSchema) }}
+            Schema Type: {{ getSchemaType(tab.schema) }}
           </div>
-          <SchemaViewer :schema="subSchema" :root-schema="rootSchema" :is-root="false" />
+          <SchemaViewer :schema="tab.schema" :root-schema="rootSchema" :is-root="false" />
         </div>
-      </div>
-    </div>
+      </template>
+    </Tabs>
   </div>
 </template>
 

@@ -1,22 +1,62 @@
 import path from 'node:path'
 import $RefParser from '@apidevtools/json-schema-ref-parser'
 import Ajv from 'ajv'
+import Ajv2019 from 'ajv/dist/2019.js'
+import Ajv2020 from 'ajv/dist/2020.js'
+import draft06 from 'ajv/dist/refs/json-schema-draft-06.json' with { type: 'json' }
 import fs from 'fs-extra'
 import { glob } from 'glob'
 
-// Initialize AJV with options
-const ajv = new Ajv({
-  allErrors: true,
-  verbose: true,
-  strict: false,
-})
+const ajvOptions = { allErrors: true, strict: false }
+
+const DRAFT_07 = 'http://json-schema.org/draft-07/schema'
+const DRAFT_06 = 'http://json-schema.org/draft-06/schema'
+const DRAFT_2019 = 'https://json-schema.org/draft/2019-09/schema'
+const DRAFT_2020 = 'https://json-schema.org/draft/2020-12/schema'
+
+const metaschemaValidators = {
+  [DRAFT_07]: () => new Ajv(ajvOptions).getSchema(`${DRAFT_07}#`),
+  [DRAFT_06]: () => new Ajv(ajvOptions).addMetaSchema(draft06).getSchema(`${DRAFT_06}#`),
+  [DRAFT_2019]: () => new Ajv2019(ajvOptions).getSchema(DRAFT_2019),
+  [DRAFT_2020]: () => new Ajv2020(ajvOptions).getSchema(DRAFT_2020),
+}
+
+const validatorCache = new Map()
+
+function metaschemaValidatorFor(schema) {
+  const declared = typeof schema.$schema === 'string' ? schema.$schema.replace(/#$/, '') : ''
+  const uri = declared in metaschemaValidators ? declared : DRAFT_07
+  if (!validatorCache.has(uri)) {
+    validatorCache.set(uri, metaschemaValidators[uri]())
+  }
+  return validatorCache.get(uri)
+}
+
+/**
+ * Validate a schema document against the metaschema it declares in `$schema`
+ * (draft-06, draft-07, 2019-09 or 2020-12), falling back to draft-07.
+ * @param {object} schema - The raw schema document
+ * @returns {{ valid: boolean, errors: Array<{ path: string, message: string }> }} Validation result
+ */
+function validateSchema(schema) {
+  const validate = metaschemaValidatorFor(schema)
+  const valid = validate(schema)
+  const errors = (validate.errors ?? []).map(err => ({
+    path: err.instancePath || '/',
+    message: err.message,
+  }))
+  return { valid, errors }
+}
 
 /**
  * Parse a JSON schema file
  * @param {string} filePath - Path to the JSON schema file
+ * @param {object} [options] - Parsing options
+ * @param {boolean} [options.strict] - Reject schemas that violate their metaschema instead of warning
  * @returns {object} Parsed schema
  */
-async function parse(filePath) {
+async function parse(filePath, options = {}) {
+  const { strict = false } = options
   const absoluteFilePath = path.resolve(filePath)
 
   let schemaContent
@@ -41,23 +81,13 @@ async function parse(filePath) {
     )
   }
 
-  // Attempt to validate against JSON Schema draft-07
-  try {
-    const validate = ajv.compile({
-      $schema: 'http://json-schema.org/draft-07/schema#',
-    })
-
-    validate(rawSchema)
-
-    if (validate.errors) {
-      console.warn(`Warning: Schema validation issues in ${absoluteFilePath}:`)
-      validate.errors.forEach((err) => {
-        console.warn(`  - ${err.instancePath} ${err.message}`)
-      })
+  const validation = validateSchema(rawSchema)
+  if (!validation.valid) {
+    const details = validation.errors.map(err => `  - ${err.path} ${err.message}`).join('\n')
+    if (strict) {
+      throw new Error(`Schema ${absoluteFilePath} does not match its metaschema:\n${details}`)
     }
-  }
-  catch (err) {
-    console.warn(`Warning: Failed to validate schema ${absoluteFilePath}: ${err.message}`)
+    console.warn(`Warning: Schema validation issues in ${absoluteFilePath}:\n${details}`)
   }
 
   return processSchema(rawSchema, absoluteFilePath)
@@ -128,7 +158,7 @@ async function processSchema(schema, filePath) {
  * @returns {Array} Array of parsed schemas
  */
 async function parseDirectory(directoryPath, options = {}) {
-  const { verbose = false } = options
+  const { verbose = false, strict = false } = options
   const schemas = []
 
   try {
@@ -145,13 +175,16 @@ async function parseDirectory(directoryPath, options = {}) {
     // Parse each file
     for (const file of files) {
       try {
-        const schema = await parse(file)
+        const schema = await parse(file, { strict })
         schemas.push({
           schema,
           file,
         })
       }
       catch (err) {
+        if (strict) {
+          throw err
+        }
         console.error(`Error parsing ${file}: ${err.message}`)
       }
     }
@@ -163,4 +196,4 @@ async function parseDirectory(directoryPath, options = {}) {
   }
 }
 
-export { parse, parseDirectory, processSchema }
+export { parse, parseDirectory, processSchema, validateSchema }

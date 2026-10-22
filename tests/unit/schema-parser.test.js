@@ -3,7 +3,7 @@ import path from 'node:path'
 import process from 'node:process'
 import fs from 'fs-extra'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { parse, parseDirectory } from '../../src/utils/schema-parser.js'
+import { parse, parseDirectory, validateSchema } from '../../src/utils/schema-parser.js'
 
 let dir
 
@@ -76,6 +76,16 @@ describe('parse', () => {
 })
 
 describe('parseDirectory', () => {
+  it('skips files that fail to parse unless strict', async () => {
+    await writeJson('ok.json', { type: 'string' })
+    await fs.writeFile(path.join(dir, 'bad.json'), '{ nope')
+
+    const lenient = await parseDirectory(dir)
+    expect(lenient.map(entry => path.basename(entry.file))).toEqual(['ok.json'])
+
+    await expect(parseDirectory(dir, { strict: true })).rejects.toThrow(/bad\.json/)
+  })
+
   it('returns one entry per JSON file with the resolved schema and its path', async () => {
     const a = await writeJson('a.json', { type: 'string' })
     const b = await writeJson('sub/b.json', { type: 'number' })
@@ -84,5 +94,58 @@ describe('parseDirectory', () => {
 
     expect(result.map(entry => entry.file).sort()).toEqual([a, b].sort())
     expect(result.find(entry => entry.file === b).schema.type).toBe('number')
+  })
+})
+
+describe('validateSchema', () => {
+  it('accepts a valid draft-07 schema', () => {
+    expect(validateSchema({ type: 'object', properties: { name: { type: 'string' } } })).toEqual({ valid: true, errors: [] })
+  })
+
+  it('reports each metaschema violation with its path', () => {
+    const result = validateSchema({ type: 'strng', required: 'name', properties: 'nope', minimum: 'abc' })
+
+    expect(result.valid).toBe(false)
+    expect([...new Set(result.errors.map(e => e.path))].sort()).toEqual(['/minimum', '/properties', '/required', '/type'].sort())
+  })
+
+  it('validates against the metaschema named by $schema', () => {
+    const schema2020 = { $schema: 'https://json-schema.org/draft/2020-12/schema', type: 'array', prefixItems: 'x' }
+    const schema07 = { $schema: 'http://json-schema.org/draft-07/schema#', type: 'array', prefixItems: 'x' }
+
+    expect(validateSchema(schema2020).valid).toBe(false)
+    expect(validateSchema(schema07).valid).toBe(true)
+  })
+
+  it('falls back to draft-07 for an unknown $schema', () => {
+    expect(validateSchema({ $schema: 'https://example.com/custom', type: 'strng' }).valid).toBe(false)
+  })
+})
+
+describe('parse validation', () => {
+  it('prints no validation warning for a valid schema', async () => {
+    const file = await writeJson('ok.json', { $schema: 'http://json-schema.org/draft-07/schema#', type: 'object' })
+
+    await parse(file)
+
+    expect(console.warn).not.toHaveBeenCalled()
+  })
+
+  it('warns with every violation for an invalid schema and still returns it', async () => {
+    const file = await writeJson('invalid.json', { type: 'strng', minimum: 'abc' })
+
+    const schema = await parse(file)
+
+    expect(schema.type).toBe('strng')
+    const output = console.warn.mock.calls.flat().join('\n')
+    expect(output).toContain('invalid.json')
+    expect(output).toContain('/type')
+    expect(output).toContain('/minimum')
+  })
+
+  it('rejects an invalid schema in strict mode', async () => {
+    const file = await writeJson('invalid.json', { type: 'strng' })
+
+    await expect(parse(file, { strict: true })).rejects.toThrow(/invalid\.json.*\/type/s)
   })
 })

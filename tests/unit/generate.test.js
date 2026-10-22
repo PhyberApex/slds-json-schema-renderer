@@ -18,7 +18,7 @@ beforeEach(async () => {
   bundleDir = path.join(tmpDir, 'bundle')
   await fs.ensureDir(bundleDir)
   await fs.writeFile(path.join(bundleDir, 'bundle.css'), 'body{}')
-  await fs.writeFile(path.join(bundleDir, 'bundle.umd.cjs'), '// bundle')
+  await fs.writeFile(path.join(bundleDir, 'bundle.js'), '// bundle')
 })
 
 afterEach(() => fs.remove(tmpDir))
@@ -51,7 +51,7 @@ describe('generate', () => {
     await generate({ schemas: [], outputDir, bundleDir, title: 'Docs', description: '' })
 
     expect(await fs.pathExists(path.join(outputDir, 'assets/bundle.css'))).toBe(true)
-    expect(await fs.pathExists(path.join(outputDir, 'assets/bundle.umd.cjs'))).toBe(true)
+    expect(await fs.pathExists(path.join(outputDir, 'assets/bundle.js'))).toBe(true)
   })
 
   it('rejects when the frontend bundle directory is missing', async () => {
@@ -93,5 +93,18 @@ describe('generate', () => {
 
     const html = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
     expect(html).not.toContain('name="description"')
+  })
+
+  it('references only .js and .css assets that exist in the output', async () => {
+    const outputDir = path.join(tmpDir, 'out')
+    await generate({ schemas: [], outputDir, bundleDir, title: 'Docs', description: '' })
+
+    const html = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
+    const assets = [...html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g)].map(m => m[1])
+    expect(assets.length).toBeGreaterThan(0)
+    for (const asset of assets) {
+      expect(asset).toMatch(/\.(?:js|css)$/)
+      expect(await fs.pathExists(path.join(outputDir, asset))).toBe(true)
+    }
   })
 })

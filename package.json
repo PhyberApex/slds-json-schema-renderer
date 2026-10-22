@@ -42,7 +42,8 @@
     "pages": "npm run build && npm run start -- generate -i ./test/ -o docs",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "test": "vitest run",
+    "test": "vitest run --project unit --project frontend",
+    "test:smoke": "vitest run --project smoke",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "prepare": "husky"

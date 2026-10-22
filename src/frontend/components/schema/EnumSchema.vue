@@ -1,6 +1,8 @@
 <script setup>
 import { computed } from 'vue'
+import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
 import { formatLiteral, isCompositeLiteral } from '@/utils/formatLiteral.js'
+import { formatTypeLabel } from '@/utils/schemaRegistry.js'
 
 const props = defineProps({
   schema: {
@@ -20,6 +22,7 @@ const values = computed(() => props.schema.enum)
   <div class="slds-box slds-theme_shade">
     <div class="slds-text-heading_small slds-m-bottom_small">
       Enum Values
+      <span v-if="formatTypeLabel(schema)" class="slds-badge slds-m-left_x-small">{{ formatTypeLabel(schema) }}</span>
     </div>
     <div class="slds-grid slds-wrap slds-gutters">
       <div
@@ -34,5 +37,7 @@ const values = computed(() => props.schema.enum)
         </div>
       </div>
     </div>
+
+    <SchemaConstraints :schema="schema" />
   </div>
 </template>

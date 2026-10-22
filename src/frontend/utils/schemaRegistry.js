@@ -1,3 +1,4 @@
+import AnySchema from '@/components/schema/AnySchema.vue'
 import ArraySchema from '@/components/schema/ArraySchema.vue'
 import BooleanSchema from '@/components/schema/BooleanSchema.vue'
 import CompositionSchema from '@/components/schema/CompositionSchema.vue'
@@ -36,8 +37,43 @@ export function normalizeTypes(schema) {
   return Array.isArray(schema.type) ? schema.type : [schema.type]
 }
 
+const STRUCTURAL_KEYWORDS = {
+  object: ['properties', 'patternProperties', 'additionalProperties', 'required', 'minProperties', 'maxProperties', 'propertyNames', 'dependencies', 'dependentRequired', 'dependentSchemas'],
+  array: ['items', 'prefixItems', 'additionalItems', 'contains', 'minItems', 'maxItems', 'uniqueItems', 'minContains', 'maxContains'],
+  string: ['minLength', 'maxLength', 'pattern', 'format', 'contentMediaType', 'contentEncoding'],
+  number: ['minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum', 'multipleOf'],
+}
+
+/**
+ * Types implied by structural keywords when the schema declares no `type`.
+ */
+export function inferTypes(schema) {
+  if (!isSchemaObject(schema) || normalizeTypes(schema).length > 0)
+    return []
+  return Object.entries(STRUCTURAL_KEYWORDS)
+    .filter(([, keywords]) => keywords.some(keyword => keyword in schema))
+    .map(([type]) => type)
+}
+
+export function effectiveTypes(schema) {
+  const declared = normalizeTypes(schema)
+  return declared.length > 0 ? declared : inferTypes(schema)
+}
+
+export function isTypeInferred(schema) {
+  return normalizeTypes(schema).length === 0 && inferTypes(schema).length > 0
+}
+
 export function formatType(schema) {
   return normalizeTypes(schema).join(' | ')
+}
+
+/**
+ * Human-readable type label, e.g. `string | null` or `object (inferred)`.
+ */
+export function formatTypeLabel(schema) {
+  const label = effectiveTypes(schema).join(' | ')
+  return isTypeInferred(schema) ? `${label} (inferred)` : label
 }
 
 export function isNullable(schema) {
@@ -46,6 +82,8 @@ export function isNullable(schema) {
 }
 
 function componentForTypes(types) {
+  if (types.length === 0)
+    return AnySchema
   const components = schemaTypeComponents()
   const concreteTypes = types.length > 1 ? types.filter(type => type !== 'null') : types
   if (concreteTypes.length === 1)
@@ -88,6 +126,6 @@ export const schemaUtils = {
       return ConstSchema
     }
 
-    return componentForTypes(normalizeTypes(schema))
+    return componentForTypes(effectiveTypes(schema))
   },
 }

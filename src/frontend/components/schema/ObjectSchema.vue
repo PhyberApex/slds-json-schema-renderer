@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
-import { formatType, normalizeTypes, schemaUtils } from '@/utils/schemaRegistry.js'
+import { effectiveTypes, formatTypeLabel, schemaUtils } from '@/utils/schemaRegistry.js'
 
 const props = defineProps({
   schema: {
@@ -37,8 +37,8 @@ function getTypeLabel(property) {
     return property ? 'any' : 'none'
   if (schemaUtils.isRef(property))
     return property._circular ? 'recursive reference' : 'reference'
-  if (normalizeTypes(property).length > 0)
-    return formatType(property)
+  if (effectiveTypes(property).length > 0)
+    return formatTypeLabel(property)
   if (schemaUtils.hasComposition(property))
     return 'composition'
   if (schemaUtils.isEnum(property))
@@ -57,7 +57,7 @@ function toggleProperty(name) {
 <template>
   <div>
     <div>
-      <div>Type: {{ formatType(schema) || 'object' }}</div>
+      <div>Type: {{ formatTypeLabel(schema) || 'object' }}</div>
     </div>
 
     <SchemaConstraints :schema="schema" />

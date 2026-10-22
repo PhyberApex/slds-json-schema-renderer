@@ -1,7 +1,6 @@
 import AnySchema from '@/components/schema/AnySchema.vue'
 import ArraySchema from '@/components/schema/ArraySchema.vue'
 import BooleanSchema from '@/components/schema/BooleanSchema.vue'
-import CompositionSchema from '@/components/schema/CompositionSchema.vue'
 import ConstSchema from '@/components/schema/ConstSchema.vue'
 import EnumSchema from '@/components/schema/EnumSchema.vue'
 import ObjectSchema from '@/components/schema/ObjectSchema.vue'
@@ -55,6 +54,17 @@ export function inferTypes(schema) {
     .map(([type]) => type)
 }
 
+const COMPOSITION_KEYWORDS = ['allOf', 'anyOf', 'oneOf']
+
+/**
+ * Composition keywords present on the schema, in a stable order.
+ */
+export function compositionKeywords(schema) {
+  if (!isSchemaObject(schema))
+    return []
+  return COMPOSITION_KEYWORDS.filter(keyword => Array.isArray(schema[keyword]))
+}
+
 export function effectiveTypes(schema) {
   const declared = normalizeTypes(schema)
   return declared.length > 0 ? declared : inferTypes(schema)
@@ -81,9 +91,9 @@ export function isNullable(schema) {
   return types.length > 1 && types.includes('null')
 }
 
-function componentForTypes(types) {
+function componentForTypes(types, schema) {
   if (types.length === 0)
-    return AnySchema
+    return compositionKeywords(schema).length > 0 ? null : AnySchema
   const components = schemaTypeComponents()
   const concreteTypes = types.length > 1 ? types.filter(type => type !== 'null') : types
   if (concreteTypes.length === 1)
@@ -96,7 +106,7 @@ function componentForTypes(types) {
 export const schemaUtils = {
   isSchemaObject,
   isBooleanSchema: schema => typeof schema === 'boolean',
-  hasComposition: schema => isSchemaObject(schema) && !!(schema.anyOf || schema.oneOf || schema.allOf),
+  hasComposition: schema => compositionKeywords(schema).length > 0,
   isEnum: schema => isSchemaObject(schema) && Array.isArray(schema.enum),
   isConst: schema => isSchemaObject(schema) && 'const' in schema,
   isRef: schema => isSchemaObject(schema) && typeof schema.$ref === 'string',
@@ -114,10 +124,6 @@ export const schemaUtils = {
       return RefSchema
     }
 
-    if (schemaUtils.hasComposition(schema)) {
-      return CompositionSchema
-    }
-
     if (schemaUtils.isEnum(schema)) {
       return EnumSchema
     }
@@ -126,6 +132,6 @@ export const schemaUtils = {
       return ConstSchema
     }
 
-    return componentForTypes(effectiveTypes(schema))
+    return componentForTypes(effectiveTypes(schema), schema)
   },
 }

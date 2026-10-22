@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import ArraySchema from '@/components/schema/ArraySchema.vue'
-import CompositionSchema from '@/components/schema/CompositionSchema.vue'
 import ConstSchema from '@/components/schema/ConstSchema.vue'
 import EnumSchema from '@/components/schema/EnumSchema.vue'
 import ObjectSchema from '@/components/schema/ObjectSchema.vue'
@@ -15,7 +14,8 @@ describe('schemaUtils.getComponentForSchema', () => {
     [{ type: 'integer' }, PrimitiveSchema],
     [{ enum: ['a', 'b'] }, EnumSchema],
     [{ const: 1 }, ConstSchema],
-    [{ oneOf: [{ type: 'string' }] }, CompositionSchema],
+    [{ oneOf: [{ type: 'string' }] }, null],
+    [{ type: 'object', oneOf: [{ type: 'string' }] }, ObjectSchema],
   ])('picks the component for %j', (schema, component) => {
     expect(schemaUtils.getComponentForSchema(schema)).toBe(component)
   })

@@ -26,7 +26,7 @@ defineProps({
               <div class="slds-page-header__name-title">
                 <h1
                   class="slds-page-header__title slds-truncate"
-                  title="{{ schema.title || 'Schema' }}"
+                  :title="schema.title || 'Schema'"
                 >
                   {{ schema.title || 'Schema' }}
                 </h1>

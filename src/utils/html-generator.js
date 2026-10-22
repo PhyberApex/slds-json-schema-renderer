@@ -4,6 +4,7 @@ import fs from 'fs-extra'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+const DEFAULT_BUNDLE_DIR = path.resolve(__dirname, '../../lib/frontend/')
 
 /**
  * Serialize data as JSON that is safe to embed inside an inline <script> tag.
@@ -29,9 +30,10 @@ function serializeForInlineScript(data) {
  * @param {string} options.outputDir - Output directory
  * @param {string} options.title - Documentation title
  * @param {string} options.description - Documentation description
+ * @param {string} [options.bundleDir] - Directory containing the built frontend bundle
  */
 async function generate(options) {
-  const { schemas, outputDir, title, description } = options
+  const { schemas, outputDir, title, description, bundleDir = DEFAULT_BUNDLE_DIR } = options
 
   try {
     console.log('Preparing output directory...')
@@ -57,8 +59,9 @@ async function generate(options) {
       window.__JSON_SCHEMA_DOCS_DATA__ = ${serializeForInlineScript(appData)};
     </script>`
 
-    // Insert the script tag before the closing body tag
-    html = html.replace('</body>', `${scriptTag}</body>`)
+    // A replacer function inserts the data verbatim; a string replacement
+    // would interpret `$$`, `$&`, `` $` `` and `$'` inside the schema data.
+    html = html.replace('</body>', () => `${scriptTag}</body>`)
 
     console.log('Writing HTML file...')
     // Write the HTML to the output directory
@@ -66,7 +69,7 @@ async function generate(options) {
     await fs.writeFile(outputPath, html)
 
     // Copy assets and bundle
-    await copyAssets(outputDir)
+    await copyAssets(outputDir, bundleDir)
 
     return {
       outputPath,
@@ -81,8 +84,9 @@ async function generate(options) {
 /**
  * Copy assets to the output directory
  * @param {string} outputDir - Output directory
+ * @param {string} bundleDir - Directory containing the built frontend bundle
  */
-async function copyAssets(outputDir) {
+async function copyAssets(outputDir, bundleDir = DEFAULT_BUNDLE_DIR) {
   try {
     console.log('Copying assets...')
     // Create assets directory
@@ -91,8 +95,7 @@ async function copyAssets(outputDir) {
 
     // Copy the frontend bundle from the lib directory
     try {
-      // Vite produces both ES modules and UMD files - we'll use the UMD version for broader compatibility
-      const bundlePath = path.resolve(__dirname, '../../lib/frontend/')
+      const bundlePath = bundleDir
       const bundleTarget = assetsDir
 
       if (await fs.pathExists(bundlePath)) {

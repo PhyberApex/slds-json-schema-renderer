@@ -1,6 +1,5 @@
 <script setup>
 import { motion } from 'motion-v'
-import { ref } from 'vue'
 
 const props = defineProps({
   schemas: {
@@ -14,15 +13,21 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['selectSchema'])
-const selectedSchemaId = ref(props.selectedSchema?.fileName || null)
 
-function selectSchema(schema) {
-  selectedSchemaId.value = schema.fileName
-  emit('selectSchema', schema)
+function schemaKey(entry) {
+  return entry.file
 }
 
-function getSchemaTitle(schema) {
-  return schema.schema?.title || schema.fileName || 'Untitled Schema'
+function isSelected(entry) {
+  return props.selectedSchema !== null && schemaKey(props.selectedSchema) === schemaKey(entry)
+}
+
+function fileName(entry) {
+  return entry.schema?._metadata?.fileName ?? entry.file.split(/[\\/]/).pop()
+}
+
+function getSchemaTitle(entry) {
+  return entry.schema?.title || fileName(entry)
 }
 </script>
 
@@ -35,15 +40,15 @@ function getSchemaTitle(schema) {
         </div>
       </div>
     </div>
-    <div v-for="schema in schemas" :key="schema.fileName" class="slds-navigation-list__item">
+    <div v-for="schema in schemas" :key="schemaKey(schema)" class="slds-navigation-list__item">
       <div class="slds-navigation-list__item-content">
         <div class="slds-navigation-list__item-title">
           <motion.button
             :while-hover="{ scale: 1.05 }"
             :while-press="{ scale: 0.95 }"
             class="slds-button slds-button_neutral slds-button_stretch"
-            :class="{ 'slds-is-active': selectedSchemaId === schema.fileName }"
-            @click="selectSchema(schema)"
+            :class="{ 'slds-is-active': isSelected(schema) }"
+            @click="emit('selectSchema', schema)"
           >
             {{ getSchemaTitle(schema) }}
           </motion.button>

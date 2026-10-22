@@ -55,5 +55,6 @@ describe('built frontend bundle', () => {
     expect(errors).toEqual([])
     expect(schemaCount).toBeGreaterThan(0)
     expect(dom.window.document.querySelectorAll('#app button').length).toBe(schemaCount)
+    expect(dom.window.document.querySelectorAll('#app button.slds-is-active').length).toBe(1)
   })
 })

@@ -29,6 +29,13 @@ export default defineConfig({
           environment: 'jsdom',
         },
       },
+      {
+        test: {
+          name: 'smoke',
+          include: ['tests/smoke/**/*.test.js'],
+          environment: 'node',
+        },
+      },
     ],
     coverage: {
       provider: 'v8',

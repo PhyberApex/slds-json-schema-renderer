@@ -29,3 +29,6 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Smoke test the built bundle
+        run: npm run test:smoke

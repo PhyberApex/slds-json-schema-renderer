@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
-import { formatType } from '@/utils/schemaRegistry.js'
+import { formatTypeLabel } from '@/utils/schemaRegistry.js'
 
 const props = defineProps({
   schema: {
@@ -43,7 +43,7 @@ const getItemsType = computed(() => {
             Type
           </div>
           <div class="slds-badge">
-            {{ formatType(schema) || 'array' }}
+            {{ formatTypeLabel(schema) || 'array' }}
           </div>
         </div>
         <div v-if="hasItems" class="slds-col">

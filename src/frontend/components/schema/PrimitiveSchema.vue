@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
-import { isNullable, normalizeTypes } from '@/utils/schemaRegistry.js'
+import { effectiveTypes, isNullable, isTypeInferred } from '@/utils/schemaRegistry.js'
 
 const props = defineProps({
   schema: {
@@ -10,7 +10,8 @@ const props = defineProps({
   },
 })
 
-const concreteTypes = computed(() => normalizeTypes(props.schema).filter(type => type !== 'null'))
+const concreteTypes = computed(() => effectiveTypes(props.schema).filter(type => type !== 'null'))
+const inferred = computed(() => isTypeInferred(props.schema))
 const nullable = computed(() => isNullable(props.schema))
 </script>
 
@@ -30,6 +31,7 @@ const nullable = computed(() => isNullable(props.schema))
               {{ type }}
             </span>
             <span v-if="nullable" class="slds-badge slds-badge_lightest">nullable</span>
+            <span v-if="inferred" class="slds-badge slds-badge_lightest">inferred</span>
           </div>
           <div class="slds-col">
             <div class="slds-text-title_caps slds-m-bottom_xx-small">

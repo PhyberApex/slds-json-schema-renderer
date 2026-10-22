@@ -1,7 +1,8 @@
 <script setup>
 import { computed, provide, ref } from 'vue'
-import { compositionKeywords, schemaUtils } from '@/utils/schemaRegistry'
+import { applicatorKeywords, compositionKeywords, isSchemaObject, schemaUtils } from '@/utils/schemaRegistry'
 import SchemaLayout from '../layout/SchemaLayout.vue'
+import ApplicatorsSection from './ApplicatorsSection.vue'
 import CompositionSchema from './CompositionSchema.vue'
 import PlainSchemaView from './PlainSchemaView.vue'
 import SchemaHeader from './SchemaHeader.vue'
@@ -35,6 +36,13 @@ provide('rootSchema', rootSchema)
 // Get the appropriate component for the schema type
 const schemaComponent = computed(() => schemaUtils.getComponentForSchema(props.schema))
 const compositions = computed(() => compositionKeywords(props.schema))
+const ANNOTATION_KEYWORDS = ['readOnly', 'writeOnly', 'deprecated', '$comment']
+const hasApplicators = computed(() =>
+  applicatorKeywords(props.schema).length > 0
+  || ANNOTATION_KEYWORDS.some(keyword => isSchemaObject(props.schema) && keyword in props.schema),
+)
+const isUnknown = computed(() => !schemaComponent.value && compositions.value.length === 0 && !hasApplicators.value)
+const schemaKeywords = computed(() => (isSchemaObject(props.schema) ? Object.keys(props.schema).filter(key => key !== '_metadata') : []))
 </script>
 
 <template>
@@ -53,12 +61,14 @@ const compositions = computed(() => compositionKeywords(props.schema))
               :schema="schema"
               :root-schema="rootSchema"
             />
-            <UnknownSchemaMessage v-else-if="compositions.length === 0" />
+            <UnknownSchemaMessage v-else-if="isUnknown" :keywords="schemaKeywords" />
           </div>
 
           <div v-for="keyword in compositions" :key="keyword" class="slds-m-top_medium">
             <CompositionSchema :schema="schema" :keyword="keyword" :root-schema="rootSchema" />
           </div>
+
+          <ApplicatorsSection v-if="hasApplicators" :schema="schema" :root-schema="rootSchema" />
         </div>
       </div>
 

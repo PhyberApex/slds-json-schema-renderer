@@ -10,7 +10,8 @@ import * as schemaParser from '../utils/schema-parser.js'
  * @param {object} options - Command options
  */
 async function generate(options) {
-  const { input, output, title, description, verbose, strict } = options
+  const { input, output, title, description, verbose, strict, failOnSkip, bundleDir } = options
+  const skipped = []
 
   try {
     // Create output directory if it doesn't exist
@@ -19,11 +20,14 @@ async function generate(options) {
     console.log(chalk.blue(`🔍 Looking for JSON schema files in: ${input}`))
 
     // Parse schema files from the input directory
-    const schemas = await schemaParser.parseDirectory(input, { verbose, strict })
+    const schemas = await schemaParser.parseDirectory(input, {
+      verbose,
+      strict,
+      onFailure: failure => skipped.push(failure),
+    })
 
     if (schemas.length === 0) {
-      console.log(chalk.yellow(`⚠️ No valid JSON schema files found in ${input}`))
-      return
+      throw new Error(`No valid JSON schema files found in ${input}`)
     }
 
     console.log(chalk.green(`✅ Found and parsed ${schemas.length} JSON schema files`))
@@ -60,12 +64,22 @@ async function generate(options) {
       outputDir: output,
       title,
       description,
+      bundleDir,
     })
 
     console.log(chalk.green(`✅ Documentation generated successfully`))
     console.log(`📘 ${result.schemasProcessed} schemas documented`)
     console.log(`📁 Output: ${path.resolve(output)}`)
     console.log(`🌐 Open ${path.resolve(path.join(output, 'index.html'))} in your browser to view`)
+
+    if (skipped.length > 0) {
+      const noun = skipped.length === 1 ? 'file was' : 'files were'
+      console.warn(chalk.yellow(`⚠️ ${skipped.length} ${noun} skipped:`))
+      skipped.forEach(({ file, error }) => console.warn(chalk.yellow(`  - ${file}: ${error.message}`)))
+      if (failOnSkip) {
+        process.exit(1)
+      }
+    }
   }
   catch (err) {
     console.error(chalk.red(`❌ Error generating documentation: ${err.message}`))

@@ -53,6 +53,8 @@ Options:
   -v, --verbose                    Enable verbose output (default: false)
   --strict                         Fail on schemas that do not match their JSON
                                    Schema metaschema (default: false)
+  --fail-on-skip                   Exit with code 1 after generating when any
+                                   file had to be skipped (default: false)
   -h, --help                       display help for command
 ```
 
@@ -79,7 +81,7 @@ slds-json-schema-renderer generate \
 
 ### Exit codes
 
-The command exits with a non-zero code when the output could not be written (for example when the frontend bundle is missing from the installation) and, with `--strict`, when any schema fails to parse or violates its metaschema.
+The command exits with code 1 when no schema could be parsed at all or the output could not be written (for example when the frontend bundle is missing from the installation). Files that fail to parse are skipped and listed in a summary at the end; add `--fail-on-skip` to turn that summary into exit code 1, or `--strict` to abort on the first failing or invalid schema.
 
 ## Development
 

@@ -65,6 +65,17 @@ export function compositionKeywords(schema) {
   return COMPOSITION_KEYWORDS.filter(keyword => Array.isArray(schema[keyword]))
 }
 
+const APPLICATOR_KEYWORDS = ['not', 'if', 'then', 'else', 'dependencies', 'dependentRequired', 'dependentSchemas', 'propertyNames']
+
+/**
+ * Applicator keywords (other than composition) present on the schema.
+ */
+export function applicatorKeywords(schema) {
+  if (!isSchemaObject(schema))
+    return []
+  return APPLICATOR_KEYWORDS.filter(keyword => keyword in schema)
+}
+
 export function effectiveTypes(schema) {
   const declared = normalizeTypes(schema)
   return declared.length > 0 ? declared : inferTypes(schema)
@@ -92,8 +103,10 @@ export function isNullable(schema) {
 }
 
 function componentForTypes(types, schema) {
-  if (types.length === 0)
-    return compositionKeywords(schema).length > 0 ? null : AnySchema
+  if (types.length === 0) {
+    const hasOtherKeywords = compositionKeywords(schema).length > 0 || applicatorKeywords(schema).length > 0
+    return hasOtherKeywords ? null : AnySchema
+  }
   const components = schemaTypeComponents()
   const concreteTypes = types.length > 1 ? types.filter(type => type !== 'null') : types
   if (concreteTypes.length === 1)

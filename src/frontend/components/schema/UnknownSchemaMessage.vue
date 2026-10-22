@@ -6,7 +6,11 @@ defineProps({
   },
   message: {
     type: String,
-    default: 'This schema doesen\'t have proper handling yet.',
+    default: 'This schema doesn\'t have proper handling yet.',
+  },
+  keywords: {
+    type: Array,
+    default: () => [],
   },
 })
 </script>
@@ -27,6 +31,9 @@ defineProps({
     <h2>{{ title }}</h2>
     <div class="slds-notify__content">
       <p>{{ message }}</p>
+      <p v-if="keywords.length > 0" class="slds-text-body_small">
+        Keywords seen: <code v-for="keyword in keywords" :key="keyword" class="slds-m-right_xx-small">{{ keyword }}</code>
+      </p>
     </div>
   </div>
 </template>

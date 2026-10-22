@@ -54,7 +54,7 @@ const compositionTypeLabel = computed(() => {
 
 // Get the CSS class for the composition type badge
 const compositionTypeClass = computed(() => {
-  switch (props.compositionType) {
+  switch (compositionType.value) {
     case 'oneOf':
       return 'slds-badge_success'
     case 'anyOf':

@@ -1,6 +1,7 @@
 <script setup>
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
+import { formatTypeLabel } from '@/utils/schemaRegistry.js'
 
 const props = defineProps({
   schema: {
@@ -31,13 +32,6 @@ const schemas = computed(() => {
   return props.schema[compositionType.value] || []
 })
 
-watchEffect(() => {
-  schemas.value.forEach((schema) => {
-    if (!schema.type)
-      schema.type = props.schema.type
-  })
-})
-
 // Get the label for the composition type
 const compositionTypeLabel = computed(() => {
   switch (compositionType.value) {
@@ -66,12 +60,9 @@ const compositionTypeClass = computed(() => {
   }
 })
 
-// Get the schema type for display
+// Branches that declare no type inherit the parent's for display only
 function getSchemaType(schema) {
-  if (Array.isArray(schema.type)) {
-    return schema.type.join(' | ')
-  }
-  return schema.type || 'object'
+  return formatTypeLabel(schema) || formatTypeLabel(props.schema) || 'any'
 }
 
 // Get the tab title for a schema

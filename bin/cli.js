@@ -8,7 +8,10 @@ import * as cli from '../lib/cli/index.js'
 // Read package.json
 const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url)))
 
-program.version(pkg.version).description('JSON Schema Documentation Generator CLI')
+program
+  .name('slds-json-schema-renderer')
+  .version(pkg.version)
+  .description('JSON Schema Documentation Generator CLI')
 
 // Add the generate command
 program

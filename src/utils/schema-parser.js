@@ -48,6 +48,12 @@ function validateSchema(schema) {
   return { valid, errors }
 }
 
+function describeJson(value) {
+  if (value === null)
+    return 'null'
+  return Array.isArray(value) ? 'an array' : `a ${typeof value}`
+}
+
 /**
  * Parse a JSON schema file
  * @param {string} filePath - Path to the JSON schema file
@@ -75,9 +81,19 @@ async function parse(filePath, options = {}) {
     throw new Error(`Invalid JSON in file ${absoluteFilePath}: ${err.message}`)
   }
 
+  if (typeof rawSchema === 'boolean') {
+    throw new TypeError(
+      `${absoluteFilePath} is a top-level boolean schema (${rawSchema}); boolean schemas are only supported as subschemas`,
+    )
+  }
+
+  if (rawSchema === null || typeof rawSchema !== 'object' || Array.isArray(rawSchema)) {
+    throw new Error(`${absoluteFilePath} is not a JSON Schema document (expected an object, got ${describeJson(rawSchema)})`)
+  }
+
   if (!rawSchema.$schema && !rawSchema.type) {
     console.warn(
-      `Warning: File ${absoluteFilePath} may not be a JSON schema (missing $schema or type property)`,
+      `Warning: ${absoluteFilePath} has neither $schema nor type; it is still treated as a schema and included in the output`,
     )
   }
 

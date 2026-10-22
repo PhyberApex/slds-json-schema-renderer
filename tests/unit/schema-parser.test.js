@@ -75,7 +75,47 @@ describe('parse', () => {
   })
 })
 
+describe('parse non-object documents', () => {
+  it.each([
+    ['null', null],
+    ['a number', 42],
+    ['a string', 'text'],
+    ['an array', [1, 2]],
+  ])('rejects %s as not a JSON Schema document', async (_label, content) => {
+    const file = await writeJson('doc.json', content)
+
+    await expect(parse(file)).rejects.toThrow(/doc\.json is not a JSON Schema document/)
+  })
+
+  it('rejects a top-level boolean schema with a dedicated message', async () => {
+    const file = await writeJson('bool.json', true)
+
+    await expect(parse(file)).rejects.toThrow(/boolean/i)
+  })
+
+  it('accepts an object without $schema or type but says it is still included', async () => {
+    const file = await writeJson('package.json', { name: 'pkg', version: '1.0.0' })
+
+    const schema = await parse(file)
+
+    expect(schema._metadata.fileName).toBe('package.json')
+    const output = console.warn.mock.calls.flat().join('\n')
+    expect(output).toMatch(/package\.json.*(still|treated as).*schema/is)
+  })
+})
+
 describe('parseDirectory', () => {
+  it('skips non-object documents and keeps the real schemas', async () => {
+    await writeJson('ok.json', { type: 'string' })
+    await writeJson('list.json', [1, 2])
+    await writeJson('nothing.json', null)
+
+    const result = await parseDirectory(dir)
+
+    expect(result.map(entry => path.basename(entry.file))).toEqual(['ok.json'])
+    expect(console.error).toHaveBeenCalledTimes(2)
+  })
+
   it('skips files that fail to parse unless strict', async () => {
     await writeJson('ok.json', { type: 'string' })
     await fs.writeFile(path.join(dir, 'bad.json'), '{ nope')

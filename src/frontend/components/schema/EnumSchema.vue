@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { formatLiteral, isCompositeLiteral } from '@/utils/formatLiteral.js'
 
 const props = defineProps({
   schema: {
@@ -8,7 +9,7 @@ const props = defineProps({
   },
   rootSchema: {
     type: Object,
-    required: true,
+    default: null,
   },
 })
 
@@ -24,10 +25,12 @@ const values = computed(() => props.schema.enum)
       <div
         v-for="(value, index) in values"
         :key="index"
-        class="slds-col slds-size_1-of-3 slds-p-around_xx-small"
+        class="slds-col slds-p-around_xx-small"
+        :class="isCompositeLiteral(value) ? 'slds-size_1-of-1' : 'slds-size_1-of-3'"
       >
-        <div class="slds-badge slds-badge_inverse">
-          {{ value }}
+        <pre v-if="isCompositeLiteral(value)" class="slds-box slds-m-vertical_xx-small"><code>{{ formatLiteral(value) }}</code></pre>
+        <div v-else class="slds-badge slds-badge_inverse">
+          {{ formatLiteral(value) }}
         </div>
       </div>
     </div>

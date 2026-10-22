@@ -1,5 +1,5 @@
 <script setup>
-import { computed, provide, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { applicatorKeywords, compositionKeywords, isSchemaObject, schemaUtils } from '@/utils/schemaRegistry'
 import SchemaLayout from '../layout/SchemaLayout.vue'
 import ApplicatorsSection from './ApplicatorsSection.vue'
@@ -14,10 +14,6 @@ const props = defineProps({
     type: [Object, Boolean],
     required: true,
   },
-  rootSchema: {
-    type: Object,
-    default: null,
-  },
   isRoot: {
     type: Boolean,
     default: true,
@@ -29,12 +25,6 @@ const VIEW_TABS = [
   { id: 'plain', label: 'Plain JSON' },
 ]
 const activeTab = ref('visual')
-
-// If this is the root component, use the schema as the rootSchema
-const rootSchema = computed(() => (props.isRoot ? props.schema : props.rootSchema))
-
-// Provide the rootSchema to all child components
-provide('rootSchema', rootSchema)
 
 // Get the appropriate component for the schema type
 const schemaComponent = computed(() => schemaUtils.getComponentForSchema(props.schema))
@@ -60,16 +50,15 @@ const schemaKeywords = computed(() => (isSchemaObject(props.schema) ? Object.key
               :is="schemaComponent"
               v-if="schemaComponent"
               :schema="schema"
-              :root-schema="rootSchema"
             />
             <UnknownSchemaMessage v-else-if="isUnknown" :keywords="schemaKeywords" />
           </div>
 
           <div v-for="keyword in compositions" :key="keyword" class="slds-m-top_medium">
-            <CompositionSchema :schema="schema" :keyword="keyword" :root-schema="rootSchema" />
+            <CompositionSchema :schema="schema" :keyword="keyword" />
           </div>
 
-          <ApplicatorsSection v-if="hasApplicators" :schema="schema" :root-schema="rootSchema" />
+          <ApplicatorsSection v-if="hasApplicators" :schema="schema" />
         </div>
 
         <div v-else class="slds-p-around_medium">

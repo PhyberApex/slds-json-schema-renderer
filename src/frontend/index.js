@@ -35,6 +35,3 @@ if (document.readyState === 'loading') {
 else {
   init()
 }
-
-// Export for library usage
-export { App, createApp }

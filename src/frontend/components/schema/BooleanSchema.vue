@@ -4,10 +4,6 @@ defineProps({
     type: Boolean,
     required: true,
   },
-  rootSchema: {
-    type: Object,
-    default: null,
-  },
 })
 </script>
 

@@ -5,7 +5,7 @@ import SchemaViewer from '@/components/schema/SchemaViewer.vue'
 import { compositionKeywords } from '@/utils/schemaRegistry.js'
 
 function mountComposition(schema, keyword = compositionKeywords(schema)[0]) {
-  return mount(CompositionSchema, { props: { schema, keyword, rootSchema: schema } })
+  return mount(CompositionSchema, { props: { schema, keyword } })
 }
 
 function mountViewer(schema) {

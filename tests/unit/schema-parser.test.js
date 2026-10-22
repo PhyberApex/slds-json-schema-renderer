@@ -154,6 +154,15 @@ describe('parse non-object documents', () => {
 })
 
 describe('parseDirectory', () => {
+  it('ignores JSON files under node_modules', async () => {
+    await writeJson('ok.json', { type: 'string' })
+    await writeJson('node_modules/dep/package.json', { name: 'dep' })
+
+    const result = await parseDirectory(dir)
+
+    expect(result.map(entry => path.basename(entry.file))).toEqual(['ok.json'])
+  })
+
   it('skips non-object documents and keeps the real schemas', async () => {
     await writeJson('ok.json', { type: 'string' })
     await writeJson('list.json', [1, 2])

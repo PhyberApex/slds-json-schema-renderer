@@ -21,7 +21,7 @@ describe('boolean subschemas', () => {
 
   it('keeps the whole properties table when one property is a boolean schema', () => {
     const schema = { type: 'object', properties: { name: { type: 'string' }, extra: true } }
-    const wrapper = mount(ObjectSchema, { props: { schema, rootSchema: schema } })
+    const wrapper = mount(ObjectSchema, { props: { schema } })
 
     const rows = wrapper.findAll('tbody tr')
     expect(rows.map(row => row.find('td').text())).toEqual(['name', 'extra'])
@@ -30,13 +30,13 @@ describe('boolean subschemas', () => {
 
   it('renders an array whose items are a boolean schema', () => {
     const schema = { type: 'array', items: true }
-    const wrapper = mount(ArraySchema, { props: { schema, rootSchema: schema } })
+    const wrapper = mount(ArraySchema, { props: { schema } })
     expect(wrapper.text()).toMatch(/any value/i)
   })
 
   it('renders an array whose items schema is false', () => {
     const schema = { type: 'array', items: false }
-    const wrapper = mount(ArraySchema, { props: { schema, rootSchema: schema } })
+    const wrapper = mount(ArraySchema, { props: { schema } })
     expect(wrapper.text()).toMatch(/no value/i)
   })
 })

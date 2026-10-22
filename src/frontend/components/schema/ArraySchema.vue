@@ -10,10 +10,6 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  rootSchema: {
-    type: Object,
-    required: true,
-  },
 })
 
 // Check if schema has constraints
@@ -69,13 +65,13 @@ const getItemsType = computed(() => {
           <div class="slds-text-title_caps slds-m-bottom_xx-small">
             Index {{ index }}
           </div>
-          <SchemaViewer :schema="itemSchema" :root-schema="rootSchema" :is-root="false" />
+          <SchemaViewer :schema="itemSchema" :is-root="false" />
         </div>
       </template>
 
       <!-- Handle single schema for all items -->
       <template v-else>
-        <SchemaViewer :schema="schema.items" :root-schema="rootSchema" :is-root="false" />
+        <SchemaViewer :schema="schema.items" :is-root="false" />
       </template>
     </div>
     <NoPropertiesMessage
@@ -88,7 +84,7 @@ const getItemsType = computed(() => {
       <div class="slds-text-heading_small slds-m-bottom_small">
         Contains
       </div>
-      <SchemaViewer :schema="schema.contains" :root-schema="rootSchema" :is-root="false" />
+      <SchemaViewer :schema="schema.contains" :is-root="false" />
     </div>
 
     <div v-if="schema.additionalItems !== undefined && Array.isArray(schema.items)" class="slds-m-top_medium">
@@ -100,7 +96,7 @@ const getItemsType = computed(() => {
           {{ schema.additionalItems ? 'Allowed' : 'Not allowed' }}
         </span>
       </div>
-      <SchemaViewer v-else :schema="schema.additionalItems" :root-schema="rootSchema" :is-root="false" />
+      <SchemaViewer v-else :schema="schema.additionalItems" :is-root="false" />
     </div>
   </div>
 </template>

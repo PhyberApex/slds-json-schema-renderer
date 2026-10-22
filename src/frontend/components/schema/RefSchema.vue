@@ -6,10 +6,6 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  rootSchema: {
-    type: Object,
-    default: null,
-  },
 })
 
 const isCircular = computed(() => props.schema._circular === true)

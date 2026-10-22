@@ -14,10 +14,6 @@ const props = defineProps({
     required: true,
     validator: value => ['allOf', 'anyOf', 'oneOf'].includes(value),
   },
-  rootSchema: {
-    type: Object,
-    default: null,
-  },
 })
 
 const compositionType = computed(() => props.keyword)
@@ -87,7 +83,7 @@ function getTabTitle(schema, index) {
         <div class="slds-text-title_caps slds-m-bottom_x-small">
           {{ getTabTitle(subSchema, index) }} · {{ getSchemaType(subSchema) }}
         </div>
-        <SchemaViewer :schema="subSchema" :root-schema="rootSchema" :is-root="false" />
+        <SchemaViewer :schema="subSchema" :is-root="false" />
       </div>
     </div>
 
@@ -97,7 +93,7 @@ function getTabTitle(schema, index) {
           <div class="slds-text-title_caps slds-m-bottom_small">
             Schema Type: {{ getSchemaType(tab.schema) }}
           </div>
-          <SchemaViewer :schema="tab.schema" :root-schema="rootSchema" :is-root="false" />
+          <SchemaViewer :schema="tab.schema" :is-root="false" />
         </div>
       </template>
     </Tabs>

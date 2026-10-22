@@ -219,6 +219,7 @@ async function parseDirectory(directoryPath, options = {}) {
     const files = await glob('**/*.json', {
       cwd: directoryPath,
       absolute: true,
+      ignore: '**/node_modules/**',
     })
 
     if (verbose) {

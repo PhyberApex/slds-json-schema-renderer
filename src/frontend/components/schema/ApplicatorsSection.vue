@@ -7,10 +7,6 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  rootSchema: {
-    type: Object,
-    default: null,
-  },
 })
 
 const conditional = computed(() =>
@@ -64,7 +60,7 @@ function capitalize(word) {
         Not
         <span class="slds-badge slds-badge_error slds-m-left_x-small">must not match</span>
       </div>
-      <SchemaViewer :schema="schema.not" :root-schema="rootSchema" :is-root="false" />
+      <SchemaViewer :schema="schema.not" :is-root="false" />
     </div>
 
     <div v-if="conditional.length > 0" class="slds-m-top_medium">
@@ -76,7 +72,7 @@ function capitalize(word) {
           <div class="slds-text-title_caps slds-m-bottom_x-small">
             {{ capitalize(keyword) }}
           </div>
-          <SchemaViewer :schema="schema[keyword]" :root-schema="rootSchema" :is-root="false" />
+          <SchemaViewer :schema="schema[keyword]" :is-root="false" />
         </div>
       </div>
     </div>
@@ -103,7 +99,7 @@ function capitalize(word) {
               <template v-if="entry.requiredProperties">
                 {{ entry.requiredProperties.join(', ') }}
               </template>
-              <SchemaViewer v-else :schema="entry.schema" :root-schema="rootSchema" :is-root="false" />
+              <SchemaViewer v-else :schema="entry.schema" :is-root="false" />
             </td>
           </tr>
         </tbody>
@@ -114,7 +110,7 @@ function capitalize(word) {
       <div class="slds-text-heading_small slds-m-bottom_small">
         Property Names
       </div>
-      <SchemaViewer :schema="schema.propertyNames" :root-schema="rootSchema" :is-root="false" />
+      <SchemaViewer :schema="schema.propertyNames" :is-root="false" />
     </div>
   </div>
 </template>

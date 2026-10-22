@@ -49,13 +49,13 @@ describe('schemas without an explicit type', () => {
 
   it('marks the inferred type in the badge', () => {
     const schema = { properties: { a: { type: 'string' } } }
-    const wrapper = mount(ObjectSchema, { props: { schema, rootSchema: schema } })
+    const wrapper = mount(ObjectSchema, { props: { schema } })
     expect(wrapper.text()).toMatch(/object \(inferred\)/)
   })
 
   it('marks inferred types in the property table', () => {
     const schema = { type: 'object', properties: { typeless: { properties: { a: { type: 'string' } } } } }
-    const wrapper = mount(ObjectSchema, { props: { schema, rootSchema: schema } })
+    const wrapper = mount(ObjectSchema, { props: { schema } })
     expect(wrapper.find('tbody .slds-badge').text()).toBe('object (inferred)')
   })
 })

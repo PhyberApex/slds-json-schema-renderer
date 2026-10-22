@@ -9,10 +9,6 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  rootSchema: {
-    type: Object,
-    default: null,
-  },
 })
 
 const constValue = computed(() => props.schema.const)

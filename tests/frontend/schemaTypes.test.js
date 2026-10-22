@@ -44,7 +44,7 @@ describe('type arrays', () => {
 
   it('shows a readable type label in the object property table', () => {
     const schema = { type: 'object', properties: { tag: { type: ['string', 'null'] } } }
-    const wrapper = mount(ObjectSchema, { props: { schema, rootSchema: schema } })
+    const wrapper = mount(ObjectSchema, { props: { schema } })
     expect(wrapper.find('tbody .slds-badge').text()).toBe('string | null')
   })
 })

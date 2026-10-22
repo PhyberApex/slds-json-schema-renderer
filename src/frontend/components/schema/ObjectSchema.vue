@@ -10,10 +10,6 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  rootSchema: {
-    type: Object,
-    required: true,
-  },
 })
 
 // Track which properties are expanded
@@ -135,7 +131,7 @@ function toggleProperty(name) {
                   <tr v-if="expandedProperties[name]">
                     <td colspan="4" class="slds-p-around_medium">
                       <div class="slds-box slds-theme_shade">
-                        <SchemaViewer :schema="property" :root-schema="rootSchema" :is-root="false" />
+                        <SchemaViewer :schema="property" :is-root="false" />
                       </div>
                     </td>
                   </tr>
@@ -157,7 +153,7 @@ function toggleProperty(name) {
               <code>{{ pattern }}</code>
             </div>
           </div>
-          <SchemaViewer :schema="propSchema" :root-schema="rootSchema" :is-root="false" />
+          <SchemaViewer :schema="propSchema" :is-root="false" />
         </div>
       </div>
     </div>
@@ -173,7 +169,7 @@ function toggleProperty(name) {
       <SchemaViewer
         v-else
         :schema="schema.additionalProperties"
-        :root-schema="rootSchema"
+
         :is-root="false"
       />
     </div>

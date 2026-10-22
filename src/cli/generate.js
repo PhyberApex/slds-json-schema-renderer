@@ -34,8 +34,8 @@ async function generate(options) {
       let totalProperties = 0
 
       schemas.forEach((schema) => {
-        const type = schema.schema.type || 'unknown'
-        typeStats[type] = (typeStats[type] || 0) + 1
+        const types = [schema.schema.type ?? 'unknown'].flat().join(' | ')
+        typeStats[types] = (typeStats[types] || 0) + 1
 
         if (schema.schema.properties) {
           totalProperties += Object.keys(schema.schema.properties).length

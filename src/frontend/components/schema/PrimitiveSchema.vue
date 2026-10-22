@@ -1,12 +1,17 @@
 <script setup>
+import { computed } from 'vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
+import { isNullable, normalizeTypes } from '@/utils/schemaRegistry.js'
 
-defineProps({
+const props = defineProps({
   schema: {
     type: Object,
     required: true,
   },
 })
+
+const concreteTypes = computed(() => normalizeTypes(props.schema).filter(type => type !== 'null'))
+const nullable = computed(() => isNullable(props.schema))
 </script>
 
 <template>
@@ -21,9 +26,10 @@ defineProps({
             <div class="slds-text-title_caps slds-m-bottom_xx-small">
               Type
             </div>
-            <div class="slds-badge">
-              {{ schema.type }}
-            </div>
+            <span v-for="type in concreteTypes" :key="type" class="slds-badge slds-m-right_xx-small">
+              {{ type }}
+            </span>
+            <span v-if="nullable" class="slds-badge slds-badge_lightest">nullable</span>
           </div>
           <div class="slds-col">
             <div class="slds-text-title_caps slds-m-bottom_xx-small">

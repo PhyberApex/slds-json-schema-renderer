@@ -27,6 +27,34 @@ export function isSchemaObject(schema) {
   return schema !== null && typeof schema === 'object' && !Array.isArray(schema)
 }
 
+/**
+ * The declared `type` keyword as an array; empty when the schema declares none.
+ */
+export function normalizeTypes(schema) {
+  if (!isSchemaObject(schema) || schema.type === undefined)
+    return []
+  return Array.isArray(schema.type) ? schema.type : [schema.type]
+}
+
+export function formatType(schema) {
+  return normalizeTypes(schema).join(' | ')
+}
+
+export function isNullable(schema) {
+  const types = normalizeTypes(schema)
+  return types.length > 1 && types.includes('null')
+}
+
+function componentForTypes(types) {
+  const components = schemaTypeComponents()
+  const concreteTypes = types.length > 1 ? types.filter(type => type !== 'null') : types
+  if (concreteTypes.length === 1)
+    return components[concreteTypes[0]] || null
+  if (concreteTypes.length > 1 && concreteTypes.every(type => components[type] === PrimitiveSchema))
+    return PrimitiveSchema
+  return null
+}
+
 export const schemaUtils = {
   isSchemaObject,
   isBooleanSchema: schema => typeof schema === 'boolean',
@@ -60,6 +88,6 @@ export const schemaUtils = {
       return ConstSchema
     }
 
-    return schemaTypeComponents()[schema.type] || null
+    return componentForTypes(normalizeTypes(schema))
   },
 }

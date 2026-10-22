@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { formatLiteral, isCompositeLiteral } from '@/utils/formatLiteral.js'
 
 const props = defineProps({
   schema: {
@@ -8,18 +9,12 @@ const props = defineProps({
   },
   rootSchema: {
     type: Object,
-    required: true,
+    default: null,
   },
 })
 
 const constValue = computed(() => props.schema.const)
-const isObject = computed(() => typeof constValue.value === 'object' && constValue.value !== null)
-const prettyConstValue = computed(() => {
-  if (isObject.value) {
-    return JSON.stringify(constValue.value, null, 2)
-  }
-  return constValue.value
-})
+const isComposite = computed(() => isCompositeLiteral(constValue.value))
 </script>
 
 <template>
@@ -27,17 +22,9 @@ const prettyConstValue = computed(() => {
     <div class="slds-text-heading_small slds-m-bottom_small">
       Const Value
     </div>
-    <div class="slds-grid slds-wrap slds-gutters">
-      <div class="slds-col slds-size_1-of-1 slds-p-around_xx-small">
-        <template v-if="isObject">
-          <pre class="slds-box slds-theme_shade slds-m-vertical_xx-small"><code>{{ prettyConstValue }}</code></pre>
-        </template>
-        <template v-else>
-          <div class="slds-badge slds-badge_inverse">
-            {{ prettyConstValue }}
-          </div>
-        </template>
-      </div>
+    <pre v-if="isComposite" class="slds-box slds-m-vertical_xx-small"><code>{{ formatLiteral(constValue) }}</code></pre>
+    <div v-else class="slds-badge slds-badge_inverse">
+      {{ formatLiteral(constValue) }}
     </div>
   </div>
 </template>

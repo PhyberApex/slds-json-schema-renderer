@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Tree",
+  "description": "A recursive tree structure where every node can contain further nodes.",
+  "type": "object",
+  "required": ["name"],
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Label of this node"
+    },
+    "children": {
+      "type": "array",
+      "description": "Child nodes, each a full Tree",
+      "items": { "$ref": "#" }
+    }
+  }
+}

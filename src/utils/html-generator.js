@@ -81,41 +81,36 @@ async function generate(options) {
   }
 }
 
+const BUNDLE_FILES = ['bundle.css', 'bundle.umd.cjs']
+
 /**
- * Copy assets to the output directory
+ * Copy the built frontend bundle into the output directory
  * @param {string} outputDir - Output directory
  * @param {string} bundleDir - Directory containing the built frontend bundle
  */
 async function copyAssets(outputDir, bundleDir = DEFAULT_BUNDLE_DIR) {
-  try {
-    console.log('Copying assets...')
-    // Create assets directory
-    const assetsDir = path.join(outputDir, 'assets')
-    await fs.ensureDir(assetsDir)
+  console.log('Copying assets...')
 
-    // Copy the frontend bundle from the lib directory
-    try {
-      const bundlePath = bundleDir
-      const bundleTarget = assetsDir
+  if (!(await fs.pathExists(bundleDir))) {
+    throw new Error(
+      `Frontend bundle not found at ${bundleDir}. The package is incomplete; reinstall it or run "npm run build:frontend" when working from source.`,
+    )
+  }
 
-      if (await fs.pathExists(bundlePath)) {
-        await fs.copy(bundlePath, bundleTarget)
-        console.log('Frontend bundle copied successfully')
-      }
-      else {
-        console.warn('Warning: Frontend bundle not found at', bundlePath)
-        console.warn('Make sure you run "npm run build:frontend" first')
-        // Create a placeholder bundle
-        await fs.writeFile(bundleTarget, '// Placeholder bundle')
-      }
-    }
-    catch (err) {
-      console.warn(`Warning: Could not copy frontend bundle: ${err.message}`)
+  const missing = []
+  for (const file of BUNDLE_FILES) {
+    if (!(await fs.pathExists(path.join(bundleDir, file)))) {
+      missing.push(file)
     }
   }
-  catch (err) {
-    throw new Error(`Failed to copy assets: ${err.message}`)
+  if (missing.length > 0) {
+    throw new Error(`Frontend bundle at ${bundleDir} is missing ${missing.join(', ')}`)
   }
+
+  const assetsDir = path.join(outputDir, 'assets')
+  await fs.ensureDir(assetsDir)
+  await fs.copy(bundleDir, assetsDir)
+  console.log('Frontend bundle copied successfully')
 }
 
 export { copyAssets, generate, serializeForInlineScript }

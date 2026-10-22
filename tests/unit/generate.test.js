@@ -45,4 +45,30 @@ describe('generate', () => {
     const data = await readEmbeddedData(outputDir)
     expect(data.schemas[0].schema).toEqual(schema)
   })
+
+  it('copies the bundle files into assets/', async () => {
+    const outputDir = path.join(tmpDir, 'out')
+    await generate({ schemas: [], outputDir, bundleDir, title: 'Docs', description: '' })
+
+    expect(await fs.pathExists(path.join(outputDir, 'assets/bundle.css'))).toBe(true)
+    expect(await fs.pathExists(path.join(outputDir, 'assets/bundle.umd.cjs'))).toBe(true)
+  })
+
+  it('rejects when the frontend bundle directory is missing', async () => {
+    const outputDir = path.join(tmpDir, 'out')
+    const missing = path.join(tmpDir, 'does-not-exist')
+
+    await expect(generate({ schemas: [], outputDir, bundleDir: missing, title: 'Docs', description: '' }))
+      .rejects
+      .toThrow(/frontend bundle/i)
+  })
+
+  it('rejects when the bundle directory lacks one of the referenced asset files', async () => {
+    const outputDir = path.join(tmpDir, 'out')
+    await fs.remove(path.join(bundleDir, 'bundle.css'))
+
+    await expect(generate({ schemas: [], outputDir, bundleDir, title: 'Docs', description: '' }))
+      .rejects
+      .toThrow(/bundle\.css/)
+  })
 })

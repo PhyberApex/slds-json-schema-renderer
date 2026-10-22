@@ -6,7 +6,7 @@ import ApplicatorsSection from './ApplicatorsSection.vue'
 import CompositionSchema from './CompositionSchema.vue'
 import PlainSchemaView from './PlainSchemaView.vue'
 import SchemaHeader from './SchemaHeader.vue'
-import SchemaTabs from './SchemaTabs.vue'
+import Tabs from './Tabs.vue'
 import UnknownSchemaMessage from './UnknownSchemaMessage.vue'
 
 const props = defineProps({
@@ -24,7 +24,10 @@ const props = defineProps({
   },
 })
 
-// State for active tab
+const VIEW_TABS = [
+  { id: 'visual', label: 'Visual' },
+  { id: 'plain', label: 'Plain JSON' },
+]
 const activeTab = ref('visual')
 
 // If this is the root component, use the schema as the rootSchema
@@ -47,11 +50,9 @@ const schemaKeywords = computed(() => (isSchemaObject(props.schema) ? Object.key
 
 <template>
   <SchemaLayout>
-    <div class="slds-tabs_default">
-      <SchemaTabs v-model="activeTab" />
-
-      <div :class="{ 'slds-show': activeTab === 'visual', 'slds-hide': activeTab !== 'visual' }">
-        <div class="slds-p-around_medium">
+    <Tabs v-model="activeTab" :tabs="VIEW_TABS">
+      <template #panel="{ tab }">
+        <div v-if="tab.id === 'visual'" class="slds-p-around_medium">
           <SchemaHeader :schema="schema" />
 
           <div class="slds-m-top_medium">
@@ -70,14 +71,12 @@ const schemaKeywords = computed(() => (isSchemaObject(props.schema) ? Object.key
 
           <ApplicatorsSection v-if="hasApplicators" :schema="schema" :root-schema="rootSchema" />
         </div>
-      </div>
 
-      <div :class="{ 'slds-show': activeTab === 'plain', 'slds-hide': activeTab !== 'plain' }">
-        <div class="slds-p-around_medium">
+        <div v-else class="slds-p-around_medium">
           <PlainSchemaView :schema="schema" />
         </div>
-      </div>
-    </div>
+      </template>
+    </Tabs>
   </SchemaLayout>
 </template>
 

@@ -208,10 +208,13 @@ async function processSchema(schema, filePath) {
  * Parse all JSON schema files in a directory
  * @param {string} directoryPath - Path to the directory containing JSON schema files
  * @param {object} options - Options for parsing
+ * @param {boolean} [options.verbose] - Log the number of discovered files
+ * @param {boolean} [options.strict] - Abort on the first file that fails to parse
+ * @param {(failure: { file: string, error: Error }) => void} [options.onFailure] - Called for every skipped file
  * @returns {Array} Array of parsed schemas
  */
 async function parseDirectory(directoryPath, options = {}) {
-  const { verbose = false, strict = false } = options
+  const { verbose = false, strict = false, onFailure = () => {} } = options
   const schemas = []
 
   try {
@@ -240,6 +243,7 @@ async function parseDirectory(directoryPath, options = {}) {
           throw err
         }
         console.error(`Error parsing ${file}: ${err.message}`)
+        onFailure({ file, error: err })
       }
     }
 

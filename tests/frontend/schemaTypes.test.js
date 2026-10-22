@@ -1,8 +1,9 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
+import ArraySchema from '@/components/schema/ArraySchema.vue'
 import ObjectSchema from '@/components/schema/ObjectSchema.vue'
 import PrimitiveSchema from '@/components/schema/PrimitiveSchema.vue'
-import { formatType, normalizeTypes, schemaUtils } from '@/utils/schemaRegistry.js'
+import { normalizeTypes, schemaUtils } from '@/utils/schemaRegistry.js'
 
 describe('normalizeTypes', () => {
   it.each([
@@ -12,13 +13,6 @@ describe('normalizeTypes', () => {
     [true, []],
   ])('returns an array of declared types for %j', (schema, expected) => {
     expect(normalizeTypes(schema)).toEqual(expected)
-  })
-})
-
-describe('formatType', () => {
-  it('joins multiple types with a separator', () => {
-    expect(formatType({ type: ['string', 'null'] })).toBe('string | null')
-    expect(formatType({ type: 'integer' })).toBe('integer')
   })
 })
 
@@ -46,5 +40,12 @@ describe('type arrays', () => {
     const schema = { type: 'object', properties: { tag: { type: ['string', 'null'] } } }
     const wrapper = mount(ObjectSchema, { props: { schema } })
     expect(wrapper.find('tbody .slds-badge').text()).toBe('string | null')
+  })
+
+  it('shows a nullable badge on nullable object and array headers', () => {
+    const object = mount(ObjectSchema, { props: { schema: { type: ['object', 'null'], properties: {} } } })
+    const array = mount(ArraySchema, { props: { schema: { type: ['array', 'null'], items: { type: 'string' } } } })
+    expect(object.find('.type-badges').text()).toMatch(/object.*nullable/s)
+    expect(array.find('.type-badges').text()).toMatch(/array.*nullable/s)
   })
 })

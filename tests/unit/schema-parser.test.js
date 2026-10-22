@@ -136,10 +136,11 @@ describe('parse non-object documents', () => {
     await expect(parse(file)).rejects.toThrow(/doc\.json is not a JSON Schema document/)
   })
 
-  it('rejects a top-level boolean schema with a dedicated message', async () => {
-    const file = await writeJson('bool.json', true)
+  it.each([true, false])('accepts a top-level boolean schema %s as-is', async (value) => {
+    const file = await writeJson('bool.json', value)
 
-    await expect(parse(file)).rejects.toThrow(/boolean/i)
+    await expect(parse(file)).resolves.toBe(value)
+    expect(console.warn).not.toHaveBeenCalled()
   })
 
   it('accepts an object without $schema or type but says it is still included', async () => {
@@ -213,6 +214,12 @@ describe('validateSchema', () => {
 
     expect(validateSchema(schema2020).valid).toBe(false)
     expect(validateSchema(schema07).valid).toBe(true)
+  })
+
+  it('validates draft-04 schemas against the draft-04 metaschema', () => {
+    const draft04 = { $schema: 'http://json-schema.org/draft-04/schema#', minimum: 0, exclusiveMinimum: true }
+    expect(validateSchema(draft04)).toEqual({ valid: true, errors: [] })
+    expect(validateSchema({ ...draft04, type: 'strng' }).valid).toBe(false)
   })
 
   it('falls back to draft-07 for an unknown $schema', () => {

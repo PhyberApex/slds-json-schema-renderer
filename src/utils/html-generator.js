@@ -96,8 +96,6 @@ async function generate(options) {
       window.__JSON_SCHEMA_DOCS_DATA__ = ${serializeForInlineScript(appData)};
     </script>`
 
-    // A replacer function inserts the data verbatim; a string replacement
-    // would interpret `$$`, `$&`, `` $` `` and `$'` inside the schema data.
     html = html.replace('</body>', () => `${scriptTag}</body>`)
 
     console.log('Writing HTML file...')

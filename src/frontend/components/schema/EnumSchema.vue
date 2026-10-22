@@ -1,7 +1,8 @@
 <script setup>
 import { computed } from 'vue'
+import LiteralValue from '@/components/schema/LiteralValue.vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
-import { formatLiteral, isCompositeLiteral } from '@/utils/formatLiteral.js'
+import { isCompositeLiteral } from '@/utils/formatLiteral.js'
 import { formatTypeLabel } from '@/utils/schemaRegistry.js'
 
 const props = defineProps({
@@ -27,10 +28,7 @@ const values = computed(() => props.schema.enum)
         class="slds-col slds-p-around_xx-small"
         :class="isCompositeLiteral(value) ? 'slds-size_1-of-1' : 'slds-size_1-of-3'"
       >
-        <pre v-if="isCompositeLiteral(value)" class="slds-box slds-m-vertical_xx-small"><code>{{ formatLiteral(value) }}</code></pre>
-        <div v-else class="slds-badge slds-badge_inverse">
-          {{ formatLiteral(value) }}
-        </div>
+        <LiteralValue :value="value" />
       </div>
     </div>
 

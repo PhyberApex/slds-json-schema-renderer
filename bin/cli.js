@@ -22,7 +22,7 @@ program
   .option('-t, --title <title>', 'Documentation title', 'JSON Schema Documentation')
   .option('-d, --description <description>', 'Documentation description', '')
   .option('-v, --verbose', 'Enable verbose output', false)
-  .option('--strict', 'Fail on schemas that do not match their JSON Schema metaschema', false)
+  .option('--strict', 'Abort on the first file that fails to parse or does not match its JSON Schema metaschema', false)
   .option('--fail-on-skip', 'Exit with code 1 after generating when any file had to be skipped', false)
   .action(cli.generate)
 

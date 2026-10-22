@@ -10,7 +10,7 @@ import * as schemaParser from '../utils/schema-parser.js'
  * @param {object} options - Command options
  */
 async function generate(options) {
-  const { input, output, title, description, verbose } = options
+  const { input, output, title, description, verbose, strict } = options
 
   try {
     // Create output directory if it doesn't exist
@@ -19,7 +19,7 @@ async function generate(options) {
     console.log(chalk.blue(`🔍 Looking for JSON schema files in: ${input}`))
 
     // Parse schema files from the input directory
-    const schemas = await schemaParser.parseDirectory(input, { verbose })
+    const schemas = await schemaParser.parseDirectory(input, { verbose, strict })
 
     if (schemas.length === 0) {
       console.log(chalk.yellow(`⚠️ No valid JSON schema files found in ${input}`))

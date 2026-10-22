@@ -19,6 +19,7 @@ program
   .option('-t, --title <title>', 'Documentation title', 'JSON Schema Documentation')
   .option('-d, --description <description>', 'Documentation description', '')
   .option('-v, --verbose', 'Enable verbose output', false)
+  .option('--strict', 'Fail on schemas that do not match their JSON Schema metaschema', false)
   .action(cli.generate)
 
 program.parse(process.argv)

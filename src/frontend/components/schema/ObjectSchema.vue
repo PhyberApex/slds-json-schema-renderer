@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
-import { effectiveTypes, formatTypeLabel, schemaUtils } from '@/utils/schemaRegistry.js'
+import { effectiveTypes, formatTypeLabel, isNullable, schemaUtils } from '@/utils/schemaRegistry.js'
 
 const props = defineProps({
   schema: {
@@ -52,8 +52,10 @@ function toggleProperty(name) {
 
 <template>
   <div>
-    <div>
-      <div>Type: {{ formatTypeLabel(schema) || 'object' }}</div>
+    <div class="type-badges">
+      <span class="slds-text-title_caps slds-m-right_x-small">Type</span>
+      <span class="slds-badge slds-m-right_xx-small">{{ formatTypeLabel(schema) || 'object' }}</span>
+      <span v-if="isNullable(schema)" class="slds-badge slds-badge_lightest">nullable</span>
     </div>
 
     <SchemaConstraints :schema="schema" />
@@ -169,7 +171,6 @@ function toggleProperty(name) {
       <SchemaViewer
         v-else
         :schema="schema.additionalProperties"
-
         :is-root="false"
       />
     </div>

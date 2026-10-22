@@ -1,6 +1,7 @@
 import path from 'node:path'
 import $RefParser from '@apidevtools/json-schema-ref-parser'
 import Ajv from 'ajv'
+import Ajv04 from 'ajv-draft-04'
 import Ajv2019 from 'ajv/dist/2019.js'
 import Ajv2020 from 'ajv/dist/2020.js'
 import draft06 from 'ajv/dist/refs/json-schema-draft-06.json' with { type: 'json' }
@@ -9,12 +10,14 @@ import { glob } from 'glob'
 
 const ajvOptions = { allErrors: true, strict: false }
 
+const DRAFT_04 = 'http://json-schema.org/draft-04/schema'
 const DRAFT_07 = 'http://json-schema.org/draft-07/schema'
 const DRAFT_06 = 'http://json-schema.org/draft-06/schema'
 const DRAFT_2019 = 'https://json-schema.org/draft/2019-09/schema'
 const DRAFT_2020 = 'https://json-schema.org/draft/2020-12/schema'
 
 const metaschemaValidators = {
+  [DRAFT_04]: () => new Ajv04(ajvOptions).getSchema(`${DRAFT_04}#`),
   [DRAFT_07]: () => new Ajv(ajvOptions).getSchema(`${DRAFT_07}#`),
   [DRAFT_06]: () => new Ajv(ajvOptions).addMetaSchema(draft06).getSchema(`${DRAFT_06}#`),
   [DRAFT_2019]: () => new Ajv2019(ajvOptions).getSchema(DRAFT_2019),
@@ -34,7 +37,7 @@ function metaschemaValidatorFor(schema) {
 
 /**
  * Validate a schema document against the metaschema it declares in `$schema`
- * (draft-06, draft-07, 2019-09 or 2020-12), falling back to draft-07.
+ * (draft-04, draft-06, draft-07, 2019-09 or 2020-12), falling back to draft-07.
  * @param {object} schema - The raw schema document
  * @returns {{ valid: boolean, errors: Array<{ path: string, message: string }> }} Validation result
  */
@@ -82,9 +85,7 @@ async function parse(filePath, options = {}) {
   }
 
   if (typeof rawSchema === 'boolean') {
-    throw new TypeError(
-      `${absoluteFilePath} is a top-level boolean schema (${rawSchema}); boolean schemas are only supported as subschemas`,
-    )
+    return rawSchema
   }
 
   if (rawSchema === null || typeof rawSchema !== 'object' || Array.isArray(rawSchema)) {

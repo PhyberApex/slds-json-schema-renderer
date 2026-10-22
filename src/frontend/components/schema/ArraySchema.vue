@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import NoPropertiesMessage from '@/components/schema/NoPropertiesMessage.vue'
 import SchemaConstraints from '@/components/schema/SchemaConstraints.vue'
 import SchemaViewer from '@/components/schema/SchemaViewer.vue'
-import { formatTypeLabel } from '@/utils/schemaRegistry.js'
+import { formatTypeLabel, isNullable } from '@/utils/schemaRegistry.js'
 
 const props = defineProps({
   schema: {
@@ -12,16 +12,14 @@ const props = defineProps({
   },
 })
 
-// Check if schema has constraints
 const hasConstraints = computed(() => {
   const constraintProps = ['minItems', 'maxItems', 'uniqueItems']
   return constraintProps.some(prop => prop in props.schema)
 })
 
-// Get the type of items in the array
 const hasItems = computed(() => props.schema.items !== undefined)
 
-const getItemsType = computed(() => {
+const itemsTypeLabel = computed(() => {
   if (typeof props.schema.items === 'boolean')
     return props.schema.items ? 'any' : 'none'
   if (Array.isArray(props.schema.items))
@@ -34,20 +32,21 @@ const getItemsType = computed(() => {
   <div class="array-schema">
     <div class="slds-box slds-theme_shade">
       <div class="slds-grid slds-gutters">
-        <div class="slds-col">
+        <div class="slds-col type-badges">
           <div class="slds-text-title_caps slds-m-bottom_xx-small">
             Type
           </div>
-          <div class="slds-badge">
+          <span class="slds-badge slds-m-right_xx-small">
             {{ formatTypeLabel(schema) || 'array' }}
-          </div>
+          </span>
+          <span v-if="isNullable(schema)" class="slds-badge slds-badge_lightest">nullable</span>
         </div>
         <div v-if="hasItems" class="slds-col">
           <div class="slds-text-title_caps slds-m-bottom_xx-small">
             Items Type
           </div>
           <div class="slds-badge">
-            {{ getItemsType }}
+            {{ itemsTypeLabel }}
           </div>
         </div>
       </div>

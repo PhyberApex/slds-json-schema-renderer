@@ -7,7 +7,7 @@ A CLI tool that generates interactive documentation from JSON Schema files. It p
 
 ## Features
 
-- **Schema parsing and validation**: every schema is validated against the metaschema it declares in `$schema` (draft-06, draft-07, 2019-09 or 2020-12; draft-07 by default). Violations are reported as warnings, or as errors with `--strict`.
+- **Schema parsing and validation**: every schema is validated against the metaschema it declares in `$schema` (draft-04, draft-06, draft-07, 2019-09 or 2020-12; draft-07 by default). Violations are reported as warnings, or as errors with `--strict`.
 - **`$ref` resolution**: references are resolved relative to the schema file that contains them, so schemas can be split across files and folders. Recursive references are detected and shown as a "recursive reference" badge instead of being expanded forever.
 - **Broad keyword coverage**: objects, arrays, primitives, type arrays such as `["string", "null"]`, boolean subschemas, `enum` / `const`, `anyOf` / `oneOf` / `allOf` next to other keywords, `not`, `if` / `then` / `else`, `dependencies`, `propertyNames`, `format`, `default`, `examples` and the usual constraints.
 - **Visual and raw views**: every schema (and every nested subschema) can be switched between the visual rendering and the fully resolved JSON.
@@ -51,8 +51,9 @@ Options:
                                    Documentation")
   -d, --description <description>  Documentation description (default: "")
   -v, --verbose                    Enable verbose output (default: false)
-  --strict                         Fail on schemas that do not match their JSON
-                                   Schema metaschema (default: false)
+  --strict                         Abort on the first file that fails to parse
+                                   or does not match its JSON Schema metaschema
+                                   (default: false)
   --fail-on-skip                   Exit with code 1 after generating when any
                                    file had to be skipped (default: false)
   -h, --help                       display help for command
@@ -74,7 +75,7 @@ slds-json-schema-renderer generate \
 ### How input files are treated
 
 - **Every `*.json` file** below the input directory (except under `node_modules`) is treated as a schema and gets its own entry in the sidebar. This includes files that are only referenced from other schemas. Keep shared fragments in a separate directory if you do not want them listed.
-- Files that are not JSON objects (`null`, arrays, numbers, strings) are reported and skipped. A JSON object without `$schema` or `type` is still included, with a warning.
+- Files that are not JSON objects or booleans (`null`, arrays, numbers, strings) are reported and skipped. A JSON object without `$schema` or `type` is still included, with a warning.
 - **Relative `$ref`s** such as `"$ref": "./common/address.json#/definitions/street"` are resolved relative to the file that contains them. Remote (`http`) references are not fetched.
 - **Recursive schemas** (for example a tree whose children are the same schema) are supported. The back-reference is kept as `{ "$ref": "#/...", "_circular": true }` in the resolved JSON and rendered as a badge.
 - Each schema's sidebar label is its `title`, falling back to the file name.

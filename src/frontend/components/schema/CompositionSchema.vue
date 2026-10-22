@@ -16,54 +16,28 @@ const props = defineProps({
   },
 })
 
-const compositionType = computed(() => props.keyword)
+const COMPOSITION_DISPLAY = {
+  oneOf: { label: 'One Of (Choose One)', badgeClass: 'slds-badge_success' },
+  anyOf: { label: 'Any Of (Choose Any)', badgeClass: 'slds-badge_warning' },
+  allOf: { label: 'All Of (Must Match All)', badgeClass: 'slds-badge_inverse' },
+}
+
+const display = computed(() => COMPOSITION_DISPLAY[props.keyword])
 const stacked = computed(() => props.keyword === 'allOf')
 
 const activeTab = ref(0)
 
-// Get the array of schemas based on composition type
-const schemas = computed(() => {
-  return props.schema[compositionType.value] || []
-})
+const schemas = computed(() => props.schema[props.keyword] || [])
 
 const tabs = computed(() =>
   schemas.value.map((subSchema, index) => ({ id: index, label: getTabTitle(subSchema, index), schema: subSchema })),
 )
-
-// Get the label for the composition type
-const compositionTypeLabel = computed(() => {
-  switch (compositionType.value) {
-    case 'oneOf':
-      return 'One Of (Choose One)'
-    case 'anyOf':
-      return 'Any Of (Choose Any)'
-    case 'allOf':
-      return 'All Of (Must Match All)'
-    default:
-      return compositionType.value
-  }
-})
-
-// Get the CSS class for the composition type badge
-const compositionTypeClass = computed(() => {
-  switch (compositionType.value) {
-    case 'oneOf':
-      return 'slds-badge_success'
-    case 'anyOf':
-      return 'slds-badge_warning'
-    case 'allOf':
-      return 'slds-badge_inverse'
-    default:
-      return ''
-  }
-})
 
 // Branches that declare no type inherit the parent's for display only
 function getSchemaType(schema) {
   return formatTypeLabel(schema) || formatTypeLabel(props.schema) || 'any'
 }
 
-// Get the tab title for a schema
 function getTabTitle(schema, index) {
   if (schema?.title) {
     return schema.title
@@ -75,7 +49,7 @@ function getTabTitle(schema, index) {
 <template>
   <div class="slds-box slds-theme_shade">
     <div class="slds-text-heading_small slds-m-bottom_small">
-      <span class="slds-badge" :class="compositionTypeClass">{{ compositionTypeLabel }}</span>
+      <span class="slds-badge" :class="display.badgeClass">{{ display.label }}</span>
     </div>
 
     <div v-if="stacked">

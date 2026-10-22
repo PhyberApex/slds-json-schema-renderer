@@ -65,6 +65,12 @@ export function compositionKeywords(schema) {
   return COMPOSITION_KEYWORDS.filter(keyword => Array.isArray(schema[keyword]))
 }
 
+export const ANNOTATION_KEYWORDS = ['readOnly', 'writeOnly', 'deprecated', '$comment']
+
+export function hasAnnotations(schema) {
+  return isSchemaObject(schema) && ANNOTATION_KEYWORDS.some(keyword => keyword in schema)
+}
+
 const APPLICATOR_KEYWORDS = ['not', 'if', 'then', 'else', 'dependencies', 'dependentRequired', 'dependentSchemas', 'propertyNames']
 
 /**
@@ -83,10 +89,6 @@ export function effectiveTypes(schema) {
 
 export function isTypeInferred(schema) {
   return normalizeTypes(schema).length === 0 && inferTypes(schema).length > 0
-}
-
-export function formatType(schema) {
-  return normalizeTypes(schema).join(' | ')
 }
 
 /**

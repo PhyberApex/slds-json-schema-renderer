@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
-import { applicatorKeywords, compositionKeywords, isSchemaObject, schemaUtils } from '@/utils/schemaRegistry'
+import { applicatorKeywords, compositionKeywords, hasAnnotations, isSchemaObject, schemaUtils } from '@/utils/schemaRegistry'
 import SchemaLayout from '../layout/SchemaLayout.vue'
 import ApplicatorsSection from './ApplicatorsSection.vue'
 import CompositionSchema from './CompositionSchema.vue'
@@ -26,14 +26,9 @@ const VIEW_TABS = [
 ]
 const activeTab = ref('visual')
 
-// Get the appropriate component for the schema type
 const schemaComponent = computed(() => schemaUtils.getComponentForSchema(props.schema))
 const compositions = computed(() => compositionKeywords(props.schema))
-const ANNOTATION_KEYWORDS = ['readOnly', 'writeOnly', 'deprecated', '$comment']
-const hasApplicators = computed(() =>
-  applicatorKeywords(props.schema).length > 0
-  || ANNOTATION_KEYWORDS.some(keyword => isSchemaObject(props.schema) && keyword in props.schema),
-)
+const hasApplicators = computed(() => applicatorKeywords(props.schema).length > 0 || hasAnnotations(props.schema))
 const isUnknown = computed(() => !schemaComponent.value && compositions.value.length === 0 && !hasApplicators.value)
 const schemaKeywords = computed(() => (isSchemaObject(props.schema) ? Object.keys(props.schema).filter(key => key !== '_metadata') : []))
 </script>

@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 import ConstSchema from '@/components/schema/ConstSchema.vue'
 import EnumSchema from '@/components/schema/EnumSchema.vue'
+import LiteralValue from '@/components/schema/LiteralValue.vue'
 import { formatLiteral } from '@/utils/formatLiteral.js'
 
 describe('formatLiteral', () => {
@@ -45,5 +46,12 @@ describe('constSchema', () => {
   it('pretty-prints an object const', () => {
     const wrapper = mount(ConstSchema, { props: { schema: { const: { a: 1 } } } })
     expect(wrapper.find('pre').text()).toBe('{\n  "a": 1\n}')
+  })
+})
+
+describe('literalValue', () => {
+  it('renders scalars as a badge and composites as a code block', () => {
+    expect(mount(LiteralValue, { props: { value: 'x' } }).find('.slds-badge').text()).toBe('"x"')
+    expect(mount(LiteralValue, { props: { value: [1] } }).find('pre').text()).toBe('[\n  1\n]')
   })
 })

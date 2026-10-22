@@ -5,15 +5,19 @@ import EnumSchema from '@/components/schema/EnumSchema.vue'
 import ObjectSchema from '@/components/schema/ObjectSchema.vue'
 import PrimitiveSchema from '@/components/schema/PrimitiveSchema.vue'
 
-// Registry of schema type components
-export const schemaTypeComponents = {
-  object: ObjectSchema,
-  array: ArraySchema,
-  string: PrimitiveSchema,
-  number: PrimitiveSchema,
-  integer: PrimitiveSchema,
-  boolean: PrimitiveSchema,
-  null: PrimitiveSchema,
+// Resolved lazily: the components import SchemaViewer, which imports this
+// module, so an eager map would capture `undefined` for whichever component
+// happens to be first in the import cycle.
+function schemaTypeComponents() {
+  return {
+    object: ObjectSchema,
+    array: ArraySchema,
+    string: PrimitiveSchema,
+    number: PrimitiveSchema,
+    integer: PrimitiveSchema,
+    boolean: PrimitiveSchema,
+    null: PrimitiveSchema,
+  }
 }
 
 // Schema type checking utilities
@@ -35,6 +39,6 @@ export const schemaUtils = {
       return ConstSchema
     }
 
-    return schemaTypeComponents[schema.type] || null
+    return schemaTypeComponents()[schema.type] || null
   },
 }

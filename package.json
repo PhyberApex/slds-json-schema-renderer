@@ -61,7 +61,7 @@
   "devDependencies": {
     "@antfu/eslint-config": "9.5.1",
     "@babel/cli": "8.0.6",
-    "@babel/core": "8.0.7",
+    "@babel/core": "8.0.9",
     "@babel/preset-env": "8.0.7",
     "@vitejs/plugin-vue": "6.0.10",
     "@vitest/coverage-v8": "5.0.5",

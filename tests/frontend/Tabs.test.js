@@ -14,7 +14,11 @@ function mountTabs(initial = 'one') {
   const Host = defineComponent({
     setup() {
       const active = ref(initial)
-      return () => h(Tabs, { tabs, 'modelValue': active.value, 'onUpdate:modelValue': value => (active.value = value) }, {
+      return () => h(Tabs, {
+        tabs,
+        'modelValue': active.value,
+        'onUpdate:modelValue': value => (active.value = value),
+      }, {
         panel: ({ tab }) => h('p', `${tab.label} panel`),
       })
     },
@@ -52,7 +56,9 @@ describe('tabs', () => {
       expect(panels[index].attributes('aria-labelledby')).toBe(tab.attributes('id'))
     })
 
-    const allIds = [...document.querySelectorAll('[id]')].map(el => el.id)
+    const allIds = [
+      ...document.querySelectorAll('[id]'),
+    ].map(el => el.id)
     expect(new Set(allIds).size).toBe(allIds.length)
     wrapper.unmount()
   })
@@ -92,8 +98,16 @@ describe('tabs', () => {
 
 describe('schema viewer tabs', () => {
   it('exposes Visual and Plain JSON as accessible tabs with distinct ids per viewer', () => {
-    const schema = { type: 'object', properties: { child: { type: 'string' } } }
-    const wrapper = mount(SchemaViewer, { props: { schema, isRoot: true }, attachTo: document.body })
+    const schema = {
+      type: 'object',
+      properties: {
+        child: { type: 'string' },
+      },
+    }
+    const wrapper = mount(SchemaViewer, {
+      props: { schema, isRoot: true },
+      attachTo: document.body,
+    })
 
     const tabEls = wrapper.findAll('[role="tab"]')
     expect(tabEls.slice(0, 2).map(tab => tab.text())).toEqual(['Visual', 'Plain JSON'])

@@ -7,8 +7,16 @@ import { normalizeTypes, schemaUtils } from '@/utils/schemaRegistry.js'
 
 describe('normalizeTypes', () => {
   it.each([
-    [{ type: 'string' }, ['string']],
-    [{ type: ['string', 'null'] }, ['string', 'null']],
+    [
+      { type: 'string' },
+      ['string'],
+    ],
+    [
+      {
+        type: ['string', 'null'],
+      },
+      ['string', 'null'],
+    ],
     [{}, []],
     [true, []],
   ])('returns an array of declared types for %j', (schema, expected) => {
@@ -18,33 +26,69 @@ describe('normalizeTypes', () => {
 
 describe('type arrays', () => {
   it('renders a nullable string with PrimitiveSchema', () => {
-    expect(schemaUtils.getComponentForSchema({ type: ['string', 'null'] })).toBe(PrimitiveSchema)
+    expect(schemaUtils.getComponentForSchema({
+      type: ['string', 'null'],
+    })).toBe(PrimitiveSchema)
   })
 
   it('renders a nullable object with ObjectSchema', () => {
-    expect(schemaUtils.getComponentForSchema({ type: ['object', 'null'], properties: {} })).toBe(ObjectSchema)
+    expect(schemaUtils.getComponentForSchema({
+      type: ['object', 'null'],
+      properties: {},
+    })).toBe(ObjectSchema)
   })
 
   it('renders several primitive types with PrimitiveSchema', () => {
-    expect(schemaUtils.getComponentForSchema({ type: ['string', 'number'] })).toBe(PrimitiveSchema)
+    expect(schemaUtils.getComponentForSchema({
+      type: ['string', 'number'],
+    })).toBe(PrimitiveSchema)
   })
 
   it('shows each type and a nullable badge in the primitive view', () => {
-    const wrapper = mount(PrimitiveSchema, { props: { schema: { type: ['string', 'null'] } } })
+    const wrapper = mount(PrimitiveSchema, {
+      props: {
+        schema: {
+          type: ['string', 'null'],
+        },
+      },
+    })
     expect(wrapper.text()).toContain('string')
     expect(wrapper.text()).toMatch(/nullable/i)
     expect(wrapper.text()).not.toContain('[')
   })
 
   it('shows a readable type label in the object property table', () => {
-    const schema = { type: 'object', properties: { tag: { type: ['string', 'null'] } } }
-    const wrapper = mount(ObjectSchema, { props: { schema } })
+    const schema = {
+      type: 'object',
+      properties: {
+        tag: {
+          type: ['string', 'null'],
+        },
+      },
+    }
+    const wrapper = mount(ObjectSchema, {
+      props: { schema },
+    })
     expect(wrapper.find('tbody .slds-badge').text()).toBe('string | null')
   })
 
   it('shows a nullable badge on nullable object and array headers', () => {
-    const object = mount(ObjectSchema, { props: { schema: { type: ['object', 'null'], properties: {} } } })
-    const array = mount(ArraySchema, { props: { schema: { type: ['array', 'null'], items: { type: 'string' } } } })
+    const object = mount(ObjectSchema, {
+      props: {
+        schema: {
+          type: ['object', 'null'],
+          properties: {},
+        },
+      },
+    })
+    const array = mount(ArraySchema, {
+      props: {
+        schema: {
+          type: ['array', 'null'],
+          items: { type: 'string' },
+        },
+      },
+    })
     expect(object.find('.type-badges').text()).toMatch(/object.*nullable/s)
     expect(array.find('.type-badges').text()).toMatch(/array.*nullable/s)
   })

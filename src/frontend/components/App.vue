@@ -26,7 +26,9 @@ const props = defineProps({
 })
 
 // Initialize with first schema if available
-const selectedSchema = ref(props.schemas.length > 0 ? props.schemas[0] : null)
+const selectedSchema = ref(props.schemas.length > 0
+  ? props.schemas[0]
+  : null)
 
 function handleSelectSchema(schema) {
   selectedSchema.value = schema

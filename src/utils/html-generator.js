@@ -88,7 +88,9 @@ async function generate(options) {
     html = fillPlaceholder(
       html,
       'metaDescription',
-      description ? `<meta name="description" content="${escapeHtml(description)}" />` : '',
+      description
+        ? `<meta name="description" content="${escapeHtml(description)}" />`
+        : '',
     )
 
     // Add the data to the window object so it can be used by Vue

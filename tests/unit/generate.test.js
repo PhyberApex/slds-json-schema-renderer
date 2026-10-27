@@ -10,7 +10,9 @@ let bundleDir
 async function readEmbeddedData(outputDir) {
   const html = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
   const match = html.match(/window\.__JSON_SCHEMA_DOCS_DATA__ = (.*?);\s*<\/script>/s)
-  return match ? JSON.parse(match[1]) : null
+  return match
+    ? JSON.parse(match[1])
+    : null
 }
 
 beforeEach(async () => {
@@ -35,7 +37,9 @@ describe('generate', () => {
     const outputDir = path.join(tmpDir, 'out')
 
     await generate({
-      schemas: [{ schema, file: '/schemas/dollar.json' }],
+      schemas: [
+        { schema, file: '/schemas/dollar.json' },
+      ],
       outputDir,
       bundleDir,
       title: 'Docs',
@@ -48,7 +52,13 @@ describe('generate', () => {
 
   it('copies the bundle files into assets/', async () => {
     const outputDir = path.join(tmpDir, 'out')
-    await generate({ schemas: [], outputDir, bundleDir, title: 'Docs', description: '' })
+    await generate({
+      schemas: [],
+      outputDir,
+      bundleDir,
+      title: 'Docs',
+      description: '',
+    })
 
     expect(await fs.pathExists(path.join(outputDir, 'assets/bundle.css'))).toBe(true)
     expect(await fs.pathExists(path.join(outputDir, 'assets/bundle.js'))).toBe(true)
@@ -58,7 +68,13 @@ describe('generate', () => {
     const outputDir = path.join(tmpDir, 'out')
     const missing = path.join(tmpDir, 'does-not-exist')
 
-    await expect(generate({ schemas: [], outputDir, bundleDir: missing, title: 'Docs', description: '' }))
+    await expect(generate({
+      schemas: [],
+      outputDir,
+      bundleDir: missing,
+      title: 'Docs',
+      description: '',
+    }))
       .rejects
       .toThrow(/frontend bundle/i)
   })
@@ -67,7 +83,13 @@ describe('generate', () => {
     const outputDir = path.join(tmpDir, 'out')
     await fs.remove(path.join(bundleDir, 'bundle.css'))
 
-    await expect(generate({ schemas: [], outputDir, bundleDir, title: 'Docs', description: '' }))
+    await expect(generate({
+      schemas: [],
+      outputDir,
+      bundleDir,
+      title: 'Docs',
+      description: '',
+    }))
       .rejects
       .toThrow(/bundle\.css/)
   })
@@ -89,7 +111,13 @@ describe('generate', () => {
 
   it('omits the meta description when none is configured', async () => {
     const outputDir = path.join(tmpDir, 'out')
-    await generate({ schemas: [], outputDir, bundleDir, title: 'Docs', description: '' })
+    await generate({
+      schemas: [],
+      outputDir,
+      bundleDir,
+      title: 'Docs',
+      description: '',
+    })
 
     const html = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
     expect(html).not.toContain('name="description"')
@@ -97,10 +125,18 @@ describe('generate', () => {
 
   it('references only .js and .css assets that exist in the output', async () => {
     const outputDir = path.join(tmpDir, 'out')
-    await generate({ schemas: [], outputDir, bundleDir, title: 'Docs', description: '' })
+    await generate({
+      schemas: [],
+      outputDir,
+      bundleDir,
+      title: 'Docs',
+      description: '',
+    })
 
     const html = await fs.readFile(path.join(outputDir, 'index.html'), 'utf8')
-    const assets = [...html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g)].map(m => m[1])
+    const assets = [
+      ...html.matchAll(/(?:src|href)="(assets\/[^"]+)"/g),
+    ].map(m => m[1])
     expect(assets.length).toBeGreaterThan(0)
     for (const asset of assets) {
       expect(asset).toMatch(/\.(?:js|css)$/)

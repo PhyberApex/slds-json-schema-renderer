@@ -14,7 +14,12 @@ export default defineConfig(({ command }) => {
     define: {
       'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
     },
-    plugins: [vue(), command === 'build' ? '' : vueDevTools()],
+    plugins: [
+      vue(),
+      command === 'build'
+        ? ''
+        : vueDevTools(),
+    ],
 
     // The root is src/frontend for development
     root: path.resolve(__dirname, 'src/frontend'),

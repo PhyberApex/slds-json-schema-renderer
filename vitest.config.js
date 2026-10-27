@@ -21,7 +21,9 @@ export default defineConfig({
         },
       },
       {
-        plugins: [vue()],
+        plugins: [
+          vue(),
+        ],
         resolve: { alias },
         test: {
           name: 'frontend',
@@ -41,7 +43,12 @@ export default defineConfig({
       provider: 'v8',
       include: ['src/**/*.{js,vue}'],
       reporter: ['text', 'lcov'],
-      thresholds: { lines: 15, functions: 5, branches: 5, statements: 15 },
+      thresholds: {
+        lines: 15,
+        functions: 5,
+        branches: 5,
+        statements: 15,
+      },
     },
   },
 })

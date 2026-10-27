@@ -30,7 +30,11 @@ const activeTab = ref(0)
 const schemas = computed(() => props.schema[props.keyword] || [])
 
 const tabs = computed(() =>
-  schemas.value.map((subSchema, index) => ({ id: index, label: getTabTitle(subSchema, index), schema: subSchema })),
+  schemas.value.map((subSchema, index) => ({
+    id: index,
+    label: getTabTitle(subSchema, index),
+    schema: subSchema,
+  })),
 )
 
 // Branches that declare no type inherit the parent's for display only

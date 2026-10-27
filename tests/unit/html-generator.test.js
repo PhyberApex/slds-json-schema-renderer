@@ -3,7 +3,12 @@ import { serializeForInlineScript } from '../../src/utils/html-generator.js'
 
 describe('serializeForInlineScript', () => {
   it('round-trips data through JSON.parse', () => {
-    const data = { title: 'Hello & <world>', nested: { arr: [1, 'two', null, true] } }
+    const data = {
+      title: 'Hello & <world>',
+      nested: {
+        arr: [1, 'two', null, true],
+      },
+    }
     expect(JSON.parse(serializeForInlineScript(data))).toEqual(data)
   })
 

@@ -24,13 +24,24 @@ describe('collapsibleSection', () => {
 })
 
 describe('applicator blocks', () => {
-  const schema = { type: 'object', not: { type: 'null' }, propertyNames: { pattern: '^a' } }
+  const schema = {
+    type: 'object',
+    not: { type: 'null' },
+    propertyNames: { pattern: '^a' },
+  }
 
   it('are expanded at the root and collapsed when nested', () => {
-    const root = mount(ApplicatorsSection, { props: { schema, expanded: true } })
+    const root = mount(ApplicatorsSection, {
+      props: { schema, expanded: true },
+    })
     expect(root.findAll('button[aria-expanded]').map(b => b.attributes('aria-expanded'))).toEqual(['true', 'true'])
 
-    const nested = mount(SchemaViewer, { props: { schema: { type: 'array', items: schema }, isRoot: true } })
+    const nested = mount(SchemaViewer, {
+      props: {
+        schema: { type: 'array', items: schema },
+        isRoot: true,
+      },
+    })
     const nestedToggles = nested.findAll('.applicators button[aria-expanded]')
     expect(nestedToggles.length).toBe(2)
     expect(nestedToggles.map(b => b.attributes('aria-expanded'))).toEqual(['false', 'false'])

@@ -65,7 +65,9 @@ function badgeClass(key, value) {
 
 // Draft-04 expresses exclusivity as a boolean next to minimum/maximum.
 function boundLabel(key, exclusiveKey) {
-  return props.schema[exclusiveKey] === true ? `${formatKey(key)} (exclusive)` : formatKey(key)
+  return props.schema[exclusiveKey] === true
+    ? `${formatKey(key)} (exclusive)`
+    : formatKey(key)
 }
 
 const constraints = computed(() =>
@@ -77,9 +79,19 @@ const constraints = computed(() =>
       const value = props.schema[key]
       const label = key === 'minimum'
         ? boundLabel('minimum', 'exclusiveMinimum')
-        : key === 'maximum' ? boundLabel('maximum', 'exclusiveMaximum') : formatKey(key)
-      const kind = LITERAL_KEYWORDS.includes(key) || CODE_KEYWORDS.includes(key) ? 'code' : 'badge'
-      return { key, label, kind, text: formatValue(key, value), badgeClass: badgeClass(key, value) }
+        : key === 'maximum'
+          ? boundLabel('maximum', 'exclusiveMaximum')
+          : formatKey(key)
+      const kind = LITERAL_KEYWORDS.includes(key) || CODE_KEYWORDS.includes(key)
+        ? 'code'
+        : 'badge'
+      return {
+        key,
+        label,
+        kind,
+        text: formatValue(key, value),
+        badgeClass: badgeClass(key, value),
+      }
     }),
 )
 

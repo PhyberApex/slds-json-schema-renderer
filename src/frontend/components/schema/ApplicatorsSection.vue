@@ -24,8 +24,12 @@ const dependencyEntries = computed(() => {
     Object.entries(props.schema[keyword] ?? {}).map(([property, value]) => ({
       keyword,
       property,
-      requiredProperties: Array.isArray(value) ? value : null,
-      schema: Array.isArray(value) ? null : value,
+      requiredProperties: Array.isArray(value)
+        ? value
+        : null,
+      schema: Array.isArray(value)
+        ? null
+        : value,
     })),
   )
 })

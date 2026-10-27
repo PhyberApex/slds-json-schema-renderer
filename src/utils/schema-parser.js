@@ -27,8 +27,12 @@ const metaschemaValidators = {
 const validatorCache = new Map()
 
 function metaschemaValidatorFor(schema) {
-  const declared = typeof schema.$schema === 'string' ? schema.$schema.replace(/#$/, '') : ''
-  const uri = declared in metaschemaValidators ? declared : DRAFT_07
+  const declared = typeof schema.$schema === 'string'
+    ? schema.$schema.replace(/#$/, '')
+    : ''
+  const uri = declared in metaschemaValidators
+    ? declared
+    : DRAFT_07
   if (!validatorCache.has(uri)) {
     validatorCache.set(uri, metaschemaValidators[uri]())
   }
@@ -54,7 +58,9 @@ function validateSchema(schema) {
 function describeJson(value) {
   if (value === null)
     return 'null'
-  return Array.isArray(value) ? 'an array' : `a ${typeof value}`
+  return Array.isArray(value)
+    ? 'an array'
+    : `a ${typeof value}`
 }
 
 /**
@@ -129,7 +135,10 @@ function breakCycles(node, ancestors = new Map(), pointer = '#') {
     return node
   }
   if (ancestors.has(node)) {
-    return { $ref: ancestors.get(node), _circular: true }
+    return {
+      $ref: ancestors.get(node),
+      _circular: true,
+    }
   }
 
   ancestors.set(node, pointer)

@@ -30,7 +30,9 @@ const schemaComponent = computed(() => schemaUtils.getComponentForSchema(props.s
 const compositions = computed(() => compositionKeywords(props.schema))
 const hasApplicators = computed(() => applicatorKeywords(props.schema).length > 0 || hasAnnotations(props.schema))
 const isUnknown = computed(() => !schemaComponent.value && compositions.value.length === 0 && !hasApplicators.value)
-const schemaKeywords = computed(() => (isSchemaObject(props.schema) ? Object.keys(props.schema).filter(key => key !== '_metadata') : []))
+const schemaKeywords = computed(() => (isSchemaObject(props.schema)
+  ? Object.keys(props.schema).filter(key => key !== '_metadata')
+  : []))
 </script>
 
 <template>

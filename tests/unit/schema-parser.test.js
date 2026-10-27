@@ -26,11 +26,18 @@ afterEach(async () => {
 
 describe('parse', () => {
   it('resolves relative $refs against the schema file location without changing the cwd', async () => {
-    await writeJson('defs/address.json', { type: 'object', properties: { city: { type: 'string' } } })
+    await writeJson('defs/address.json', {
+      type: 'object',
+      properties: {
+        city: { type: 'string' },
+      },
+    })
     const file = await writeJson('nested/person.json', {
       $schema: 'http://json-schema.org/draft-07/schema#',
       type: 'object',
-      properties: { address: { $ref: '../defs/address.json' } },
+      properties: {
+        address: { $ref: '../defs/address.json' },
+      },
     })
     const chdir = vi.spyOn(process, 'chdir')
     const cwdBefore = process.cwd()
@@ -43,7 +50,12 @@ describe('parse', () => {
   })
 
   it('attaches file metadata', async () => {
-    const file = await writeJson('thing.json', { title: 'Thing', type: 'object', properties: { a: {}, b: {} }, required: ['a'] })
+    const file = await writeJson('thing.json', {
+      title: 'Thing',
+      type: 'object',
+      properties: { a: {}, b: {} },
+      required: ['a'],
+    })
 
     const schema = await parse(file)
 
@@ -58,7 +70,12 @@ describe('parse', () => {
   })
 
   it('names the file and the unresolved reference in a single error message', async () => {
-    const file = await writeJson('broken.json', { type: 'object', properties: { x: { $ref: './missing.json' } } })
+    const file = await writeJson('broken.json', {
+      type: 'object',
+      properties: {
+        x: { $ref: './missing.json' },
+      },
+    })
 
     const error = await parse(file).catch(e => e)
 
@@ -83,7 +100,10 @@ describe('parse circular references', () => {
       type: 'object',
       properties: {
         name: { type: 'string' },
-        children: { type: 'array', items: { $ref: '#' } },
+        children: {
+          type: 'array',
+          items: { $ref: '#' },
+        },
       },
     })
 
@@ -98,9 +118,16 @@ describe('parse circular references', () => {
     const file = await writeJson('linked.json', {
       type: 'object',
       definitions: {
-        node: { type: 'object', properties: { next: { $ref: '#/definitions/node' } } },
+        node: {
+          type: 'object',
+          properties: {
+            next: { $ref: '#/definitions/node' },
+          },
+        },
       },
-      properties: { head: { $ref: '#/definitions/node' } },
+      properties: {
+        head: { $ref: '#/definitions/node' },
+      },
     })
 
     const schema = await parse(file)
@@ -113,8 +140,13 @@ describe('parse circular references', () => {
   it('keeps shared non-cyclic references fully expanded', async () => {
     const file = await writeJson('shared.json', {
       type: 'object',
-      definitions: { id: { type: 'string', minLength: 1 } },
-      properties: { a: { $ref: '#/definitions/id' }, b: { $ref: '#/definitions/id' } },
+      definitions: {
+        id: { type: 'string', minLength: 1 },
+      },
+      properties: {
+        a: { $ref: '#/definitions/id' },
+        b: { $ref: '#/definitions/id' },
+      },
     })
 
     const schema = await parse(file)
@@ -129,7 +161,10 @@ describe('parse non-object documents', () => {
     ['null', null],
     ['a number', 42],
     ['a string', 'text'],
-    ['an array', [1, 2]],
+    [
+      'an array',
+      [1, 2],
+    ],
   ])('rejects %s as not a JSON Schema document', async (_label, content) => {
     const file = await writeJson('doc.json', content)
 
@@ -198,14 +233,31 @@ describe('parseDirectory', () => {
 
 describe('validateSchema', () => {
   it('accepts a valid draft-07 schema', () => {
-    expect(validateSchema({ type: 'object', properties: { name: { type: 'string' } } })).toEqual({ valid: true, errors: [] })
+    expect(validateSchema({
+      type: 'object',
+      properties: {
+        name: { type: 'string' },
+      },
+    })).toEqual({ valid: true, errors: [] })
   })
 
   it('reports each metaschema violation with its path', () => {
-    const result = validateSchema({ type: 'strng', required: 'name', properties: 'nope', minimum: 'abc' })
+    const result = validateSchema({
+      type: 'strng',
+      required: 'name',
+      properties: 'nope',
+      minimum: 'abc',
+    })
 
     expect(result.valid).toBe(false)
-    expect([...new Set(result.errors.map(e => e.path))].sort()).toEqual(['/minimum', '/properties', '/required', '/type'].sort())
+    expect([
+      ...new Set(result.errors.map(e => e.path)),
+    ].sort()).toEqual([
+      '/minimum',
+      '/properties',
+      '/required',
+      '/type',
+    ].sort())
   })
 
   it('validates against the metaschema named by $schema', () => {

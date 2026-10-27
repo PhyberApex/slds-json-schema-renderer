@@ -37,7 +37,14 @@ async function loadGeneratedPage() {
 
 beforeAll(async () => {
   outputDir = await fs.mkdtemp(path.join(os.tmpdir(), 'slds-smoke-'))
-  await promisify(execFile)(process.execPath, [cli, 'generate', '-i', fixtures, '-o', outputDir], { cwd: repoRoot })
+  await promisify(execFile)(process.execPath, [
+    cli,
+    'generate',
+    '-i',
+    fixtures,
+    '-o',
+    outputDir,
+  ], { cwd: repoRoot })
 }, 60_000)
 
 afterAll(() => fs.remove(outputDir))

@@ -73,7 +73,9 @@ async function generate(options) {
     console.log(`🌐 Open ${path.resolve(path.join(output, 'index.html'))} in your browser to view`)
 
     if (skipped.length > 0) {
-      const noun = skipped.length === 1 ? 'file was' : 'files were'
+      const noun = skipped.length === 1
+        ? 'file was'
+        : 'files were'
       console.warn(chalk.yellow(`⚠️ ${skipped.length} ${noun} skipped:`))
       skipped.forEach(({ file, error }) => console.warn(chalk.yellow(`  - ${file}: ${error.message}`)))
       if (failOnSkip) {

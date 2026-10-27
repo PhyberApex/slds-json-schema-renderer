@@ -10,13 +10,21 @@ describe('refSchema', () => {
   })
 
   it('labels a circular marker as a recursive reference to its target', () => {
-    const wrapper = mount(RefSchema, { props: { schema: { $ref: '#/definitions/node', _circular: true } } })
+    const wrapper = mount(RefSchema, {
+      props: {
+        schema: { $ref: '#/definitions/node', _circular: true },
+      },
+    })
     expect(wrapper.text()).toMatch(/recursive/i)
     expect(wrapper.text()).toContain('#/definitions/node')
   })
 
   it('labels an unresolved $ref as a reference', () => {
-    const wrapper = mount(RefSchema, { props: { schema: { $ref: 'other.json#/x' } } })
+    const wrapper = mount(RefSchema, {
+      props: {
+        schema: { $ref: 'other.json#/x' },
+      },
+    })
     expect(wrapper.text()).not.toMatch(/recursive/i)
     expect(wrapper.text()).toContain('other.json#/x')
   })
@@ -25,9 +33,16 @@ describe('refSchema', () => {
     const schema = {
       title: 'Tree',
       type: 'object',
-      properties: { children: { type: 'array', items: { $ref: '#', _circular: true } } },
+      properties: {
+        children: {
+          type: 'array',
+          items: { $ref: '#', _circular: true },
+        },
+      },
     }
-    const wrapper = mount(SchemaViewer, { props: { schema, isRoot: true } })
+    const wrapper = mount(SchemaViewer, {
+      props: { schema, isRoot: true },
+    })
     expect(wrapper.text()).toContain('Tree')
   })
 })

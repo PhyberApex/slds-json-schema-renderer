@@ -33,14 +33,50 @@ export function isSchemaObject(schema) {
 export function normalizeTypes(schema) {
   if (!isSchemaObject(schema) || schema.type === undefined)
     return []
-  return Array.isArray(schema.type) ? schema.type : [schema.type]
+  return Array.isArray(schema.type)
+    ? schema.type
+    : [schema.type]
 }
 
 const STRUCTURAL_KEYWORDS = {
-  object: ['properties', 'patternProperties', 'additionalProperties', 'required', 'minProperties', 'maxProperties', 'propertyNames', 'dependencies', 'dependentRequired', 'dependentSchemas'],
-  array: ['items', 'prefixItems', 'additionalItems', 'contains', 'minItems', 'maxItems', 'uniqueItems', 'minContains', 'maxContains'],
-  string: ['minLength', 'maxLength', 'pattern', 'format', 'contentMediaType', 'contentEncoding'],
-  number: ['minimum', 'maximum', 'exclusiveMinimum', 'exclusiveMaximum', 'multipleOf'],
+  object: [
+    'properties',
+    'patternProperties',
+    'additionalProperties',
+    'required',
+    'minProperties',
+    'maxProperties',
+    'propertyNames',
+    'dependencies',
+    'dependentRequired',
+    'dependentSchemas',
+  ],
+  array: [
+    'items',
+    'prefixItems',
+    'additionalItems',
+    'contains',
+    'minItems',
+    'maxItems',
+    'uniqueItems',
+    'minContains',
+    'maxContains',
+  ],
+  string: [
+    'minLength',
+    'maxLength',
+    'pattern',
+    'format',
+    'contentMediaType',
+    'contentEncoding',
+  ],
+  number: [
+    'minimum',
+    'maximum',
+    'exclusiveMinimum',
+    'exclusiveMaximum',
+    'multipleOf',
+  ],
 }
 
 /**
@@ -65,13 +101,27 @@ export function compositionKeywords(schema) {
   return COMPOSITION_KEYWORDS.filter(keyword => Array.isArray(schema[keyword]))
 }
 
-export const ANNOTATION_KEYWORDS = ['readOnly', 'writeOnly', 'deprecated', '$comment']
+export const ANNOTATION_KEYWORDS = [
+  'readOnly',
+  'writeOnly',
+  'deprecated',
+  '$comment',
+]
 
 export function hasAnnotations(schema) {
   return isSchemaObject(schema) && ANNOTATION_KEYWORDS.some(keyword => keyword in schema)
 }
 
-const APPLICATOR_KEYWORDS = ['not', 'if', 'then', 'else', 'dependencies', 'dependentRequired', 'dependentSchemas', 'propertyNames']
+const APPLICATOR_KEYWORDS = [
+  'not',
+  'if',
+  'then',
+  'else',
+  'dependencies',
+  'dependentRequired',
+  'dependentSchemas',
+  'propertyNames',
+]
 
 /**
  * Applicator keywords (other than composition) present on the schema.
@@ -84,7 +134,9 @@ export function applicatorKeywords(schema) {
 
 export function effectiveTypes(schema) {
   const declared = normalizeTypes(schema)
-  return declared.length > 0 ? declared : inferTypes(schema)
+  return declared.length > 0
+    ? declared
+    : inferTypes(schema)
 }
 
 export function isTypeInferred(schema) {
@@ -96,7 +148,9 @@ export function isTypeInferred(schema) {
  */
 export function formatTypeLabel(schema) {
   const label = effectiveTypes(schema).join(' | ')
-  return isTypeInferred(schema) ? `${label} (inferred)` : label
+  return isTypeInferred(schema)
+    ? `${label} (inferred)`
+    : label
 }
 
 export function isNullable(schema) {
@@ -110,7 +164,9 @@ function componentForTypes(types, schema) {
     return hasOtherKeywords ? null : AnySchema
   }
   const components = schemaTypeComponents()
-  const concreteTypes = types.length > 1 ? types.filter(type => type !== 'null') : types
+  const concreteTypes = types.length > 1
+    ? types.filter(type => type !== 'null')
+    : types
   if (concreteTypes.length === 1)
     return components[concreteTypes[0]] || null
   if (concreteTypes.length > 1 && concreteTypes.every(type => components[type] === PrimitiveSchema))

@@ -56,7 +56,7 @@
     "commander": "15.0.0",
     "fs-extra": "11.4.1",
     "glob": "14.0.3",
-    "motion-v": "2.8.0"
+    "motion-v": "2.9.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "10.0.0",

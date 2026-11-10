@@ -53,7 +53,7 @@
     "ajv": "8.20.0",
     "ajv-draft-04": "1.0.0",
     "chalk": "6.0.1",
-    "commander": "15.0.0",
+    "commander": "15.1.0",
     "fs-extra": "11.4.1",
     "glob": "14.0.4",
     "motion-v": "2.11.1"
